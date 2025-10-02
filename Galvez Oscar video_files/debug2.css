@@ -29,21 +29,43 @@ border-radius:   1px 54px 1px 55px;
 
 .g{
 position: absolute;
-text-transform: uppercase;
-color: wheat;
 cursor: pointer;
 font-size: 1.2w;
 top:  0%;
 left:  0%;
 width: 100%;
-height: 39px;
+height: 15%;
 background-color: transparent;
-text-align: center;
-box-shadow: 0px 0px 5px #222;
 
 } 
  
+ 
+ 
 
+.gg{
+position: absolute;
+bottom:   7%;
+right:   -1%;
+width: 8%;
+height: 12%;
+background-color: transparent;
+} 
+ 
+
+
+
+
+
+
+
+ 
+.ma {
+
+position: absolute;
+top: 16%;
+height: 12vw;
+left: -1vw;
+ }
 
 
 
@@ -165,8 +187,8 @@ position: absolute;
 top: -4%;
 left: 5%;
 width: 51%;
-height: 65%;  
- transform: rotate(3.2deg);
+height: 65.5%;  
+ transform: rotate(3.0deg);
    
 }
 
@@ -174,7 +196,7 @@ height: 65%;
 .genero{
 position: absolute;
 left:    60vw;
-width: 42%;
+width: 30%;
   top:  30VH;
     font-size:  3vh;
 
@@ -188,7 +210,7 @@ text-decoration: none;
 padding: 1% 1%;
 box-shadow: 7px 5px dimgray;
   background-color: red;
-margin-left: 1vh;
+margin-left: 2vh;
 } 
 
 
@@ -223,6 +245,14 @@ top: 3%;
 width: 17%;
 height: 14%; 
     
+}
+
+.logo2{
+position: absolute;
+right: -1%;
+top: 0%;
+ height: 14%; 
+width: 12%;
 }
 
 
