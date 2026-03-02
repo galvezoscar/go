@@ -1,0 +1,306 @@
+
+*{
+margin:0px;
+padding:0px;
+}
+ 
+   
+
+
+
+
+
+
+
+ 
+.target {
+color: aliceblue;
+text-decoration: none;
+margin-top:     2vh;
+
+    
+} 
+
+.social-bar {
+position: absolute;
+ height: 97%; 
+     
+background: linear-gradient(to right, rgba(10, 15, 10, 00.9) 100%, transparent 20%);
+   padding: 0 5px;
+ font-size: 1vw;
+box-shadow: 1px 1px 1vw blue;
+    border-radius: 0 3rem 3rem 0;
+
+}
+
+.icon {
+position: relative;
+display: flex;
+transition: all .15s;
+height: 6%;
+width: 3.7vw;
+
+} 
+
+ 
+
+.icon1 {
+position: relative;
+display: flex;
+transition: all .15s;
+height: 6%;
+width: 3.7vw;
+
+
+} 
+
+ 
+
+.icon-inicio {
+display: flex;
+  font-size: 2vw;
+
+}
+
+
+.target1 {
+color: aliceblue;
+text-decoration: none;
+ 
+}
+.icon-facebook {
+background: #2E406E;
+color: aliceblue;
+text-decoration: none;
+ 
+}
+.icon-twitter {
+background: #339DC5;
+border-radius: 0 0 3rem 0; 
+   
+}
+.icon-0 {
+margin-top:  2vh;
+}
+.icon-1 {
+margin-top:  1vh;
+}
+.icon-1 {
+margin-top:  1vh;
+}
+.icon-2 {
+margin-top:  1vh;
+}
+.icon-3 {
+margin-top:  2vh;
+  }
+.icon-4 {
+ 
+margin-top:  1vh;
+
+}
+.icon-5 {
+  font-size: 2vw;
+margin-top:   9vh;
+  }
+
+.icon-instagram {
+top:  8vh;
+ background-color: red;
+box-shadow: 3px 1px 10px blue;
+  border-radius: 0 3rem 0  0;
+height: 7vh;
+
+}
+
+.icon-instagram2 {
+ top:   14vh;
+ background-color: red;
+box-shadow: 3px 1px 10px blue;
+height: 7vh;
+    
+box-shadow: 1px 1px 1vw blue;
+border-radius: 0 0 3rem 0;
+}
+
+
+
+
+
+
+
+
+
+
+.instagram11 {
+position: absolute;
+text-decoration: none;
+ text-align: center;
+
+color: aliceblue;
+ top:  1vW;
+line-height:  5vh;
+width: 5vh;
+font-size:  7vh;
+ font-family: fantasy;
+ 
+}
+
+.instagram22 {
+position: absolute;
+text-decoration: none;
+ text-align: center;
+
+color: aliceblue;
+line-height:  5vh;
+width: 5vh;
+font-size:  11vh;
+  font-family: fantasy;
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.icon:first-child {
+border-radius: 0 3rem 0 0;
+}
+.icon:last-child {
+border-radius: 0 0 3rem 0;
+}
+.icon:hover {
+padding-left: 150%;
+background-color: orangered;
+box-shadow: 5px 1px 10px orange;
+-webkit-transition-property: background-color, color;
+-webkit-transition-duration: 3s;
+-o-transition-property: background-color, color;
+-o-transition-duration: 3s;
+  font-size: 2vw;
+
+}
+
+
+
+
+
+
+article{
+top: 70%;
+position: absolute;
+width: 95%;
+left: 5%;
+overflow-y: hidden;
+overflow-x: hidden;
+height: 30%;
+
+}
+
+ 
+ 
+ 
+
+
+.z-slide-item {
+ position: absolute;
+ left: 3vh;
+ width: 100%;
+ height: 90%;
+ transform: translate3d(10, 10, 10);
+margin-top: 1%;
+}
+
+.z-slide-item img {
+ left:  1%;
+ right: 0;
+ bottom: 0;
+ width: 100%;
+ height: 100%;
+ margin: auto;
+position: relative;
+
+}
+
+
+.item {
+
+cursor:pointer;
+transition: transform 2.2s;
+width: 13.50%; 
+height: 94%;
+display: inline-block;
+    
+    
+margin: 7px auto;
+}
+
+
+.-series {
+
+cursor:pointer;
+transition: transform 2.2s;
+width: 19%; 
+height: 94%;
+display: inline-block;
+    
+ margin: 7px auto;
+}
+
+
+
+ 
+
+
+.item:focus,
+.item:hover {
+transform: scale(1.2);
+z-index: 7;
+position: relative;
+transition: transform 2.2s;	
+box-shadow:  5px 1px 10px 2px orange;
+  }
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
