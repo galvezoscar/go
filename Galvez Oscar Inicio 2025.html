@@ -147,9 +147,9 @@ function mostrar1341302(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/9442387495553?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}   
                                        
 function mostrar1341303(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/9788216969746?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}                                         
+document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/10010380143169?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}                                         
 function mostrar1341304(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/9664957319745?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}    
+document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12420598074053?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}    
                               
 function mostrar1341305(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/10270195583732?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
@@ -1699,184 +1699,152 @@ Danang quiere conocer el misterio de la desaparición de su padre y descubrir la
 </footer>
     
     
-    
-           <script>
+    <script>
 $(document).ready(function() {
-    $("carga").fadeOut("slow");;
+    // Si tu elemento es <div id="carga"> usa "#carga"
+    // Si tu elemento es <div class="carga"> usa ".carga"
+    $("#carga").fadeOut("slow"); 
 });
-             
-               
-               
-</script>     
-
+</script>
     
     
   
-
-     
 <script>
-	var video_player = document.getElementById("video_player"),
-links = video_player.getElementsByTagName('cam');
-for (var i=0; i<links.length; i++) {
-	links[i].onclick = handler;
+// Selección de elementos principales
+var videoContainer = document.getElementById("video_player");
+var videoElement = document.querySelector("#video_player video");
+var trailer = document.getElementById("videotrailer");
+var b1 = document.getElementById("btn1");
+var b2 = document.getElementById("btn2");
+
+// Manejador de clics para los elementos <cam>
+if (videoContainer) {
+    var links = videoContainer.getElementsByTagName('cam');
+    for (var i = 0; i < links.length; i++) {
+        links[i].onclick = videoHandler;
+    }
 }
-	
-function handler(e) {
-	e.preventDefault();
-	videotarget = this.getAttribute("href");
-	filename = videotarget.substr(0, videotarget.lastIndexOf('.')) || videotarget;
-	video = document.querySelector("#video_player video");
-	
-	source = document.querySelectorAll("#video_player video source");
-	source[0].src = filename + ".mp4";
-	source[1].src = filename + ".webm";
-	video.load();
-	video.play(none); 
-}	
-	
 
+function videoHandler(e) {
+    e.preventDefault();
+    var videotarget = this.getAttribute("href");
+    if (!videotarget) return;
 
-var IFRAME =
-document.getElementById("video_Player");
+    // Extraer nombre base del archivo
+    var filename = videotarget.substr(0, videotarget.lastIndexOf('.')) || videotarget;
+    var sources = videoElement.getElementsByTagName('source');
+
+    if (sources.length >= 2) {
+        sources[0].src = filename + ".mp4";
+        sources[1].src = filename + ".webm";
+        videoElement.load();
+        videoElement.play();
+    }
+}
+
+// Funciones de Control Play/Pause
 function playPause() {
-btn1.style.display = 'inherit'; 
-btn2.style.display = 'inherit';
-videotrailer.style.opacity = '0';
-video.play(); 
-
+    if (b1) b1.style.display = 'inherit';
+    if (b2) b2.style.display = 'inherit';
+    if (trailer) trailer.style.opacity = '0';
+    if (videoElement) videoElement.play();
 }
 
-function playPause1() { 
-btn2.style.display = 'inherit';
-btn2.style.display = 'none';
-videotrailer.style.opacity = '1';
-video.pause();
+function playPause1() {
+    if (b2) b2.style.display = 'none';
+    if (trailer) trailer.style.opacity = '1';
+    if (videoElement) videoElement.pause();
 }
-	
-	
-
-var IFRAME =
-document.getElementById("video_Player");
-function playPause() {
-btn1.style.display = 'inherit'; 
-btn2.style.display = 'inherit';
-videotrailer.style.opacity = '0';
-video.play(); 
-
-}
-
-function playPause1() { 
-btn2.style.display = 'inherit';
-btn2.style.display = 'none';
-videotrailer.style.opacity = '1';
-video.pause();
-}
-	
-	
-	
-	
-	</script>
-    
-    
-    
+</script>
    
  
     
-    
-    
-  <script languague="javascript">
-    
-    
-    
-    
-    
-    function cambiaVisibilidad() {
-       var div1 = document.getElementById('cartelera');
-       var div2 = document.getElementById('cartelera2');
-       var div3 = document.getElementById('accionar1');
-       var div4 = document.getElementById('accionar');
-        
-       if(div2.style.display == 'block'){
-           div2.style.display = 'none';
-           div1.style.display = 'block';
-           div4.style.display = 'none';
-           div3.style.display = 'block';
-           
-       }else{
-          div2.style.display = 'block';
-          div1.style.display = 'none';
-           div3.style.display = 'none';
-           div4.style.display = 'block';
-         }
-   }
-    
+    <script>
+function cambiaVisibilidad() {
+    // Definimos los elementos
+    const d1 = document.getElementById('cartelera');
+    const d2 = document.getElementById('cartelera2');
+    const d3 = document.getElementById('accionar1');
+    const d4 = document.getElementById('accionar');
 
-    
+    // Verificamos que los elementos existan para evitar errores en consola
+    if (!d1 || !d2) return;
+
+    // Usamos una lógica de alternancia más limpia
+    if (d2.style.display === 'block') {
+        d2.style.display = 'none';
+        d1.style.display = 'block';
+        if (d4) d4.style.display = 'none';
+        if (d3) d3.style.display = 'block';
+    } else {
+        d2.style.display = 'block';
+        d1.style.display = 'none';
+        if (d3) d3.style.display = 'none';
+        if (d4) d4.style.display = 'block';
+    }
+}
 </script>
     
 
-    
-<script>
-        
+    <script>
 const slides = document.querySelectorAll('.slides');
 const dots = document.querySelectorAll('.item');
 let slideIndex = 0;
-showSlide();
-function showSlide(n){
-for(let i=0; i<slides.length; i++){
-               slides[i].style.display = "none";
+
+// Inicializamos el primer slide
+showSlide(slideIndex);
+
+function showSlide(n) {
+    // Si no hay slides, no hacer nada
+    if (slides.length === 0) return;
+
+    // Resetear todos los slides y quitar la clase active de los puntos
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+        dots[i].classList.remove("active"); 
     }
-        
-    
-        slides[slideIndex].style.display = "block";
-        dots[slideIndex].className += "active";
-    } 
-    dots.forEach((item, index) =>{
-       item.addEventListener('click', ()=>{ 
-        showSlide(slideIndex = index); 
-        
-    })
-    
+
+    // Mostrar el slide actual y activar su punto correspondiente
+    slides[n].style.display = "block";
+    dots[n].classList.add("active");
+}
+
+// Configurar los eventos de clic en los puntos
+dots.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        slideIndex = index;
+        showSlide(slideIndex);
     });
+});
+</script>
     
     
     
-    
-    
-    
-        </script>        
-        
-<script> 
+        <script>
+/**
+ * Función única para manejar todos los popups
+ * @param {string} id - El número del popup (ej: '20')
+ * @param {string} claseVideo - La clase del video (ej: 'red20')
+ */
+function controlarPopup(id, claseVideo) {
+    var trailer = document.getElementById("popup-" + id);
+    var video = document.querySelector("." + claseVideo);
 
-function galvez21() { 
-    var trailer = document.getElementById("popup-21") 
-    var video = document.querySelector(".red21")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
+    if (trailer) {
+        trailer.classList.toggle("active");
+    }
 
+    if (video) {
+        video.pause();
+        video.currentTime = 0; // CORREGIDO: Usamos 0 para reiniciar el tiempo
+    }
+}
 
-function galvez22() { 
-    var trailer = document.getElementById("popup-22") 
-    var video = document.querySelector(".red22")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
-
-    
-function galvez20() { 
-    var trailer = document.getElementById("popup-20") 
-    var video = document.querySelector(".red20")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
-
-     
-</script>     
-
+// Para mantener compatibilidad con tus botones actuales:
+function galvez20() { controlarPopup('20', 'red20'); }
+function galvez21() { controlarPopup('21', 'red21'); }
+function galvez22() { controlarPopup('22', 'red22'); }
+</script>
 
  
     
