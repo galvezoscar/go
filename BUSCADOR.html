@@ -1,1636 +1,712 @@
 <!DOCTYPE html>
-<html lang="en" id="layer1" class="layer1_class"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="es">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galvez Oscar video</title>
-
-
-<script>
-function myFunction() {
-  document.getElementById("panel").style.display = "block";
-}
-</script>
+<title>GuiaLocal — Guia de Compras</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #161616;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --fg: #f5f0e8;
+    --muted: #8a8580;
+    --accent: #d4a843;
+    --accent2: #f0cc6b;
+    --red: #c0392b;
+    --green: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .font-display { font-family: 'Playfair Display', serif; }
 
-#panel {
-  display: none;
-}
+  /* Slider */
+  .slider-wrap { position: relative; overflow: hidden; }
+  .slider-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+  }
+  .slider-slide {
+    min-width: 100%;
+    position: relative;
+  }
+  .slider-slide img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+  }
+  @media(max-width:640px) { .slider-slide img { height: 260px; } }
 
-/* ===== BUSCADOR AGREGADO ===== */
-#buscadorPeliculas {
-  width: 90%;
-  max-width: 500px;
-  margin: 10px auto 15px auto;
-  display: block;
-  padding: 10px 16px;
-  font-size: 14px;
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  outline: none;
-  box-sizing: border-box;
-}
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(15,15,15,0.92) 0%, rgba(15,15,15,0.5) 50%, transparent 100%);
+    display: flex;
+    align-items: center;
+  }
+  .slide-content { padding: 2rem 3rem; max-width: 520px; }
+  @media(max-width:640px) {
+    .slide-content { padding: 1.5rem; max-width: 100%; }
+    .slide-overlay { background: linear-gradient(180deg, rgba(15,15,15,0.3) 0%, rgba(15,15,15,0.95) 100%); align-items: flex-end; }
+  }
 
-#buscadorPeliculas::placeholder {
-  color: rgba(255,255,255,0.4);
-}
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(15,15,15,0.6);
+    backdrop-filter: blur(8px);
+    color: var(--fg);
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slider-btn:hover {
+    background: var(--accent);
+    color: #0f0f0f;
+    border-color: var(--accent);
+  }
+  .slider-btn.prev { left: 16px; }
+  .slider-btn.next { right: 16px; }
 
-#buscadorPeliculas:focus {
-  border-color: rgba(255,50,50,0.7);
-}
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 0;
+  }
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    transition: all 0.35s;
+  }
+  .slider-dot.active {
+    background: var(--accent);
+    width: 28px;
+    border-radius: 4px;
+  }
 
-#resultadoBusqueda {
-  text-align: center;
-  color: rgba(255,255,255,0.5);
-  font-size: 13px;
-  margin: 5px auto 10px auto;
-  display: none;
-}
-/* ===== FIN BUSCADOR ===== */
+  /* Badges */
+  .badge-off {
+    background: var(--red);
+    color: white;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .badge-new {
+    background: var(--green);
+    color: white;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+
+  /* Categorías chips */
+  .cat-chip {
+    padding: 8px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.25s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cat-chip:hover { border-color: var(--muted); color: var(--fg); }
+  .cat-chip.active { background: var(--accent); border-color: var(--accent); color: #0f0f0f; font-weight: 600; }
+
+  /* Producto card */
+  .prod-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .prod-card:hover {
+    border-color: rgba(212,168,67,0.35);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+  .prod-card:hover .prod-img img {
+    transform: scale(1.06);
+  }
+  .prod-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .prod-img img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s;
+  }
+  .prod-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s;
+  }
+  .prod-card:hover .prod-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .prod-act-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(15,15,15,0.8);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--fg);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .prod-act-btn:hover { background: var(--accent); color: #0f0f0f; border-color: var(--accent); }
+  .prod-act-btn.liked { color: var(--red); }
+
+  /* Oferta relámpago */
+  .flash-bar {
+    background: linear-gradient(90deg, rgba(192,57,43,0.15), rgba(192,57,43,0.05), rgba(192,57,43,0.15));
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: 12px;
+  }
+  .countdown-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .countdown-num {
+    background: var(--red);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    min-width: 32px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-sep { color: var(--red); font-weight: 700; }
+
+  /* Slider horizontal de productos */
+  .h-slider-wrap { position: relative; }
+  .h-slider-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .h-slider-track::-webkit-scrollbar { display: none; }
+  .h-slider-item {
+    min-width: 260px;
+    max-width: 260px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+  @media(max-width:640px) { .h-slider-item { min-width: 220px; max-width: 220px; } }
+
+  .h-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    cursor: pointer;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s;
+    font-size: 14px;
+  }
+  .h-slider-arrow:hover { background: var(--accent); color: #0f0f0f; border-color: var(--accent); }
+  .h-slider-arrow.left { left: -16px; }
+  .h-slider-arrow.right { right: -16px; }
+  @media(max-width:1024px) { .h-slider-arrow { display: none; } }
+
+  /* Precio */
+  .price-old { text-decoration: line-through; color: var(--muted); font-size: 13px; }
+  .price-new { color: var(--accent2); font-weight: 700; font-size: 20px; }
+  .price-normal { color: var(--fg); font-weight: 600; font-size: 18px; }
+
+  /* Toast */
+  .toast-box {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .toast-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    animation: tIn 0.35s ease forwards;
+  }
+  .toast-item.out { animation: tOut 0.3s ease forwards; }
+  @keyframes tIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+  @keyframes tOut { from { transform: translateX(0); opacity:1; } to { transform: translateX(100%); opacity:0; } }
+
+  /* Nav */
+  nav {
+    backdrop-filter: blur(20px);
+    background: rgba(15,15,15,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gold-line { height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-up.vis { opacity: 1; transform: translateY(0); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
 </style>
-    <script>
-function myFunction() {
-  document.getElementById("panel").style.display = "block";
-}
-</script>
-<link rel="stylesheet" href="./Galvez Oscar video_files/zSlider.css"> 
-    
-    
-<link rel="stylesheet" href="./Galvez Oscar video_files/debug2.css">
-    
-    
-<link rel="stylesheet" href="file:///C:/Users/exo/Desktop/indo/debug2.css">
-    
-  
-<script>
-      function downLoad(){
-        if (document.all){
-            document.all["layer1"].style.visibility="none";
-            document.all["layer2"].style.visibility="none";
-        } else if (document.getElementById){
-            node = document.getElementById("layer1").style.visibility='none';
-            style.display='none';
-            node = document.getElementById("layer2").style.visibility='visible';
-        }
-      }
-    </script>
- 
-    
-<script>
+</head>
+<body>
 
-     
- function mostrar1(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7347426364097?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar2(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3628860181120?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar3(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4976769960699?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-function mostrar4(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7455751604911?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar5(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7766998977238?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-       
-    
-function mostrar6(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3912636107339?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-    
-function mostrar7(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7008696142358?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar8(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2555103873679?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
- function mostrar130(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7147949001342?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-    
-function mostrar9(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/8136406141457?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-    
-function mostrar10(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7056132475461?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar11(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/3348337789493?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar12(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2815434295928?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar13(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7361240763124?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar14(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7487350377092?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar15(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7273926560388?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar16(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/4261796448779?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar17(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/6914611612357?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar18(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/8125838068349?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar19(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7667664292566?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar20(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7592032537220?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar21(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/8012769462994?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-    
-function mostrar22(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/5290661972608?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar23(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7392451693188?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar24(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7677190212310?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar25(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7479938189956?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar26(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7244404099710?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-    
-function mostrar27(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4266901834428?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar28(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/8328603503121?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar29(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7234400291504?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar30(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2942245735152?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar31(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/5740522900070?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar32(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7555967945348?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar33(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7555967945348?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar34(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6688943442534?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar35(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7054953548357?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar36(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/5690586761959?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar37(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7283007163004?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar38(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7035740097068?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar39(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2869532428935?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar40(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7512145201796?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar41(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3182569458309?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar42(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3182569458309?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar43(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4663638624899?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar44(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6711229352550?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar45(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7337522825860?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar46(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7265250839087?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar47(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7274466839172?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar48(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6688943245926?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar49(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3659531029081?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar50(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7282960697988?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-          
-function mostrar51(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6791151356549?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-                
-function mostrar52(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4749810469465?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-                     
-function mostrar53(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2128053340733?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-                           
-function mostrar54(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/8090183535133?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                              
-function mostrar55(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7575409003140?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                
-function mostrar56(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2955871521446?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                   
-function mostrar57(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7595923212932?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                        
-function mostrar58(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7650038123097?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                           
-function mostrar59(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7562167650948?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                              
-function mostrar60(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7544291986052?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                  
-function mostrar61(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6848253200990?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-      
-                                                     
-function mostrar62(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7531546872452?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                         
-function mostrar63(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6089402616453?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                              
-function mostrar64(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7478812347012?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-function mostrar65(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7478812347012?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-          
-function mostrar66(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/8108485839602?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-               
-function mostrar67(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7222560819956?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                    
-function mostrar68(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3896433314326?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                         
-function mostrar69(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6949038066339?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                              
-function mostrar70(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6654090480217?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                   
-function mostrar71(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7555877702276?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                       
-function mostrar72(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7975589710546?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                            
-function mostrar73(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7063474932357?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-               
-                                                 
-function mostrar74(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6649798527535?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                    
-function mostrar75(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/1801718336075?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                    
-function mostrar76(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/5399378659968?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                    
-function mostrar77(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/3729788832345?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}          
-function mostrar78(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/3500633819765?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}           
-function mostrar79(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7098170280645?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}          
-function mostrar80(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7489977125508?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}            
-
-function mostrar81(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7279737244292?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-                                                    
-function mostrar82(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/1577320516250?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                    
-function mostrar83(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7487296244356?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                    
-function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11715842476670?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                                                       
-function mostrar85(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-                                                             
-function mostrar86(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11766644869828?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}                               
-function mostrar87(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11368955513540?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar88(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12403845958310?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar89(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11501642123940?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar90(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11095427844670 ?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar91(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12505176541874?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar92(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12531988105954?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar93(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12686792329966?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-
-function mostrar94(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12477843180094?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar95(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12009166408403?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar96(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11381331528321?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar97(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11647613471361?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-      
-function mostrar98(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11928424876554?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar99(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7149895551550?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar100(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12052560349761?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar101(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/10821435918977?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar102(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/10999988554367?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-          
-function mostrar103(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/1557737769533?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar104(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/      " FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>';}
-     
-function mostrar105(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/8319924046540?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar106(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/4823659121403?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar107(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7371901176555?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-        
-function mostrar108(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/1900655348285?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-         
-function mostrar109(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7572580141700?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-              
-function mostrar110(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2135837706895?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar111(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7570909366916?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-         
-function mostrar112(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7561691990660?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar113(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7392779700758?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar114(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/5601084770996?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar115(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7768344037894?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-    
-function mostrar116(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/1864265632399?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar117(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/8236851399173?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar118(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/3973322181224?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar119(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2501250255386?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar121(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7241004878542?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
-function mostrar122(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2245809474055?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar123(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7950179044084?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar124(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7353500699268?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar125(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://hydrax.net/watch?v=3CyoU2NEj" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO allowfullscreen></IFRAME>';}
-        
-function mostrar126(){
-document.getElementById('nuevaimg').innerHTML = '<iframe preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7946045229778?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-       
-function mostrar127(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7745363643124?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-           
-function mostrar128(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4340311591612?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-   
-  function mostrar129(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://filemoon.sx/e/vlxrrrlkaudj/Creed_III__2023_" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME>';}
-     
-   
-      
-    
-    
-    
-    
- function mostrar131(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/6570382723797?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
- function mostrar132(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2717121448588?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
- function mostrar133(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/4363545545269?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar134(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/2374449302174?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-    
- function mostrar135(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/6221896813147?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-    
- function mostrar120(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/5974784084690?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-   
- function mostrar136(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2869661928016?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
- function mostrar137(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/9649084762634?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
- function mostrar138(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/2379180280522?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar139(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7591965493892?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar140(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7175017859694?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar141(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7191243590205?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar142(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7562888153814?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-
-     
- function mostrar143(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/5424541993698?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-
-     
-function mostrar144(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME id="video_player autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/3642175916585?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-     
-function mostrar145(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/7293266627204?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-     
- function mostrar146(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7362485553895?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar147(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/5704626932437?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-
- function mostrar148(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/7909557799511?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
- function mostrar149(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/4198233016879?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-    
- function mostrar150(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7449463032452?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
-                
-
-     
-    
-    
-    
-            
-function fredr344et56f53re(){
-document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="inicio%20artel.gif"  tabindex="0" >';}
-    
-
-</script> 
-       
-</head> 
-    
-<body onload="downLoad()" id="layer2" class="carga">
-   
-<img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
-    
-    
-    
-
-<div id="panel">
-
-    
-    
-<figure poster="cinevacas.jpg" class="fade" id="video_player">
-    
-    
-<video preload="none" class="video-background" poster="cinevacas.jpg">
-<source src="#.mp4" type="video/mp4">
-<source src="#.webm" type="video/webm">
-</video>
-    
-    
-
-<div class="popup" id="popup-20">
-<div class="fullvid"><a id="nuevaimg"></a>
-
-    
-<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
-
-</div>
-</div> 
-    
-<div class="popup" id="popup-21">
-<div class="fullvid"><a id="nuevaimg1"></a>
-<a class="vol" href="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Go%20Animacion%20familia%20(2021).html%20#slidero">b</a>
-</div>
-</div>      
-
-    
-    
-      
-
-<div id="videotrailer">
-
-
-
-
-<div class="container">
-    
-   
-<!-- ===== BUSCADOR AGREGADO AQUI ===== -->
-<input type="text" id="buscadorPeliculas" placeholder="Buscar pelicula por nombre o genero...">
-<div id="resultadoBusqueda"></div>
-<!-- ===== FIN BUSCADOR ===== -->
-
-<div class="slides" style="display: none;">
-    
-
-<section class="content">
-    
-
-<div class="inicio">
-    
-    <div class="icon44 icon-4" style=" background-color: red;box-shadow: 5px 1px 10px blue;">
-    <a class="target"  >2026</a></div>
-    
-    <div class="icon44 icon-4">
-    <a class="target" href="Galvez%20Oscar%20Inicio%202025.html">2025</a></div>
-    
-    <div class="icon44 icon-4"> 
-    <a class="target" href="Galvez%20Oscar%20Inicio%202024.html"  >2024</a>
+<!-- Nav -->
+<nav class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,var(--accent),var(--accent2));">
+        <i class="fas fa-book-open text-sm" style="color:#0f0f0f;"></i>
+      </div>
+      <span class="font-display text-xl">Guia<span style="color:var(--accent);">Local</span></span>
     </div>
-    <div class="icon44 icon-4">
-    <a class="target" href="Galvez%20Oscar%20Inicio%202023.html" >2023</a></div>
-    <div class="icon44 icon-4">
-    <a class="target" href="Galvez%20Oscar%20Inicio%202022.html">2022</a></div>
-<div class="icon44 icon-4" >
-    <a class="target" href="Galvez%20Oscar%20Inicio%202021.html">2021</a></div>
-    
-    <div class="icon44 icon-4"> 
-    <a class="target" href="Galvez%20Oscar%20Inicio%202020.html"> 2020</a></div>
-    <div class="icon44 icon-4" >
-    <a class="target" href="Galvez%20Oscar%20Inicio%202019.html">2019</a></div>
-    
-    
-    
-</div>
-    
-    
-</section>
-    
-    
-    
-    
-</div>
-
-    
-
- 
-<div class="slides" style="display: block;">
-    
-
-<section class="content">
-    
-
-<div class="inicio">
-    
-    <div class="icon44 icon-4"> 
-    <a class="target"  href="Galvez%20Oscar%20Inicio%202025.html">Inicio</a></div>
-    <div class="icon44 icon-4">
-    <a class="target"   href="Galvez%20Oscar%20Animacion%202025.html">Animacion</a></div>
-    <div class="icon44 icon-4">
-    <a class="target"   href="Galves%20oscar%20Inicio%20Cia%20ficcion.html">Cia Ficcion</a></div>
-    
-    <div class="icon44 icon-4"> 
-    <a class="target"   href="Galves%20oscar%20Inicio%20Humor.html">Humor</a></div>
-    <div class="icon44 icon-4">
-    <a class="target"   href="Galves%20oscar%20Inicio%20Terror.html">Terror</a></div>
-    <div class="icon44 icon-4">
-    <a class="target" >°°°</a></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</div>
-    
-    
-    
-</section>
-    
-    
-    
-    
-</div>    
-
-    
-    
-
- 
-<div class="slides" style="display: block;">
-    
-
-<section class="content">
-    
- 
-    
-</section>
-    
-    
-    
-    
-</div>    
-
-    
-    
-    
-    
-    
-    
-
-    
-     
-<div class="slides" data-nombre="Uf Solo amigos Comedia Romantica 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/¡Uf! ¿Solo amigos (2026) .gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Romantica </a>
-</div>
-<p class="description"> Thando nunca ha tenido suerte en el amor... Y ahora, su mejor amigo vuelve a casa con una prometida del brazo y se ve obligada a afrontar una nueva emoción: los celos</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar84()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>    
-<div class="slides" data-nombre="Quien quiere casarse con un astronauta Comedia Romantica 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/¿Quién quiere casarse con un astronauta (2026) .gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Romantica </a>
- </div>
-<p class="description">David es un romántico empedernido que tiene una agencia de viajes especializada en viajes relacionados con comedias románticas. Su relación de 15 años con Quique está estancada. Entonces, David decide darle a Quique un viaje por la Ruta 66 con una parada especial en Las Vegas.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar85()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Alerta Extincion Comedia Terror 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Alerta%20Extincion%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Terror</a>
-</div>
-<p class="description">Cuando un hongo mutante altamente contagioso escapa de una instalación sellada, dos jóvenes empleados, acompañados por un veterano agente de bioterrorismo, deben sobrevivir al turno de noche más alocado de la historia para salvar a la humanidad de la extinción, mientras el microorganismo se propaga y destruye todo a su paso..</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar86()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Depredador Tierras salvajes C ficcion Accion 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Depredador%20Tierras%20salvajes%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >C ficción</a>
-<a class="link"  >Acción </a>
-</div>
-<p class="description">Dek, un joven Yautja (Depredador) exiliado por su clan y su propio padre, aterriza en un planeta hostil para demostrar su valía intentando dar caza a una criatura legendaria e "imposible de matar" llamada Kalisk. En su misión, forma una alianza inesperada con Thia, una androide de la corporación Weyland-Yutani que lo ayuda a navegar los peligros del entorno.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar87()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="El engano Aventuras Accion 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/El engano (2026) .gif">
-<div class="genero">
-<a class="link"  >Aventuras</a>
-<a class="link"  >Acción</a>
-</div>
-<p class="description">Bodden, una ex-pirata que busca paz en las Islas Caimán, pero debe volver a la violencia para salvar a su familia cuando su antiguo y despiadado capitán regresa por venganza.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar88()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="El Dia Del Fin Del Mundo Migracion Thriller Accion 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/El%20D%C3%ADa%20Del%20Fin%20Del%20Mundo%20Migraci%C3%B3n%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Thriller</a>
-<a class="link"  >Acción n</a>
-</div>
-<p class="description">Después de sobrevivir al fin del mundo por la caída de un cometa, Jeff Garrity, junto con su mujer Allison y su hijo Nathan, deciden abandonar el búnker que les ha mantenido a salvo cinco años para buscar una zona en Europa que podría ser habitable. Así, el último refugio es el principio de un nuevo comienzo. Juntos emprenderán un viaje donde los desastres naturales y los humanos que sobrevivieron han convertido el mundo en un auténtico infierno.</p>
-<p class="año">2026</p>
-<div class="meta2">
-<a class="red20" id="nuevaimg" href="javascript: mostrar89()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="El falsario Thriller Drama 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/El falsario (2026) .gif">
-<div class="genero">
-<a class="link"  >Thriller</a>
-<a class="link"  >Drama</a>
-</div>
-<p class="description">Roma, años setenta. Toni llega a la ciudad con el sueño de convertirse en un gran artista, pero pronto comienza a deslizarse por una peligrosa pendiente que le llevará a convertirse en el más grande de los falsificadores, trabajando para varias bandas criminales de la capital... Inspirada en una historia real.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar90()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-    
-    
-    
-    
-    
-    
-<div class="slides" data-nombre="El tour universitario con Joe Comedia Familia 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="Galvez%20Oscar%20video_files1/El%20tour%20universitario%20con%20Joe%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Familia</a>
-</div>
-<p class="description">Joe, el hermano faltón de Madea, se lleva de viaje a su nieto, criado entre algodones, para que sepa cómo es la vida antes de ir a la universidad.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar91()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Equipo Demolicion Accion Comedia 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Equipo%20Demolici%C3%B3n%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Acción</a>
-<a class="link"  > Comedia</a>
-</div>
-<p class="description">Dos hermanastros muy distintos, un detective impulsivo y otro disciplinado, se ven obligados a unirse tras el asesinato de su padre en Hawái y emprenden un peligroso viaje para descubrir una conspiración de gran alcance.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar92()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="La Cabra Comedia Deporte 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/La Cabra (2026) .gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Deporte</a>
-</div>
-<p class="description">Will  recibe una oportunidad única en la vida para unirse a los profesionales y jugar al rugebol, un deporte de alta intensidad, mixto y de contacto total dominado por los animales más rápidos y feroces del mundo </p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar93()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Estado de terror Thriller Accion 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Estado%20de%20terror%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Thriller</a>
-<a class="link"  >Acción</a>
-</div>
-<p class="description">Cuando policías corruptos secuestran a la hija del líder de la facción, la abogada Cristina busca rescatarla mientras la ciudad cae en un caos violento.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar94()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Iron Lung C Ficcion Terror 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Iron%20Lung%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >C Ficcion</a>
-<a class="link"  >Terror</a>
-</div>
-<p class="description">Película basada en el juego del mismo nombre, ambientada en un futuro postapocalíptico en el que un suceso conocido como 'El rapto silencioso' provocó la desaparición de todas las estrellas y planetas habitables conocidos del universo. Un convicto es enviado a explorar un océano de sangre descubierto en una luna desolada, utilizando un pequeño submarino apodado 'Pulmón de Hierro', la única esperanza que queda.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar95()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Los Muppets Un show especial Comedia Reboot 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Los%20Muppets%20Un%20show%20especial%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Comedia</a>
-<a class="link"  >Reboot</a>
-</div>
-<p class="description">Siguiendo la tradición de su clásico programa de variedades, los emblemáticos personajes de los Muppets regresan a la televisión por primera vez en más de cuatro décadas con música nueva, sketches cómicos y mucho caos entre bastidores, mientras se vuelven a presentar tanto a sus fans de toda la vida como a una nueva generación de espectadores.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar96()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Love Me Love Me Drama Romance 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Love%20Me,%20Love%20Me%20(2026)%20%20.gif">
-<div class="genero">
-<a class="link"  >Drama</a>
-<a class="link"  >Romance </a>
-</div>
-<p class="description">Tras la muerte de su hermano, June se muda a Milán para empezar de nuevo. Allí encuentra refugio en Will, el alumno perfecto de su instituto internacional. Pero James, el problemático mejor amigo de Will, que oculta una peligrosa vida en peleas clandestinas de MMA, convierte la rivalidad en una atracción irresistible que obliga a June a elegir entre una vida segura y un amor que lo cambia todo.
-</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar97()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>  
-    
-    
-    
-    
-<div class="slides" data-nombre="Sin Piedad C Ficcion Thriller 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="Galvez%2520Oscar%2520video_files1/Sin%20Piedad%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >C Ficción</a>
-<a class="link"  >Thriller</a>
-</div>
-<p class="description">En un futuro próximo, un detective (Chris Pratt) es acusado de asesinar a su esposa. Tiene 90 minutos para demostrar su inocencia ante la Jueza de la I.A. avanzada (Rebecca Ferguson), a la que él mismo defendió en su día, antes de que esta decida su destino.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar98()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>    
-
-<div class="slides" data-nombre="Susurros mortales 3 Humos Belico 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="Galvez%20Oscar%20video_files1/Susurros%20mortales%203%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Humos</a>
-<a class="link"  >Bélico</a>
-</div>
-<p class="description">Después de 25 años de la tragedia, un adolescente encuentra una caja misteriosa que perteneció a su abuelo.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar99()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Una carta a mi juventud Drama 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez%20Oscar%20video_files1/Una%20carta%20a%20mi%20juventud%20(2026)%20.gif">
-<div class="genero">
-<a class="link"  >Drama</a>
-<a class="link"  >Drama</a>
-</div>
-<p class="description">Un adolescente rebelde y un reservado educador forjan un vínculo inesperado en un orfanato, mientras intentan pasar página y lidiar con su doloroso pasado.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar100()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-<div class="slides" data-nombre="Una ultima aventura Asi se hizo Stranger Things 5 Documental C Ficcion 2019" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/Una última aventura Así se hizo Stranger Things (5) .gif">
-<div class="genero">
-<a class="link"  >Documental</a>
-<a class="link"  >C Ficcion</a>
-</div>
-<p class="description">Un vistazo exclusivo a todos los años de trabajo artesanal invertidos para crear la última entrega de la serie de los hermanos Duffer.</p>
-<p class="año">2019</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar101()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-    
-<div class="slides" data-nombre="El botin Thriller Accion 2026" data-buscable="si" style="display: none;">
-<section class="content">
-<img class="logopeli" src="./Galvez Oscar video_files1/El botín (2026) .gif">
-<div class="genero">
-<a class="link"  >Thriller</a>
-<a class="link"  >Acción</a>
-</div>
-<p class="description">La confianza de un grupo de policías de Miami comienza a resquebrajarse después de descubrir millones de dólares en efectivo en un escondite abandonado. A medida que fuerzas externas se enteran del tamaño de la incautación, todo se pone en duda, incluso en quién pueden confiar.</p>
-<p class="año">2026</p>
-<div class="meta">
-<a class="red20" id="nuevaimg" href="javascript: mostrar102()"><button class="go" onclick="galvez20()">go</button></a>
-</div>
-</section>
-</div>
-    
-     
-    
-    
-<!-- slider2 -->
-
- <div class="series">
-    
-    
-    
-    
-    
-    
-    
-</div>    
-</div>
-        
-    
-        
-
-
-<div class="volver2">
-<div class="item active" style="box-shadow:  none;
-" ><a class="volver11" >AÑO</a></div> 
-</div>
-    
-
-<div class="volver1">
-<div class="item active" style="box-shadow:  none;
-"  ><cam href="#">
-<a class="volver11">GENERO</a></cam></div> 
-</div>
-    
-    
-         
-
-    
-    
-    
-<article>
-
-<div class="show" id="slider1">
-    
-<div class="z-slide-wrap top" id="cartelera">
-<ul id="una2-id" class="z-slide-content fade3">
-
-    
-
-
-
-<li class="z-slide-item" style="transform: translate3d(0px, 0px, 0px);">
-<div class="item activeactive" style="display: none;"></div>                                 
-
-          
-                        
-<div class="item activeactiveactive"><cam href="./Movimiento Original - Mov Rap And Reggae.MP4">
-<img src="./Galvez Oscar video_files1/¡Uf! ¿Solo amigos (2026) .jpg"></cam></div> 					
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/¿Quién quiere casarse con un astronauta (2026) .jpg"></cam></div> 					
-
-    
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Alerta Extinción (2026) .jpg"></cam></div>
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Depredador%20Tierras%20salvajes%20(2026)%20.jpg"></cam></div>
-                        
-
-<div class="item activeactiveactiveactiveactive"><cam href="">
-<img src="./Galvez Oscar video_files1/El engano (2026) .jpg"></cam></div> 
-                        
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez Oscar video_files1/El Día Del Fin Del Mundo Migración (2026) .jpg"></cam></div> 
-
- 
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez Oscar video_files1/El falsario (2026) .jpg"></cam></div>
-                        
-
-
-</li>
-    
-    
-    
-
-<li class="z-slide-item" style="transform: translate3d(0px, 0px, 0px); transition: -webkit-transform 0.775986s linear;">
-
-          
-                        
-<div class="item activeactiveactive"><cam href="./Movimiento Original - Mov Rap And Reggae.MP4">
-<img src="./Galvez Oscar video_files1/El tour universitario con Joe (2026) .jpg"></cam></div> 					
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez Oscar video_files1/Equipo%20Demolici%C3%B3n%20(2026)%20.jpg"></cam></div> 					
-
-         
-
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/La Cabra (2026) .jpg"></cam></div>
-                    
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Estado de terror (2026) .jpg"></cam></div>
-                        
-
-<div class="item activeactiveactiveactiveactive"><cam href="">
-<img src="./Galvez Oscar video_files1/Iron Lung (2026) .jpg"></cam></div> 
-                        
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Los%20Muppets%20Un%20show%20especial%20(2026)%20.jpg"></cam></div> 
-
- 
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Love Me, Love Me (2026) .jpg"></cam></div>
-                   
-
-
-</li>
-    
-    
-    
-
-<li class="z-slide-item" style="transform: translate3d(0px, 0px, 0px); transition: -webkit-transform 0.775986s linear;">
-
-          
-                        
-<div class="item activeactiveactive"><cam href="./Movimiento Original - Mov Rap And Reggae.MP4">
-<img src="./Galvez Oscar video_files1/Sin piedad (2027) .jpg"></cam></div> 					
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez Oscar video_files1/Susurros mortales 3 (2026) .jpg"></cam></div> 					
-
-    
-<div class="item activeactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Una carta a mi juventud  (2026) .jpg"></cam></div>
-                        
-<div class="item activeactiveactiveactive"><cam href="#">
-<img src="./Galvez%20Oscar%20video_files1/Una%20%C3%BAltima%20aventura%20As%C3%AD%20se%20hizo%20Stranger%20Things%20(5)%20.jpg"></cam></div>
-                        
-
-<div class="item activeactiveactiveactiveactive"><cam href="">
-<img src="./Galvez%20Oscar%20video_files1/El%20bot%C3%ADn%20(2026)%20.jpg"></cam></div> 
-                        
- 
-
-</li>
-    
-    
-   
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</ul></div><div class="z-slide-indicator" style="left: -0.219px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.078px;"><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.1015px;"><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: -0.219px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.25px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.25px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.1795px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: -0.1955px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div></div>
-       
-
-          
-<div class="z-slide-wrap" id="slider2">
-
-<div iv="" class="" style="display: none;" id="cartelera2">
-<ul class="z-slide-content fade3" id="slidero">
-    
-<li class="z-slide-item 2" style="transform: translate3d(0px, 0px, 0px);"> 
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Bob%20Esponja%20Temporada%201.jpg" alt="si imagen"></div> </contenedor>
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Boku%20no%20Hero%20Academia%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/El%20principe%20del%20Rap.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Malcolm%20el%20del%20medio%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Tiempo%20de%20Aventura.jpg" alt="si imagen"></div></contenedor>
-    
-</li>
-    
-<li class="z-slide-item 2" style="transform: translate3d(619px, 0px, 0px);">
-
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Bob%20Esponja%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Boku%20no%20Hero%20Academia%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/El%20principe%20del%20Rap.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Malcolm%20el%20del%20medio%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Tiempo%20de%20Aventura.jpg" alt="si imagen"></div></contenedor>
-      
-</li>
-    
-<li class="z-slide-item 2" style="transform: translate3d(-619px, 0px, 0px);">
-
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Bob%20Esponja%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Boku%20no%20Hero%20Academia%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/El%20principe%20del%20Rap.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor> <div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Malcolm%20el%20del%20medio%20Temporada%201.jpg" alt="si imagen"></div></contenedor>
-    
-<contenedor><div class="item -series">
-<img src="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Series/Tiempo%20de%20Aventura.jpg" alt="si imagen"></div></contenedor>
-      
-    
-</li> </ul>
+    <div class="hidden md:flex items-center gap-6 text-sm" style="color:var(--muted);">
+      <a href="#" class="hover:text-white transition-colors">Directorio</a>
+      <a href="#" style="color:var(--accent);">Compras</a>
+      <a href="#" class="hover:text-white transition-colors">Ofertas</a>
     </div>
-    <div class="z-slide-indicator" style="left: -0.219px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.078px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.1015px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.1795px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: -0.1955px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div></div></article>
-   
-    
-
-      
-            
-<a style="cursor: pointer;" onclick="mostrarOcultar(&#39;mi-super-contenido&#39;)">
-    <input class="play" style="color: red" type="button" id="btn1" value="trailer" onclick="playPause()">
-    </a>
-       
-        
-        
-<div class="social-bar">
-      
-<div class="icon icon-facebook" target="_blank">
-<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Facebook</a>
-</div>
-<div class="icon icon-twitter" target="_blank">
-<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Twitter</a>
-</div>
-      
-     
-
-<div class="icon icon-inicio" > 
-<a  class="target" href="index.html">Home</a></div>
-     
-<div class="icon icon-0"> 
-<a  class="target" href="Galvez%20Oscar%20Inicio%202026.html">Peliculas</a></div>
-      
-<div class="icon icon-1"> 
-<a class="target" type="button" href="Galves%20oscar%20Inicio%20Animacion.html">Kid</a></div>
-    
-
-      
-<div class="icon icon-3"> 
-<a class="target" 
-   >Anime</a></div>
-      
-<div class="icon icon-2"> 
-<a class="target" 
-   >TV</a></div>
-    
-<div class="icon icon-4"> 
-<a class="target" 
-   >Paguinas recomendadas</a></div>
-     
-<div class="icono icon-5"> 
- 
-<div class="icon icon-4" onclick="cambiaVisibilidad()">
-<a class="target1" style="display: none;" id="accionar">Peliculas</a></div>
-    
-<div class="icon icon-4" onclick="cambiaVisibilidad()">
-<a class="target1" id="accionar1">Series</a></div> 
-</div>
-    
-    
-    
-      
-      
+    <div class="flex items-center gap-3">
+      <button class="relative" style="background:none;border:none;color:var(--fg);cursor:pointer;font-size:18px;" onclick="toast('Carrito vacio','info')">
+        <i class="fas fa-shopping-bag"></i>
+        <span id="cartBadge" class="absolute -top-1 -right-2 w-4 h-4 rounded-full text-xs flex items-center justify-center font-bold" style="background:var(--red);color:white;font-size:9px;display:none;">0</span>
+      </button>
     </div>
-    
-   
-<div class="booton1" style="left: -6vw;  top:  75%; ">
-<a class="link1"  href="Galvez%20Oscar%20Animacion%202025.html"  ><img class="FLECHA"  src="./151846.png"></a>
-    
-<a class="link1"  style="margin-top:   11vh; margin-left:  -5vw; position: absolute" href="Galvez%20Oscar%20Inicio%202025.html"><img class="FLECHA"  src="./251846.png"></a>
-    
-</div>
-    
+  </div>
+</nav>
+
+<!-- Hero Slider -->
+<header class="pt-16">
+  <div class="slider-wrap">
+    <div class="slider-track" id="heroSlider">
+      <!-- Slides generados por JS -->
     </div>
-    
-    
-    
-  
-  <div><img id="btn" class="logo" src="./Galvez Oscar video_files/letras cartel.gif">
-</div>
-   
-    
+    <button class="slider-btn prev" onclick="heroSlide(-1)" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+    <button class="slider-btn next" onclick="heroSlide(1)" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    <div class="slider-dots" id="heroDots"></div>
+  </div>
+</header>
 
-  
-    <div> <a href="javascript:history.back()"><img  class="logo2"  class="volver" src="volver%20flechan(1).png"></a>
-</div>
+<!-- Oferta Relámpago -->
+<section class="py-8 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="flash-bar p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <i class="fas fa-bolt text-xl" style="color:var(--red);"></i>
+        <div>
+          <div class="font-bold text-sm" style="color:var(--red);">OFERTA RELAMPAGO</div>
+          <div class="text-xs" style="color:var(--muted);">Termina en:</div>
+        </div>
+      </div>
+      <div class="countdown-box flex-shrink-0">
+        <span class="countdown-num" id="cdH">05</span>
+        <span class="countdown-sep">:</span>
+        <span class="countdown-num" id="cdM">42</span>
+        <span class="countdown-sep">:</span>
+        <span class="countdown-num" id="cdS">18</span>
+      </div>
+      <div class="flex-1 text-center sm:text-left">
+        <span class="font-semibold text-sm">Hasta 50% en electronica seleccionada</span>
+        <span class="text-xs ml-2" style="color:var(--muted);">Solo hoy</span>
+      </div>
+      <button class="btn-accent text-sm px-6 py-2.5 rounded-lg flex-shrink-0" style="background:var(--red);border:none;color:white;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.3s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(192,57,43,0.5)'" onmouseout="this.style.boxShadow='none'" onclick="document.getElementById('flashSection').scrollIntoView({behavior:'smooth'})">
+        Ver ofertas
+      </button>
+    </div>
+  </div>
+</section>
 
-    
-    
-    <a style="cursor: pointer;" onclick="mostrarOcultar">
-    <input class="pause" type="button" id="btn2" value="pause" onclick="playPause1()"></a>
-    
-</figure>
-        
-        
-    
-    
-    
+<!-- Categorías -->
+<section class="py-6 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex gap-2 overflow-x-auto pb-2" style="scrollbar-width:none;" id="catBar">
+      <!-- Generado por JS -->
+    </div>
+  </div>
+</section>
 
-        
+<!-- Productos Destacados (slider horizontal) -->
+<section class="py-8 px-4" style="background:var(--bg2);">
+  <div class="max-w-6xl mx-auto fade-up">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <span class="text-xs font-semibold tracking-widest uppercase" style="color:var(--accent);">Seleccionado para ti</span>
+        <h2 class="font-display text-2xl sm:text-3xl mt-1">Destacados de la semana</h2>
+      </div>
+    </div>
+    <div class="h-slider-wrap">
+      <button class="h-slider-arrow left" onclick="hScroll('featured',-280)" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+      <div class="h-slider-track" id="featuredSlider"></div>
+      <button class="h-slider-arrow right" onclick="hScroll('featured',280)" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
 
-</div>
+<!-- Ofertas Relámpago (slider horizontal) -->
+<section id="flashSection" class="py-8 px-4">
+  <div class="max-w-6xl mx-auto fade-up">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <span class="text-xs font-semibold tracking-widest uppercase" style="color:var(--red);">Tiempo limitado</span>
+        <h2 class="font-display text-2xl sm:text-3xl mt-1">Ofertas relampago</h2>
+      </div>
+    </div>
+    <div class="h-slider-wrap">
+      <button class="h-slider-arrow left" onclick="hScroll('flash',-280)" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+      <div class="h-slider-track" id="flashSlider"></div>
+      <button class="h-slider-arrow right" onclick="hScroll('flash',280)" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
 
-               
-    
-<footer>          
+<!-- Grid de productos (todos) -->
+<section class="py-10 px-4" style="background:var(--bg2);">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8 fade-up">
+      <span class="text-xs font-semibold tracking-widest uppercase" style="color:var(--accent);">Explora todo</span>
+      <h2 class="font-display text-2xl sm:text-3xl mt-1">Todas las publicaciones</h2>
+      <div class="gold-line w-14 mx-auto mt-3"></div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" id="allGrid"></div>
+    <div id="noRes" class="hidden text-center py-16">
+      <i class="fas fa-box-open text-4xl mb-3" style="color:var(--border);"></i>
+      <p class="font-medium">Sin resultados</p>
+      <p class="text-sm mt-1" style="color:var(--muted);">Intenta con otra categoria</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-10 px-4" style="border-top:1px solid var(--border);">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style="color:var(--muted);">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:linear-gradient(135deg,var(--accent),var(--accent2));">
+        <i class="fas fa-book-open" style="color:#0f0f0f;font-size:10px;"></i>
+      </div>
+      <span class="font-display text-sm" style="color:var(--fg);">GuiaLocal</span>
+    </div>
+    <p>2024 GuiaLocal. Guia de compras.</p>
+    <div class="flex gap-4">
+      <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+      <a href="#" class="hover:text-white transition-colors">Terminos</a>
+    </div>
+  </div>
 </footer>
-           <script>
- $(document).ready(function() {
-    $("carga").fadeOut("slow");;
+
+<!-- Toast -->
+<div class="toast-box" id="toastBox"></div>
+
+<script>
+// ===== DATOS =====
+const slides = [
+  { img: "https://picsum.photos/seed/shopbanner1/1400/500.jpg", tag: "COLECCION NUEVA", title: "Electronica de alta gama", desc: "Los mejores equipos al mejor precio, con garantia extendida de 2 anos.", btn: "Ver ofertas", cat: "Electronica" },
+  { img: "https://picsum.photos/seed/shopbanner2/1400/500.jpg", tag: "HASTA 40% OFF", title: "Moda y Accesorios", desc: "Prendas seleccionadas de las mejores marcas locales con descuentos exclusivos.", btn: "Comprar ahora", cat: "Moda" },
+  { img: "https://picsum.photos/seed/shopbanner3/1400/500.jpg", tag: "ENVIO GRATIS", title: "Hogar y Decoracion", desc: "Transforma tu espacio con piezas unicas. Envio gratis en compras mayores a $500.", btn: "Explorar", cat: "Hogar" },
+  { img: "https://picsum.photos/seed/shopbanner4/1400/500.jpg", tag: "LO MAS VENDIDO", title: "Deportes y Fitness", desc: "Equipamiento profesional para tu entrenamiento. Las marcas top del mercado.", btn: "Ver mas", cat: "Deportes" }
+];
+
+const products = [
+  { id:1, name:"Auriculares Bluetooth Pro", store:"AudioMax", cat:"Electronica", price:899, oldPrice:1499, img:"seed/prod1/500/500", featured:true, flash:true, isNew:false, rating:4.7, reviews:234 },
+  { id:2, name:"Smartwatch Fitness X", store:"TechZone", cat:"Electronica", price:1299, oldPrice:2199, img:"seed/prod2/500/500", featured:true, flash:true, isNew:true, rating:4.5, reviews:178 },
+  { id:3, name:"Zapatillas Runner Elite", store:"SportLife", cat:"Deportes", price:1599, oldPrice:null, img:"seed/prod3/500/500", featured:true, flash:false, isNew:true, rating:4.8, reviews:312 },
+  { id:4, name:"Chaqueta Cuero Vintage", store:"FashionHub", cat:"Moda", price:2399, oldPrice:3200, img:"seed/prod4/500/500", featured:true, flash:false, isNew:false, rating:4.6, reviews:89 },
+  { id:5, name:"Lampara LED Arquitectonica", store:"DecoHome", cat:"Hogar", price:649, oldPrice:899, img:"seed/prod5/500/500", featured:false, flash:true, isNew:false, rating:4.4, reviews:156 },
+  { id:6, name:"Cafetera Espresso Automatica", store:"CocinaPlus", cat:"Hogar", price:3499, oldPrice:4999, img:"seed/prod6/500/500", featured:true, flash:true, isNew:false, rating:4.9, reviews:421 },
+  { id:7, name:"Gafas de Sol Polarizadas", store:"OpticaVista", cat:"Moda", price:599, oldPrice:null, img:"seed/prod7/500/500", featured:false, flash:false, isNew:true, rating:4.3, reviews:67 },
+  { id:8, name:"Mochila Trekking 45L", store:"SportLife", cat:"Deportes", price:899, oldPrice:1299, img:"seed/prod8/500/500", featured:false, flash:true, isNew:false, rating:4.6, reviews:198 },
+  { id:9, name:"Teclado Mecanico RGB", store:"AudioMax", cat:"Electronica", price:1099, oldPrice:1599, img:"seed/prod9/500/500", featured:false, flash:false, isNew:false, rating:4.5, reviews:245 },
+  { id:10, name:"Set Cuchillos Chef Pro", store:"CocinaPlus", cat:"Hogar", price:1899, oldPrice:null, img:"seed/prod10/500/500", featured:false, flash:false, isNew:true, rating:4.7, reviews:134 },
+  { id:11, name:"Reloj Analogico Acero", store:"FashionHub", cat:"Moda", price:2199, oldPrice:2899, img:"seed/prod11/500/500", featured:true, flash:false, isNew:false, rating:4.8, reviews:276 },
+  { id:12, name:"Bicicleta Ruta Carbono", store:"SportLife", cat:"Deportes", price:8999, oldPrice:12999, img:"seed/prod12/500/500", featured:false, flash:true, isNew:false, rating:4.9, reviews:54 },
+  { id:13, name:"Monitor Curvo 32\"", store:"TechZone", cat:"Electronica", price:4299, oldPrice:5999, img:"seed/prod13/500/500", featured:true, flash:true, isNew:false, rating:4.6, reviews:189 },
+  { id:14, name:"Jardinera Vertical Modular", store:"DecoHome", cat:"Hogar", price:749, oldPrice:null, img:"seed/prod14/500/500", featured:false, flash:false, isNew:true, rating:4.2, reviews:43 },
+  { id:15, name:"Sneakers Limited Edition", store:"FashionHub", cat:"Moda", price:3299, oldPrice:null, img:"seed/prod15/500/500", featured:true, flash:false, isNew:true, rating:4.9, reviews:567 },
+  { id:16, name:"Altavoz Portatil Waterproof", store:"AudioMax", cat:"Electronica", price:699, oldPrice:999, img:"seed/prod16/500/500", featured:false, flash:true, isNew:false, rating:4.4, reviews:321 }
+];
+
+const cats = ["Todos", "Electronica", "Moda", "Hogar", "Deportes"];
+let activeCat = "Todos";
+let cartCount = 0;
+let liked = new Set();
+
+// ===== SLIDER HERO =====
+let heroIdx = 0;
+let heroTimer;
+
+function buildHero() {
+  const track = document.getElementById('heroSlider');
+  const dots = document.getElementById('heroDots');
+  track.innerHTML = slides.map((s, i) => `
+    <div class="slider-slide">
+      <img src="https://picsum.photos/${s.img}.jpg" alt="${s.title}" loading="${i===0?'eager':'lazy'}">
+      <div class="slide-overlay">
+        <div class="slide-content">
+          <span class="inline-block px-3 py-1 rounded-md text-xs font-bold tracking-wider mb-3" style="background:var(--accent);color:#0f0f0f;">${s.tag}</span>
+          <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-900 mb-3 leading-tight">${s.title}</h1>
+          <p class="text-sm sm:text-base mb-5" style="color:var(--muted);max-width:400px;">${s.desc}</p>
+          <button class="px-7 py-3 rounded-xl font-semibold text-sm" style="background:var(--accent);color:#0f0f0f;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.3s;" onmouseover="this.style.boxShadow='0 6px 24px rgba(212,168,67,0.45)'" onmouseout="this.style.boxShadow='none'" onclick="selectCat('${s.cat}')">${s.btn}</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = slides.map((_, i) => `<button class="slider-dot ${i===0?'active':''}" onclick="goHero(${i})" aria-label="Slide ${i+1}"></button>`).join('');
+  startHeroTimer();
+}
+
+function goHero(i) {
+  heroIdx = i;
+  document.getElementById('heroSlider').style.transform = `translateX(-${i * 100}%)`;
+  document.querySelectorAll('.slider-dot').forEach((d, j) => d.classList.toggle('active', j === i));
+  resetHeroTimer();
+}
+
+function heroSlide(dir) {
+  goHero((heroIdx + dir + slides.length) % slides.length);
+}
+
+function startHeroTimer() { heroTimer = setInterval(() => heroSlide(1), 5500); }
+function resetHeroTimer() { clearInterval(heroTimer); startHeroTimer(); }
+
+// ===== COUNTDOWN =====
+let cdTotal = 5*3600 + 42*60 + 18;
+function updateCD() {
+  if (cdTotal <= 0) cdTotal = 6*3600;
+  cdTotal--;
+  const h = Math.floor(cdTotal / 3600);
+  const m = Math.floor((cdTotal % 3600) / 60);
+  const s = cdTotal % 60;
+  document.getElementById('cdH').textContent = String(h).padStart(2, '0');
+  document.getElementById('cdM').textContent = String(m).padStart(2, '0');
+  document.getElementById('cdS').textContent = String(s).padStart(2, '0');
+}
+setInterval(updateCD, 1000);
+
+// ===== CATEGORÍAS =====
+function buildCats() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = cats.map(c => `<button class="cat-chip ${c===activeCat?'active':''}" onclick="selectCat('${c}')">${c}</button>`).join('');
+}
+
+function selectCat(cat) {
+  activeCat = cat;
+  buildCats();
+  renderAll();
+  document.getElementById('allGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== TARJETA DE PRODUCTO =====
+function prodHTML(p) {
+  const discount = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
+  const likedClass = liked.has(p.id) ? 'liked' : '';
+  return `
+    <div class="prod-card" onclick="openProd(${p.id})">
+      <div class="prod-img">
+        <img src="https://picsum.photos/${p.img}.jpg" alt="${p.name}" loading="lazy">
+        <div class="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+          ${discount ? `<span class="badge-off">-${discount}%</span>` : ''}
+          ${p.isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+        </div>
+        <div class="prod-actions">
+          <button class="prod-act-btn ${likedClass}" onclick="event.stopPropagation();toggleLike(${p.id},this)" aria-label="Favorito">
+            <i class="${liked.has(p.id)?'fas':'far'} fa-heart"></i>
+          </button>
+          <button class="prod-act-btn" onclick="event.stopPropagation();addCart('${p.name}')" aria-label="Agregar al carrito">
+            <i class="fas fa-shopping-bag"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-3.5">
+        <div class="text-xs mb-1" style="color:var(--muted);">${p.store}</div>
+        <h3 class="text-sm font-semibold leading-tight mb-2" style="color:var(--fg);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name}</h3>
+        <div class="flex items-center gap-1 mb-2">
+          <i class="fas fa-star text-xs" style="color:var(--accent);"></i>
+          <span class="text-xs font-semibold">${p.rating}</span>
+          <span class="text-xs" style="color:var(--muted);">(${p.reviews})</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          ${p.oldPrice ? `<span class="price-old">$${p.oldPrice.toLocaleString()}</span>` : ''}
+          ${p.oldPrice ? `<span class="price-new">$${p.price.toLocaleString()}</span>` : `<span class="price-normal">$${p.price.toLocaleString()}</span>`}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ===== RENDERIZAR SECCIONES =====
+function renderFeatured() {
+  document.getElementById('featuredSlider').innerHTML = products.filter(p => p.featured).map(p => `<div class="h-slider-item">${prodHTML(p)}</div>`).join('');
+}
+
+function renderFlash() {
+  document.getElementById('flashSlider').innerHTML = products.filter(p => p.flash).map(p => `<div class="h-slider-item">${prodHTML(p)}</div>`).join('');
+}
+
+function renderAll() {
+  const filtered = activeCat === "Todos" ? products : products.filter(p => p.cat === activeCat);
+  const grid = document.getElementById('allGrid');
+  const noRes = document.getElementById('noRes');
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    noRes.classList.remove('hidden');
+  } else {
+    noRes.classList.add('hidden');
+    grid.innerHTML = filtered.map(p => `<div>${prodHTML(p)}</div>`).join('');
+  }
+}
+
+// ===== SLIDER HORIZONTAL SCROLL =====
+function hScroll(id, amount) {
+  const el = document.getElementById(id === 'featured' ? 'featuredSlider' : 'flashSlider');
+  el.scrollBy({ left: amount, behavior: 'smooth' });
+}
+
+// ===== LIKE =====
+function toggleLike(id, btn) {
+  if (liked.has(id)) {
+    liked.delete(id);
+    toast('Eliminado de favoritos', 'info');
+  } else {
+    liked.add(id);
+    toast('Agregado a favoritos', 'success');
+  }
+  // Re-renderizar todo para reflejar el cambio
+  renderFeatured();
+  renderFlash();
+  renderAll();
+}
+
+// ===== CARRITO =====
+function addCart(name) {
+  cartCount++;
+  const badge = document.getElementById('cartBadge');
+  badge.style.display = 'flex';
+  badge.textContent = cartCount;
+  toast(`${name} agregado al carrito`, 'success');
+}
+
+// ===== ABRIR PRODUCTO (simplificado) =====
+function openProd(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  toast(`Viendo: ${p.name} — $${p.price.toLocaleString()}`, 'info');
+}
+
+// ===== TOAST =====
+function toast(msg, type) {
+  const box = document.getElementById('toastBox');
+  const el = document.createElement('div');
+  el.className = 'toast-item';
+  const icons = { success: '<i class="fas fa-check-circle" style="color:var(--green);font-size:16px;"></i>', info: '<i class="fas fa-info-circle" style="color:var(--accent);font-size:16px;"></i>' };
+  el.innerHTML = `${icons[type]||icons.info}<span>${msg}</span>`;
+  box.appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 2800);
+}
+
+// ===== SCROLL REVEAL =====
+function setupReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+}
+
+// ===== TOUCH SWIPE PARA HERO =====
+let touchX = 0;
+document.addEventListener('DOMContentLoaded', () => {
+  const wrap = document.querySelector('.slider-wrap');
+  wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) heroSlide(diff > 0 ? 1 : -1);
+  }, { passive: true });
 });
-             
-               
-               
-</script>     
 
-    
-    
-  
-
-     
-<script>
-    var video_player = document.getElementById("video_player"),
-links = video_player.getElementsByTagName('cam');
-for (var i=0; i<links.length; i++) {
-    links[i].onclick = handler;
-}
-    
-function handler(e) {
-    e.preventDefault();
-    videotarget = this.getAttribute("href");
-    filename = videotarget.substr(0, videotarget.lastIndexOf('.')) || videotarget;
-    video = document.querySelector("#video_player video");
-    
-    source = document.querySelectorAll("#video_player video source");
-    source[0].src = filename + ".mp4";
-    source[1].src = filename + ".webm";
-    video.load();
-    video.play(none); 
-}	
-    
-
-
-var video =
-document.getElementById("video_Player");
-function playPause() {
-btn1.style.display = 'inherit'; 
-btn2.style.display = 'inherit';
-videotrailer.style.opacity = '0';
-video.play(); 
-
-}
-
-function playPause1() { 
-btn2.style.display = 'inherit';
-btn2.style.display = 'none';
-videotrailer.style.opacity = '1';
-video.pause();
-}
-    
-    
-
-var video =
-document.getElementById("video_Player");
-function playPause() {
-btn1.style.display = 'inherit'; 
-btn2.style.display = 'inherit';
-videotrailer.style.opacity = '0';
-video.play(); 
-
-}
-
-function playPause1() { 
-btn2.style.display = 'inherit';
-btn2.style.display = 'none';
-videotrailer.style.opacity = '1';
-video.pause();
-}
-    
-    
-    
-    
-    </script>
-    
-    
-    
-   
- 
-    
-    
-    
-  <script languague="javascript">
-    
-    
-    
-    
-    
-    function cambiaVisibilidad() {
-       var div1 = document.getElementById('cartelera');
-       var div2 = document.getElementById('cartelera2');
-       var div3 = document.getElementById('accionar1');
-       var div4 = document.getElementById('accionar');
-        
-       if(div2.style.display == 'block'){
-           div2.style.display = 'none';
-           div1.style.display = 'block';
-           div4.style.display = 'none';
-           div3.style.display = 'block';
-           
-       }else{
-          div2.style.display = 'block';
-          div1.style.display = 'none';
-           div3.style.display = 'none';
-           div4.style.display = 'block';
-         }
-   }
-    
-
-    
+// ===== INIT =====
+buildHero();
+buildCats();
+renderFeatured();
+renderFlash();
+renderAll();
+setupReveal();
 </script>
-    
-
-    
-<script>
-        
-const slides = document.querySelectorAll('.slides');
-const dots = document.querySelectorAll('.item');
-let slideIndex = 0;
-showSlide();
-function showSlide(n){
-for(let i=0; i<slides.length; i++){
-               slides[i].style.display = "none";
-    }
-        
-    
-        slides[slideIndex].style.display = "block";
-        dots[slideIndex].className += "active";
-    } 
-    dots.forEach((item, index) =>{
-       item.addEventListener('click', ()=>{ 
-        showSlide(slideIndex = index); 
-        
-    })
-    
-    });
-    
-    
-    
-    
-    
-    
-        </script>        
-        
-<script> 
-
-function galvez21() { 
-    var trailer = document.getElementById("popup-21") 
-    var video = document.querySelector(".red21")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
-
-
-function galvez22() { 
-    var trailer = document.getElementById("popup-22") 
-    var video = document.querySelector(".red22")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
-
-    
-function galvez20() { 
-    var trailer = document.getElementById("popup-20") 
-    var video = document.querySelector(".red20")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
-
-     
-</script>     
-
-
-<!--
-
-<script>
- 
-    addEventListener("click", function() {
-    var el = document.documentElement,
-      rfs = el.requestFullscreen
-        || el.webkitRequestFullScreen
-        || el.mozRequestFullScreen
-        || el.msRequestFullscreen 
-        ;rfs.call(el);});
-        
-   </script> 
-    
--->
-
-    
-<script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
-<script src="./Galvez Oscar video_files/app.js.descarga"></script>
-
-
-<!-- ===== SCRIPT BUSCADOR AGREGADO ===== -->
-<script>
-(function(){
-    var buscador = document.getElementById('buscadorPeliculas');
-    var resultado = document.getElementById('resultadoBusqueda');
-    
-    // Guardar estado original de los slides (los que tienen data-buscable="si")
-    var slidesBuscables = document.querySelectorAll('.slides[data-buscable="si"]');
-    var totalPeliculas = slidesBuscables.length;
-    
-    buscador.addEventListener('input', function(){
-        var texto = this.value.toLowerCase().trim();
-        
-        if(texto === ''){
-            // Si el buscador esta vacio, restaurar todo a su estado original
-            slidesBuscables.forEach(function(slide){
-                slide.style.display = 'none';
-                slide.setAttribute('data-resultado', '');
-            });
-            resultado.style.display = 'none';
-            resultado.textContent = '';
-            return;
-        }
-        
-        var encontrados = 0;
-        
-        slidesBuscables.forEach(function(slide){
-            var nombre = (slide.getAttribute('data-nombre') || '').toLowerCase();
-            // Tambien buscar en la descripcion
-            var desc = (slide.querySelector('.description') || {}).textContent || '';
-            desc = desc.toLowerCase();
-            var generos = '';
-            var linksGenero = slide.querySelectorAll('.link');
-            linksGenero.forEach(function(l){ generos += ' ' + l.textContent; });
-            generos = generos.toLowerCase();
-            
-            if(nombre.indexOf(texto) !== -1 || desc.indexOf(texto) !== -1 || generos.indexOf(texto) !== -1){
-                slide.style.display = 'block';
-                slide.setAttribute('data-resultado', 'si');
-                encontrados++;
-            } else {
-                slide.style.display = 'none';
-                slide.setAttribute('data-resultado', '');
-            }
-        });
-        
-        // Mostrar resultado
-        if(encontrados > 0){
-            resultado.style.display = 'block';
-            resultado.textContent = encontrados + ' pelicula(s) encontrada(s)';
-        } else {
-            resultado.style.display = 'block';
-            resultado.textContent = 'No se encontraron resultados para "' + texto + '"';
-        }
-    });
-    
-    // Al presionar Escape, limpiar el buscador
-    buscador.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){
-            this.value = '';
-            this.dispatchEvent(new Event('input'));
-            this.blur();
-        }
-    });
-})();
-</script>
-<!-- ===== FIN SCRIPT BUSCADOR ===== -->
-    
-    
-    
-
-    
-</body></html>
+</body>
+</html>
