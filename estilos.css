@@ -1,0 +1,386 @@
+
+
+
+
+
+
+body {
+  
+      background: linear-gradient(135deg, black 0%, grey 100%); /* Degradado Rojo/Naranja urgente */
+}
+
+
+
+
+
+
+
+
+/* --- Contenedor de la Publicidad (Glassmorphism) --- */
+.slider-wrapper   {
+    
+    margin-top: 1%;
+}
+HTML {
+    
+  height: 200VW;
+}
+
+
+
+/* --- Contenedor de la Publicidad (Glassmorphism) --- */
+.slide-info {
+    background: rgba(0, 0, 0, 0.2);  
+    padding: 21vw 0%;
+    border-radius: 11%; 
+    position: relative;
+ }
+
+/* --- Etiqueta (Tag) "Envios" --- */
+.slide-tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #f1c40f, #f39c12); /* Degradado dorado/amarillo */
+    color: #2c3e50;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 50px; /* Forma de píldora */
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
+    letter-spacing: 1px;
+    left:  -1%;
+    position: absolute;
+    
+}
+
+ 
+
+.slide-title a {
+    display: inline-flex;
+    align-items: center;
+    background-color: #25D366; /* Verde WhatsApp Oficial */
+    color: white !important;
+    text-decoration: none;
+    padding: 5% 5%;
+    border-radius: 50px;
+    font-weight: bold;
+     box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+    transition: all 0.3s ease;
+    left:  1%;
+    position: absolute;
+    bottom:  5%;
+    height: 10%;
+    width: 10%;
+}
+
+.slide-title a:hover {
+    transform: translateY(-3px); /* Efecto de levantarse al pasar el mouse */
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
+    background-color: #128C7E;
+}
+
+/* Icono de WhatsApp dentro del botón */
+.slide-title img.whatsapp {
+    width: 11vw;
+    height: 12vw;
+    filter: brightness(0) invert(1); /* Asegura que el icono sea 
+    blanco */
+     left:  -21%;
+    top: -30%;
+    position: absolute;
+}
+
+/* --- Descripción --- */
+.slide-desc {
+    font-size: 1rem;
+    margin-bottom: -55px;
+    color: #ecf0f1;
+    line-height: 1.6;
+      background: linear-gradient(135deg, green 0%, #ff4b2b 100%); 
+    width: 50%;
+    margin-left:  70%;
+    width: 20vw;
+ }
+
+/* --- BOTÓN PRINCIPAL (CTA - Call To Action) --- */
+.slide-btn {
+      background: linear-gradient(135deg, green 0%, #ff4b2b 100%); /* Degradado Rojo/Naranja urgente */
+    color: white;
+    text-decoration: none;
+    padding: 1% 13px;
+     font-weight: 999;
+    letter-spacing: 1px;
+    font-size: 1.5vw; 
+    position: absolute;
+     left: 60%;
+    margin-top:  27%;
+}
+
+/* Efecto Hover del botón principal */
+.slide-btn:hover {
+    transform: translateY(-5px) scale(1.02); /* Se agranda un poco y sube */
+    box-shadow: 0 15px 30px rgba(255, 75, 43, 0.5);
+    background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 100%); /* Invierte el degradado */
+}
+
+
+
+
+
+
+
+
+/* Reseteo básico y estilos del contenedor */
+body { margin: 0; font-family: Arial, sans-serif; }
+
+.navbar {
+    background-color: #333; /* Color de fondo */
+     height: 6%;
+}
+
+.nav-list {
+    list-style: none; /* Quita puntos de lista */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Activa Flexbox */
+    justify-content: center; /* Centra los botones (o 'flex-start'/'flex-end') */
+    gap: 20px; /* Espacio entre botones */
+}
+
+/* Estilos para los botones (enlaces) */
+.nav-list a {
+    text-decoration: none; /* Quita subrayado */
+    color: white; /* Color texto */
+    padding: 10px 20px;
+    display: block;
+    border-radius: 5%;
+    transition: background-color 0.3s;
+}
+
+/* Efecto Hover (al pasar el ratón) */
+.nav-list a:hover {
+    background-color: #555;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Estilos Básicos */
+    nav {      background: linear-gradient(135deg, green 0%, #ff4b2b 100%);
+
+}
+    nav ul { margin: 0; padding: 0; list-style: none; 
+ background-color: #000; /* Fondo oscuro para resaltar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+        
+}
+    nav li { position: relative; }
+    nav a { display: block; padding: 15% 20px; color: white; text-decoration: none; }
+    nav a:hover { background-color: #555;   position: relative;
+    padding: 15px 10px;
+    color: #03e9f4;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    overflow: hidden;
+    transition: 0.5s;
+    letter-spacing: 4px;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #0005); }
+
+    /* Menú Horizontal */
+    nav > ul { display: flex; }
+
+    /* Submenú oculto */
+    nav ul ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #444;
+        
+        
+        
+        
+        
+        
+        
+    
+    }
+
+    /* Mostrar submenú al pasar ratón */
+    nav ul li:hover > ul { display: block; }
+
+
+
+
+
+
+
+
+.btn{
+   position:relative;
+   font-size:1.2em;
+   font-weight:300;
+   color:#fff;
+   text-shadow:none;
+   border-radius:0px;
+   background: #f7be68;
+   box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.22);
+   text-decoration: none;
+}
+
+.btn:hover{
+   background: #f5b14b;
+   box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.22);
+   color:#fff;
+}
+
+#modalContent{
+   position:absolute;
+   top:30%;
+   left:35%;
+   z-index:6;
+   float:left;
+   margin:-2% 0px 0px -150px;
+   width:700px;
+   color:#888888;
+   line-height:22px;
+   padding:15px;
+   border-radius:5px;
+   background:#ffffff;
+   border:1px solid #f7be68;
+   box-shadow:5px 5px 10px 0px rgba(0,0,0,0.22);
+}
+
+#modal1{
+   position:fixed;
+   top:0px;
+   left:0px;
+   z-index:5;
+   float:left;
+   width:100%;
+   height:100%;
+   background:rgba(0,0,0,0.2);
+   display:none;
+   opacity:0;
+     left: 10%;
+}
+
+#modal{
+   position:fixed;
+   top:0px;
+   left:0px;
+   z-index:5;
+   float:left;
+   width:100%;
+   height:100%;
+   background:rgba(0,0,0,0.2);
+   display:none;
+   opacity:0;
+}
+
+#modal > a{
+   position:fixed;
+   top:0px;
+   left:0px;
+   z-index:1;
+   float:left;
+   width:100%;
+   height:100%;
+}
+
+:target{
+   display:block!important;
+   opacity:1!important;
+}
+
+#modalContent > a{
+   position:absolute;
+   top:-4px;
+   right:-4px;
+   color: #fff;
+   border-radius:2px;
+   background:#f7be68;
+   padding:10px;
+   font-size: 30px;
+   text-decoration: none;
+}
+
+
+
+/* 1. Seleccionamos el contenedor que agrupa las tarjetas */
+.cards-container {
+    display: flex;       /* Activa el modo horizontal */
+    flex-wrap: wrap;     /* Permite bajar de línea si no caben */
+    justify-content: center; /* Las centra si sobra espacio */
+    gap: 20px; 
+     width: 100%;
+  height: 100%;/* Separación entre ellas */
+}
+
+
+
+.promo-card {
+  position: relative;
+  width: 30%;
+  height: 40vw;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+     
+}
+
+.promo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+    
+}
+
+.promo-overlay {
+  position: absolute;
+  bottom: -100%; /* Oculto inicialmente abajo */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: bottom 0.5s ease;
+  padding: 20px;
+  text-align: center;
+}
+ 
+/* Efecto Hover */
+.promo-card:hover .promo-overlay {
+  bottom: 0; /* Sube y se muestra */
+}
+
+.promo-card:hover img {
+  transform: scale(1.1); /* Zoom sutil a la imagen */
+}
+
+.btn-promo {
+  margin-top: 15px;
+  padding: 1% 2%;
+  background: #ff4757;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
