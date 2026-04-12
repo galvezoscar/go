@@ -146,6 +146,13 @@ body { margin: 0; font-family: Arial, sans-serif; }
 }
 
 
+/* Efecto Hover (al pasar el ratón) */
+.redg {
+    position: absolute;
+    width: 100%;
+}
+
+
 
 
 
@@ -160,7 +167,10 @@ body { margin: 0; font-family: Arial, sans-serif; }
     nav { background-color: #333; }
     nav ul { margin: 0; padding: 0; list-style: none; }
     nav li { position: relative; }
-    nav a { display: block; padding: 15px 20px; color: white; text-decoration: none; }
+    nav a { display: block; padding: 1% 9px; color: white; text-decoration: none; 
+  
+
+}
     nav a:hover { background-color: #555; }
 
     /* Menú Horizontal */
