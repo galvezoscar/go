@@ -1,21 +1,3 @@
-
-
-
-
-
-
-body {
-  
-      background: linear-gradient(135deg, black 0%, grey 100%); /* Degradado Rojo/Naranja urgente */
-}
-
-
-
-
-
-
-
-
 /* --- Contenedor de la Publicidad (Glassmorphism) --- */
 .slider-wrapper   {
     
@@ -23,7 +5,7 @@ body {
 }
 HTML {
     
-  height: 200VW;
+  height: 100VW;
 }
 
 
@@ -31,7 +13,7 @@ HTML {
 /* --- Contenedor de la Publicidad (Glassmorphism) --- */
 .slide-info {
     background: rgba(0, 0, 0, 0.2);  
-    padding: 21vw 0%;
+    padding: 20vw 0%;
     border-radius: 11%; 
     position: relative;
  }
@@ -136,7 +118,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
 
 .navbar {
     background-color: #333; /* Color de fondo */
-     height: 6%;
+     height: 6VW;
 }
 
 .nav-list {
@@ -154,13 +136,20 @@ body { margin: 0; font-family: Arial, sans-serif; }
     color: white; /* Color texto */
     padding: 10px 20px;
     display: block;
-    border-radius: 5%;
+    border-radius: 5px;
     transition: background-color 0.3s;
 }
 
 /* Efecto Hover (al pasar el ratón) */
 .nav-list a:hover {
     background-color: #555;
+}
+
+
+/* Efecto Hover (al pasar el ratón) */
+.redg {
+    position: absolute;
+    width: 100%;
 }
 
 
@@ -175,29 +164,14 @@ body { margin: 0; font-family: Arial, sans-serif; }
 
 
 /* Estilos Básicos */
-    nav {      background: linear-gradient(135deg, green 0%, #ff4b2b 100%);
+    nav { background-color: #555; }
+    nav ul { margin:  0px;  list-style: none; }
+    nav li { position: relative; }
+    nav a { display: block; padding: 1% 9px; color: white; text-decoration: none; 
+  
 
 }
-    nav ul { margin: 0; padding: 0; list-style: none; 
- background-color: #000; /* Fondo oscuro para resaltar */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 10vh;
-        
-}
-    nav li { position: relative; }
-    nav a { display: block; padding: 15% 20px; color: white; text-decoration: none; }
-    nav a:hover { background-color: #555;   position: relative;
-    padding: 15px 10px;
-    color: #03e9f4;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 14px;
-    overflow: hidden;
-    transition: 0.5s;
-    letter-spacing: 4px;
-    -webkit-box-reflect: below 1px linear-gradient(transparent, #0005); }
+    nav a:hover { background-color: #555; }
 
     /* Menú Horizontal */
     nav > ul { display: flex; }
@@ -209,178 +183,8 @@ body { margin: 0; font-family: Arial, sans-serif; }
         top: 100%;
         left: 0;
         background-color: #444;
-        
-        
-        
-        
-        
-        
-        
-    
+        min-width: 150px;
     }
 
     /* Mostrar submenú al pasar ratón */
     nav ul li:hover > ul { display: block; }
-
-
-
-
-
-
-
-
-.btn{
-   position:relative;
-   font-size:1.2em;
-   font-weight:300;
-   color:#fff;
-   text-shadow:none;
-   border-radius:0px;
-   background: #f7be68;
-   box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.22);
-   text-decoration: none;
-}
-
-.btn:hover{
-   background: #f5b14b;
-   box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.22);
-   color:#fff;
-}
-
-#modalContent{
-   position:absolute;
-   top:30%;
-   left:35%;
-   z-index:6;
-   float:left;
-   margin:-2% 0px 0px -150px;
-   width:700px;
-   color:#888888;
-   line-height:22px;
-   padding:15px;
-   border-radius:5px;
-   background:#ffffff;
-   border:1px solid #f7be68;
-   box-shadow:5px 5px 10px 0px rgba(0,0,0,0.22);
-}
-
-#modal1{
-   position:fixed;
-   top:0px;
-   left:0px;
-   z-index:5;
-   float:left;
-   width:100%;
-   height:100%;
-   background:rgba(0,0,0,0.2);
-   display:none;
-   opacity:0;
-     left: 10%;
-}
-
-#modal{
-   position:fixed;
-   top:0px;
-   left:0px;
-   z-index:5;
-   float:left;
-   width:100%;
-   height:100%;
-   background:rgba(0,0,0,0.2);
-   display:none;
-   opacity:0;
-}
-
-#modal > a{
-   position:fixed;
-   top:0px;
-   left:0px;
-   z-index:1;
-   float:left;
-   width:100%;
-   height:100%;
-}
-
-:target{
-   display:block!important;
-   opacity:1!important;
-}
-
-#modalContent > a{
-   position:absolute;
-   top:-4px;
-   right:-4px;
-   color: #fff;
-   border-radius:2px;
-   background:#f7be68;
-   padding:10px;
-   font-size: 30px;
-   text-decoration: none;
-}
-
-
-
-/* 1. Seleccionamos el contenedor que agrupa las tarjetas */
-.cards-container {
-    display: flex;       /* Activa el modo horizontal */
-    flex-wrap: wrap;     /* Permite bajar de línea si no caben */
-    justify-content: center; /* Las centra si sobra espacio */
-    gap: 20px; 
-     width: 100%;
-  height: 100%;/* Separación entre ellas */
-}
-
-
-
-.promo-card {
-  position: relative;
-  width: 30%;
-  height: 40vw;
-  overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-     
-}
-
-.promo-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-    
-}
-
-.promo-overlay {
-  position: absolute;
-  bottom: -100%; /* Oculto inicialmente abajo */
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: bottom 0.5s ease;
-  padding: 20px;
-  text-align: center;
-}
- 
-/* Efecto Hover */
-.promo-card:hover .promo-overlay {
-  bottom: 0; /* Sube y se muestra */
-}
-
-.promo-card:hover img {
-  transform: scale(1.1); /* Zoom sutil a la imagen */
-}
-
-.btn-promo {
-  margin-top: 15px;
-  padding: 1% 2%;
-  background: #ff4757;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-}
