@@ -1,13 +1,22 @@
+
+html{
+position: absolute;
+overflow: hidden;
+top: 0%;
+left:  0;
+margin: 0;
+right: 0; 
+bottom: 0;
+background-color: black;
+    
+
+}
+
 /* --- Contenedor de la Publicidad (Glassmorphism) --- */
 .slider-wrapper   {
     
     margin-top: 1%;
 }
-HTML {
-    
-  height: 100VW;
-}
-
 
 
 /* --- Contenedor de la Publicidad (Glassmorphism) --- */
