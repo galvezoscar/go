@@ -122,8 +122,6 @@ height: 200vw;
 
 
 
-/* Reseteo básico y estilos del contenedor */
-body { margin: 0; font-family: Arial, sans-serif; }
 
 .navbar {
     background-color: #333; /* Color de fondo */
