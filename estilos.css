@@ -34,7 +34,7 @@ height: 200vw;
     color: #2c3e50;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 2.75vw;
     padding: 6px 12px;
     border-radius: 50px; /* Forma de píldora */
     margin-bottom: 15px;
@@ -125,7 +125,13 @@ height: 200vw;
 
 .navbar {
     background-color: #333; /* Color de fondo */
-     height: 6VW;
+    
+left:  0;
+margin: 0;
+right: 0; 
+bottom: 0; 
+    width: 100%;
+ background: linear-gradient(135deg, black 0%, grey 100%); 
 }
 
 .nav-list {
@@ -133,8 +139,7 @@ height: 200vw;
     margin: 0;
     padding: 0;
     display: flex; /* Activa Flexbox */
-    justify-content: center; /* Centra los botones (o 'flex-start'/'flex-end') */
-    gap: 20px; /* Espacio entre botones */
+   
 }
 
 /* Estilos para los botones (enlaces) */
@@ -153,14 +158,6 @@ height: 200vw;
 }
 
 
-/* Efecto Hover (al pasar el ratón) */
-.redg {
-    position: absolute;
-    width: 100%;
-}
-
-
-
 
 
 
@@ -171,10 +168,10 @@ height: 200vw;
 
 
 /* Estilos Básicos */
-    nav { background-color: #555; font-size: 2.8vw; }
-    nav ul { margin:  0px;  list-style: none; margin-left: 6%;}
-    nav li { position: relative; }
-    nav a { display: block; padding: 1% 9px; color: white; text-decoration: none; 
+    nav { background-color: #555;  }
+    nav ul { margin:  0px;  list-style: none; }
+    nav li { position: relative; font-size: 2vh;}
+    nav a { display: block; padding: 11% 1vw; color: white; text-decoration: none; 
   
 
 }
