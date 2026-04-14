@@ -23,19 +23,24 @@ height: 200vw;
 .slide-info {
     background: rgba(0, 0, 0, 0.2);  
     padding: 20vw 0%;
+    border-radius: 11%; 
     position: relative;
  }
 
 /* --- Etiqueta (Tag) "Envios" --- */
-.slide-tag { 
+.slide-tag {
+    display: inline-block;
     background: linear-gradient(90deg, #f1c40f, #f39c12); /* Degradado dorado/amarillo */
     color: #2c3e50;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 2vw; 
+    font-size: 2.75vw;
     padding: 6px 12px;
     border-radius: 50px; /* Forma de píldora */
-      left:  -1%;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
+    letter-spacing: 1px;
+    left:  -1%;
     position: absolute;
     
 }
@@ -45,7 +50,8 @@ height: 200vw;
 .slide-title a {
     display: inline-flex;
     align-items: center;
-    background-color: #25D366; 
+    background-color: #25D366; /* Verde WhatsApp Oficial */
+    color: white !important;
     text-decoration: none;
     padding: 5% 5%;
     border-radius: 50px;
@@ -78,9 +84,7 @@ height: 200vw;
 
 /* --- Descripción --- */
 .slide-desc {
-    font-size: 2vw; 
-    
-    font-weight: 800;
+    font-size: 1rem;
     margin-bottom: -55px;
     color: #ecf0f1;
     line-height: 1.6;
@@ -117,7 +121,42 @@ height: 200vw;
 
 
 
- 
+
+
+.navbar {
+    background-color: #333; /* Color de fondo */
+    
+left:  0;
+margin: 0;
+right: 0; 
+bottom: 0; 
+    width: 100%;
+ background: linear-gradient(135deg, black 0%, grey 100%); 
+}
+
+.nav-list {
+    list-style: none; /* Quita puntos de lista */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Activa Flexbox */
+   
+}
+
+/* Estilos para los botones (enlaces) */
+.nav-list a {
+    text-decoration: none; /* Quita subrayado */
+    color: white; /* Color texto */
+    padding: 10px 20px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Efecto Hover (al pasar el ratón) */
+.nav-list a:hover {
+    background-color: #555;
+}
+
 
 
 
@@ -129,10 +168,10 @@ height: 200vw;
 
 
 /* Estilos Básicos */
-    nav { background-color: #555; font-size: 2.8vw; }
+    nav { background-color: #555;  }
     nav ul { margin:  0px;  list-style: none; }
-    nav li { position: relative; }
-    nav a { display: block; padding: 1% 9px; color: white; text-decoration: none; 
+    nav li { position: relative; font-size: 2vh;}
+    nav a { display: block; padding: 11% 1vw; color: white; text-decoration: none; 
   
 
 }
@@ -146,9 +185,7 @@ height: 200vw;
         display: none;
         position: absolute;
         top: 100%;
-        left: 0;
         background-color: #444;
-        min-width: 150px;
     }
 
     /* Mostrar submenú al pasar ratón */
@@ -171,17 +208,17 @@ height: 200vw;
     flex-wrap: wrap;     /* Permite bajar de línea si no caben */
     justify-content: center; /* Las centra si sobra espacio */
     gap: 20px; 
-     width: 100%;
-  height: 100%;/* Separación entre ellas */
+    
     margin-top:  20%;
-    font-size: 2.5vw; 
+    
+    font-size: 2.8vw;
 }
 
 
 
 .promo-card {
   position: relative;
-  width: 30%;
+ width: 28vw;
   height: 40vw;
   overflow: hidden;
   border-radius: 15px;
