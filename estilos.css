@@ -168,7 +168,7 @@ bottom: 0;
 
 
 /* Estilos Básicos */
-    nav { background-color: #555; font-size: 0.3rem; }
+    nav { background-color: #555; font-size: 1.3vw;  }
     nav ul { margin:  0px;  list-style: none; }
     nav li { position: relative; width: 100%; /* Ancho total */ 
   background-image: url('fondo.jpg');
