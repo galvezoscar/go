@@ -168,9 +168,13 @@ bottom: 0;
 
 
 /* Estilos Básicos */
-    nav { background-color: #555;  }
+    nav { background-color: #555; font-size: 0.3rem; }
     nav ul { margin:  0px;  list-style: none; }
-    nav li { position: relative; font-size: 2vh;}
+    nav li { position: relative; width: 100%; /* Ancho total */ 
+  background-image: url('fondo.jpg');
+  background-size: cover; /* Ajusta la imagen sin deformar */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat;}
     nav a { display: block; padding: 11% 1vw; color: white; text-decoration: none; 
   
 
