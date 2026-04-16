@@ -6,7 +6,7 @@ left:  0;
 margin: 0;
 right: 0; 
 bottom: 0;
-height: 200vw;
+height: 250vw;
  background: linear-gradient(135deg, black 0%, grey 100%); 
     
 
@@ -84,8 +84,8 @@ height: 200vw;
 
 /* --- Descripción --- */
 .slide-desc {
-    font-size: 1rem;
-    margin-bottom: -55px;
+    font-size: 2.5vw;
+    margin-bottom: -20px;
     color: #ecf0f1;
     line-height: 1.6;
       background: linear-gradient(135deg, green 0%, #ff4b2b 100%); 
@@ -105,7 +105,7 @@ height: 200vw;
     font-size: 1.5vw; 
     position: absolute;
      left: 60%;
-    margin-top:  27%;
+    margin-top:  2%;
 }
 
 /* Efecto Hover del botón principal */
@@ -273,3 +273,95 @@ bottom: 0;
   text-decoration: none;
   border-radius: 5px;
 }
+
+
+
+
+
+
+
+
+
+  #galeria-hover-simple {
+            position: relative;
+            width: 90%;
+            max-width: 90%; /* Ancho máximo ajustable */
+            margin: 0 auto;
+            display: flex !important;
+            gap: 5px; /* Espacio pequeño entre imágenes */
+            height: 40vw; /* Altura fija del carrusel */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Cada item (imagen) del acordeón */
+        #galeria-hover-simple .item-acordeon {
+            position: relative;
+            flex: 1; /* Todas empiezan con el mismo tamaño */
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out !important; /* Suavidad en la animación */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            
+            top: 40%;
+        }
+
+        /* Al hacer Hover, el item crece */
+        #galeria-hover-simple .item-acordeon:hover {
+            flex: 5 !important; /* Se vuelve 5 veces más ancho */
+        }
+
+        /* Estilo de la imagen */
+        #galeria-hover-simple .item-acordeon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Efecto Zoom leve dentro de la imagen al pasar el mouse */
+        #galeria-hover-simple .item-acordeon:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Texto superpuesto */
+        #galeria-hover-simple .contenido-texto {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            opacity: 0; /* Oculto por defecto */
+            transition: opacity 0.4s ease 0.1s; /* Aparece un poco después del hover */
+            white-space: nowrap; /* Evita saltos de línea feos */
+            overflow: hidden;
+        }
+
+        /* Mostrar texto al hacer hover */
+        #galeria-hover-simple .item-acordeon:hover .contenido-texto {
+            opacity: 1 !important;
+            white-space: normal; /* Permitir salto de línea cuando está expandido */
+        }
+        
+        #galeria-hover-simple .contenido-texto h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-family: system-ui, sans-serif;
+        }
+        
+        #galeria-hover-simple .contenido-texto p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            font-family: system-ui, sans-serif;
+            display: none; /* Ocultar párrafo en pantallas muy pequeñas si se desea */
+        }
+        
+        /* Mostrar párrafo solo en pantallas medianas/grandes */
+        @media (min-width: 600px) {
+            #galeria-hover-simple .item-acordeon:hover .contenido-texto p {
+                display: block;
+            }
+        }
