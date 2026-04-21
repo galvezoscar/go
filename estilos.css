@@ -6,8 +6,13 @@ left:  0;
 margin: 0;
 right: 0; 
 bottom: 0;
-height: 250vw;
+height: 300vw;
  background: linear-gradient(135deg, black 0%, grey 100%); 
+    
+
+}
+.nivo-html-caption{
+height: 100%;
     
 
 }
@@ -19,19 +24,32 @@ height: 250vw;
 }
 
 
+
+a {
+    
+    color: grey; /* Color base blanco para el centro */
+  text-shadow: 
+    0 0 5px #fff, 
+    0 0 10px #00d2ff, 
+    0 0 20px #00d2ff, 
+    0 0 40px #00d2ff;
+}
+
+
 /* --- Contenedor de la Publicidad (Glassmorphism) --- */
 .slide-info {
     background: rgba(0, 0, 0, 0.2);  
     padding: 20vw 0%;
     border-radius: 11%; 
     position: relative;
+    
  }
 
 /* --- Etiqueta (Tag) "Envios" --- */
 .slide-tag {
     display: inline-block;
-    background: linear-gradient(90deg, #f1c40f, #f39c12); /* Degradado dorado/amarillo */
-    color: #2c3e50;
+    background: linear-gradient(90deg, #f1c40f, #f39c12); 
+    
     font-weight: 800;
     text-transform: uppercase;
     font-size: 2.75vw;
@@ -42,7 +60,12 @@ height: 250vw;
     letter-spacing: 1px;
     left:  -1%;
     position: absolute;
-    
+    color: #fff; /* Color base blanco para el centro */
+  text-shadow: 
+    0 0 5px #fff, 
+    0 0 10px #00d2ff, 
+    0 0 20px #00d2ff, 
+    0 0 40px #00d2ff;
 }
 
  
@@ -85,13 +108,18 @@ height: 250vw;
 /* --- Descripción --- */
 .slide-desc {
     font-size: 2.5vw;
-    margin-bottom: -20px;
-    color: #ecf0f1;
+    margin-top:  15%;
     line-height: 1.6;
       background: linear-gradient(135deg, green 0%, #ff4b2b 100%); 
-    width: 50%;
     margin-left:  70%;
-    width: 20vw;
+    position: absolute;
+     border-radius: 53px;
+    color: #fff; /* Color base blanco para el centro */
+  text-shadow: 
+    0 0 5px #fff, 
+    0 0 10px #00d2ff, 
+    0 0 20px #00d2ff, 
+    0 0 40px #00d2ff;
  }
 
 /* --- BOTÓN PRINCIPAL (CTA - Call To Action) --- */
@@ -99,13 +127,14 @@ height: 250vw;
       background: linear-gradient(135deg, green 0%, #ff4b2b 100%); /* Degradado Rojo/Naranja urgente */
     color: white;
     text-decoration: none;
-    padding: 1% 13px;
+    padding: 1% 1px;
      font-weight: 999;
     letter-spacing: 1px;
     font-size: 1.5vw; 
     position: absolute;
      left: 60%;
-    margin-top:  2%;
+    margin-top:  15vw;
+     border-radius: 10px;
 }
 
 /* Efecto Hover del botón principal */
@@ -222,8 +251,8 @@ bottom: 0;
 
 .promo-card {
   position: relative;
- width: 28vw;
-  height: 40vw;
+ width: 20vw;
+  height: 30vw;
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -265,17 +294,20 @@ bottom: 0;
   transform: scale(1.1); /* Zoom sutil a la imagen */
 }
 
-.btn-promo {
-  margin-top: 15px;
-  padding: 1% 2%;
-  background: #ff4757;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
+
+
+footer { background: #333;
+         color: white; 
+    text-align: center; 
+    padding: 1vw;
+    margin-top:  22%;
+      color: #fff; /* Color base blanco para el centro */
+  text-shadow: 
+    0 0 5px #fff, 
+    0 0 10px #00d2ff, 
+    0 0 20px #00d2ff, 
+    0 0 40px #00d2ff;
 }
-
-
-
 
 
 
@@ -347,6 +379,8 @@ bottom: 0;
         }
         
         #galeria-hover-simple .contenido-texto h3 {
+            position: relative;
+           margin-bottom:   -42%;
             margin: 0;
             font-size: 1.2rem;
             font-family: system-ui, sans-serif;
