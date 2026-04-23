@@ -1,0 +1,485 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>En Construcción</title>
+  <!-- Google Fonts -->
+
+  <style>
+    /* ── Variables de diseño ── */
+    :root {
+      --bg: #0d0d0d;
+      --bg-deep: #060606;
+      --fg: #f0ece4;
+      --muted: #6b6560;
+      --accent: #e87a1e;
+      --accent-glow: rgba(232, 122, 30, 0.35);
+      --amber: #f5a623;
+      --card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --stripe-yellow: #f5c518;
+      --stripe-black: #1a1a1a;
+    }
+
+    /* ── Reset y base ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    
+ 
+
+    .dust {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      animation: floatDust linear infinite;
+    }
+
+    @keyframes floatDust {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) translateX(0) scale(0.5);
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-10vh) translateX(80px) scale(1);
+      }
+    }
+
+    /* ── Cinta de peligro superior ── */
+    .danger-tape {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 28px;
+      z-index: 100;
+      overflow: hidden;
+     
+      );
+    
+    }
+
+
+
+    /* ── Contenido principal ── */
+    main {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+
+    /* ── Icono de casco ── */
+     
+     
+   
+    /* ── Título principal ── */
+    .title {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      color: var(--fg);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+   
+
+    /* ── Subtítulo ── */
+    .subtitle {
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      font-weight: 400;
+    }
+
+    .subtitle strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+
+ 
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Barra de progreso ── */
+  
+ 
+     
+  
+ 
+
+   
+    /* ── Etiquetas de estado ── */
+    .status-tags {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .tag:hover {
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+
+    .tag .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    .tag .dot.green {
+      background: #34d399;
+    }
+
+    .tag .dot.yellow {
+      background: var(--amber);
+    }
+
+    /* ── Cinta inferior ── */
+    .danger-tape-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      z-index: 100;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--stripe-yellow),
+        var(--stripe-yellow) 14px,
+        var(--stripe-black) 14px,
+        var(--stripe-black) 28px
+      );
+      animation: tapeScroll 2s linear infinite;
+    }
+
+    /* ── Edificios de fondo (siluetas) ── */
+    .skyline {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.12;
+    }
+
+    .building {
+      position: absolute;
+      bottom: 0;
+      background: var(--fg);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .building::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 8px,
+        var(--bg) 8px,
+        var(--bg) 10px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 12px,
+        var(--bg) 12px,
+        var(--bg) 14px
+      );
+      opacity: 0.6;
+    }
+
+    
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .crane-wrapper {
+        right: -60px;
+        transform: scale(0.6);
+        transform-origin: right top;
+      }
+
+      .countdown {
+        gap: 10px;
+      }
+
+      .countdown-number {
+        min-width: 64px;
+        padding: 10px 14px;
+      }
+
+      .notify-form {
+        flex-direction: column;
+        border-radius: 12px;
+      }
+
+      .notify-form button {
+        padding: 14px;
+      }
+ 
+      .status-tags {
+        gap: 8px;
+      }
+    }
+
+     .logo2{
+position: absolute;
+right:   1%;
+bottom:    4vw;
+ height: 8%; 
+width: 8%;
+
+}
+
+  </style>
+</head>
+<body>
+
+    
+  <!-- Cinta de peligro superior -->
+  <div class="danger-tape" aria-hidden="true"></div>
+
+  <!-- Partículas de polvo -->
+  <div class="dust-container" aria-hidden="true" id="dustContainer"></div>
+
+  <!-- Grúa animada -->
+  <div class="crane-wrapper" aria-hidden="true">
+    <div class="crane-light"></div>
+    <div class="crane-arm">
+      <div class="crane-cable"></div>
+      <div class="crane-hook"></div>
+    </div>
+  </div>
+
+  <!-- Silueta de ciudad -->
+  <div class="skyline" aria-hidden="true" id="skyline"></div>
+
+  <!-- Contenido principal -->
+  <main>
+   
+
+    <!-- Título -->
+    <h1 class="title">
+      <span>En Construccion</span>
+    </h1>
+
+    <!-- Subtítulo -->
+    <p class="subtitle">
+      Estamos levantando algo <strong>importante</strong> desde los cimientos.
+      Mientras tanto, suscribite y sé el primero en enterarte cuando abramos las puertas.
+    </p>
+
+   
+
+    
+
+    <!-- Etiquetas de estado -->
+    <div class="status-tags">
+      <div class="tag">
+        <span class="dot"></span>
+        Diseño en curso
+      </div>
+      <div class="tag">
+        <span class="dot green"></span>
+        Backend listo
+      </div>
+      <div class="tag">
+        <span class="dot yellow"></span>
+        Testing activo
+      </div>
+    </div>
+  </main>
+
+
+
+<div> <a href="javascript:history.back()"><img  class="logo2"  class="volver" src="volver%20flechan(1).png"></a>
+</div>
+
+  <script>
+    // ── Generar partículas de polvo ──
+    (function createDust() {
+      const container = document.getElementById('dustContainer');
+      const count = 30;
+      for (let i = 0; i < count; i++) {
+        const dust = document.createElement('div');
+        dust.classList.add('dust');
+        const size = Math.random() * 3 + 1;
+        dust.style.width = size + 'px';
+        dust.style.height = size + 'px';
+        dust.style.left = Math.random() * 100 + '%';
+        dust.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        dust.style.animationDelay = (Math.random() * 10) + 's';
+        dust.style.opacity = '0';
+        // Variar colores entre ámbar y naranja
+        dust.style.background = Math.random() > 0.5
+          ? 'rgba(232, 122, 30, 0.7)'
+          : 'rgba(245, 166, 35, 0.5)';
+        container.appendChild(dust);
+      }
+    })();
+
+    // ── Generar silueta de ciudad ──
+    (function createSkyline() {
+      const skyline = document.getElementById('skyline');
+      const buildings = [
+        { left: '2%', width: 40, height: 100 },
+        { left: '8%', width: 30, height: 140 },
+        { left: '14%', width: 50, height: 80 },
+        { left: '22%', width: 35, height: 170 },
+        { left: '29%', width: 60, height: 110 },
+        { left: '38%', width: 25, height: 155 },
+        { left: '43%', width: 45, height: 90 },
+        { left: '52%', width: 55, height: 180 },
+        { left: '60%', width: 30, height: 120 },
+        { left: '66%', width: 40, height: 145 },
+        { left: '73%', width: 50, height: 95 },
+        { left: '80%', width: 35, height: 165 },
+        { left: '87%', width: 45, height: 105 },
+        { left: '94%', width: 30, height: 130 },
+      ];
+
+      buildings.forEach(b => {
+        const el = document.createElement('div');
+        el.classList.add('building');
+        el.style.left = b.left;
+        el.style.width = b.width + 'px';
+        el.style.height = b.height + 'px';
+
+        // Añadir luces de ventana aleatorias
+        const lightCount = Math.floor(Math.random() * 5) + 2;
+        for (let i = 0; i < lightCount; i++) {
+          const light = document.createElement('div');
+          light.classList.add('window-light');
+          light.style.left = (Math.random() * (b.width - 10) + 4) + 'px';
+          light.style.bottom = (Math.random() * (b.height - 20) + 10) + 'px';
+          light.style.animationDelay = (Math.random() * 4) + 's';
+          el.appendChild(light);
+        }
+
+        skyline.appendChild(el);
+      });
+    })();
+
+    // ── Cuenta regresiva: 30 días desde ahora ──
+    (function initCountdown() {
+      const launchDate = new Date();
+      launchDate.setDate(launchDate.getDate() + 30);
+      launchDate.setHours(0, 0, 0, 0);
+
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      function update() {
+        const now = new Date();
+        const diff = Math.max(0, launchDate - now);
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        daysEl.textContent = String(d).padStart(2, '0');
+        hoursEl.textContent = String(h).padStart(2, '0');
+        minutesEl.textContent = String(m).padStart(2, '0');
+        secondsEl.textContent = String(s).padStart(2, '0');
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+
+    // ── Formulario de notificación ──
+    (function initForm() {
+      const form = document.getElementById('notifyForm');
+      const emailInput = document.getElementById('emailInput');
+      const toast = document.getElementById('toast');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+
+        // Validación básica de email
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          toast.textContent = 'Por favor, ingresa un correo válido.';
+          toast.style.background = 'linear-gradient(135deg, #dc2626, #f87171)';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3000);
+          return;
+        }
+
+        // Simular registro exitoso
+        toast.textContent = 'Registrado. Te avisaremos cuando estemos listos.';
+        toast.style.background = 'linear-gradient(135deg, var(--accent), var(--amber))';
+        toast.classList.add('show');
+        emailInput.value = '';
+
+        setTimeout(() => toast.classList.remove('show'), 3500);
+      });
+    })();
+  </script>
+</body>
+</html>

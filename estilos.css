@@ -8,7 +8,8 @@ right: 0;
 bottom: 0;
 height: 350vw;
  background: linear-gradient(135deg, black 0%, grey 100%); 
-    
+    height: 350vw;
+
 
 }
 .nivo-html-caption{
