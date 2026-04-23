@@ -6,7 +6,7 @@ left:  0;
 margin: 0;
 right: 0; 
 bottom: 0;
-height: 300vw;
+height: 350vw;
  background: linear-gradient(135deg, black 0%, grey 100%); 
     
 
@@ -300,13 +300,13 @@ footer { background: #333;
          color: white; 
     text-align: center; 
     padding: 1vw;
-    margin-top:  22%;
+    top:  92vw;
       color: #fff; /* Color base blanco para el centro */
   text-shadow: 
     0 0 5px #fff, 
     0 0 10px #00d2ff, 
     0 0 20px #00d2ff, 
-    0 0 40px #00d2ff;
+    0 0 40px #00d2ff;position: relative;
 }
 
 
