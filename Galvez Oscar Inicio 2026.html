@@ -1548,17 +1548,22 @@ function activarSiEsPC(e) {
         return;
     }
 
-    // Si llegamos aquí, es PC/Tablet u otro, entonces activar pantalla completa
-    entrarPantallaCompleta();
+    // Verificar si NO estamos ya en pantalla completa.
+    // Si ya está activo, no hace nada. Si se desactivó (por achicar la pantalla), vuelve a entrar.
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
 
-    // IMPORTANTE: Removemos el evento 'click' para que solo pase UNA VEZ.
-    // Así, si el usuario vuelve a clickear, no saldrá de pantalla completa.
-    document.removeEventListener('click', activarSiEsPC);
+    if (!isFullscreen) {
+        entrarPantallaCompleta();
+    }
+
+    // IMPORTANTE: Ya NO removemos el evento. 
+    // Esto permite que el código se "reactive" si el usuario sale de pantalla completa.
 }
 
 // Agregamos el evento global al documento
 document.addEventListener('click', activarSiEsPC);
-   </script> 
+   
+</script>
     
 
     
