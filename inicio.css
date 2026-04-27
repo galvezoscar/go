@@ -22,6 +22,45 @@ transform: translate(-0%,-0%) scale(1);
 }
 */
 
+    .btn-android-modern {
+        position: absolute;
+         align-items: center;
+        justify-content: center;
+        gap: 1px; /* Espacio entre icono y texto */
+        background-color: #3DDC84; /* Verde Android */
+        color: #000000;
+        text-decoration: none;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        padding: 1vw 1vw;
+        border-radius: 1vw; /* Forma totalmente redondeada */
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: none;
+        cursor: pointer;
+        bottom: -1%;
+        left: 1%;
+    }
+
+    .btn-android-modern:hover {
+        transform: translateY(-2vw);
+        box-shadow: 0 6px 20px rgba(61, 220, 132, 0.6);
+    }
+
+    .btn-android-modern:active {
+        transform: scale(0.98);
+    }
+
+    /* Estilo del SVG (Logo) */
+    .android-logo {
+        width: 3vw;
+        height: 3vw;
+        fill: currentColor; /* Hereda el color del texto (negro) */
+        margin-bottom:  -1%;
+        
+        
+        
+    }
+
 
 
 .ban{
