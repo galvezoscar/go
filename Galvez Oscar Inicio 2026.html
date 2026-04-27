@@ -6,11 +6,6 @@
 <title>Galvez Oscar video</title>
 
 
-<script>
-function myFunction() {
-  document.getElementById("panel").style.display = "block";
-}
-</script>
 <style>
 
 #panel {
@@ -316,7 +311,7 @@ function mostrar83(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7487296244356?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
                                                     
 function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12391172213426?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/13629316993392?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
                                                        
 function mostrar85(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
@@ -532,11 +527,15 @@ document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/vide
     
  function mostrar150(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/7449463032452?autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
+                    
+ function mostrar22302(){
+document.getElementById('nuevaimg').innerHTML = '<IFRAME autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/13629316993392?controls=0 autoplay=1&loop=1" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=640 HEIGHT=360 allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
                 
 
      
     
-    
+function mostrar22302(){
+document.getElementById('nuevaimg').innerHTML = '<IFRAME  src="https://ok.ru/videoembed/13631204888944?controls=0&modestbranding=1" frameborder="0" allowfullscreen></IFRAME><a class="g"> </a><a class="gg"> </a>';}
     
             
 function fredr344et56f53re(){
@@ -983,6 +982,21 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 <p class="año">2026</p>
 <div class="meta">
 <a class="red20" id="nuevaimg" href="javascript: mostrar102()"><button class="go" onclick="galvez20()">go</button></a>
+</div>
+</section>
+</div>    
+<div class="slides" style="display: none;">
+<section class="content">
+<img class="logopeli" src="./Galvez Oscar video_files1/ ">
+<div class="genero">
+<a class="link"  >Tv</a>
+<a class="link"  >Acción</a>
+</div>
+<p class="description">
+    </p>
+<p class="año">2026</p>
+<div class="meta">
+<a class="red20" id="nuevaimg" href="javascript: mostrar22302()"><button class="go" onclick="galvez20()">go</button></a>
 </div>
 </section>
 </div>
@@ -1509,21 +1523,43 @@ function galvez20() {
 </script>     
 
 
-<!--
 
 <script>
  
-    addEventListener("click", function() {
-    var el = document.documentElement,
-      rfs = el.requestFullscreen
-        || el.webkitRequestFullScreen
-        || el.mozRequestFullScreen
-        || el.msRequestFullscreen 
-        ;rfs.call(el);});
-        
+   // Función para activar pantalla completa con compatibilidad para todos los navegadores
+function entrarPantallaCompleta() {
+    var elem = document.documentElement;
+    
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
+}
+
+// Función que se ejecuta al hacer clic
+function activarSiEsPC(e) {
+    // Detectar si es Android (si es Android, NO hace nada y se sale)
+    if (/Android/i.test(navigator.userAgent)) {
+        return;
+    }
+
+    // Si llegamos aquí, es PC/Tablet u otro, entonces activar pantalla completa
+    entrarPantallaCompleta();
+
+    // IMPORTANTE: Removemos el evento 'click' para que solo pase UNA VEZ.
+    // Así, si el usuario vuelve a clickear, no saldrá de pantalla completa.
+    document.removeEventListener('click', activarSiEsPC);
+}
+
+// Agregamos el evento global al documento
+document.addEventListener('click', activarSiEsPC);
    </script> 
     
--->
 
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
