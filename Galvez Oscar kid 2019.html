@@ -1138,7 +1138,7 @@ Los príncipes que se han convertido en enanos buscan los zapatos rojos de una d
 <a class="target1" style="display: none;" id="accionar">Peliculas</a></div>
 	
 <div class="icon icon-4" onclick="cambiaVisibilidad()">
-<a class="target1" id="accionar1">TV</a></div> 
+<a class="target1" id="accionar1">Series</a></div> 
 </div>
     
     
@@ -1365,22 +1365,46 @@ function galvez20() {
      
 </script>     
 
-<!--
-
-
 <script>
  
-    addEventListener("click", function() {
-    var el = document.documentElement,
-      rfs = el.requestFullscreen
-        || el.webkitRequestFullScreen
-        || el.mozRequestFullScreen
-        || el.msRequestFullscreen 
-        ;rfs.call(el);});
-        
-   </script> 
+   // Función para activar pantalla completa con compatibilidad para todos los navegadores
+function entrarPantallaCompleta() {
+    var elem = document.documentElement;
     
--->
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
+}
+
+// Función que se ejecuta al hacer clic
+function activarSiEsPC(e) {
+    // Detectar si es Android (si es Android, NO hace nada y se sale)
+    if (/Android/i.test(navigator.userAgent)) {
+        return;
+    }
+
+    // Verificar si NO estamos ya en pantalla completa.
+    // Si ya está activo, no hace nada. Si se desactivó (por achicar la pantalla), vuelve a entrar.
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+    if (!isFullscreen) {
+        entrarPantallaCompleta();
+    }
+
+    // IMPORTANTE: Ya NO removemos el evento. 
+    // Esto permite que el código se "reactive" si el usuario sale de pantalla completa.
+}
+
+// Agregamos el evento global al documento
+document.addEventListener('click', activarSiEsPC);
+   
+</script>
 
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>

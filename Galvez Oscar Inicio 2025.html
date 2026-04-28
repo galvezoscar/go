@@ -1863,31 +1863,46 @@ function galvez22() { controlarPopup('22', 'red22'); }
 
  
     
-    <script>
+   <script>
+ 
+   // Función para activar pantalla completa con compatibilidad para todos los navegadores
+function entrarPantallaCompleta() {
+    var elem = document.documentElement;
     
-    
-document.addEventListener("DOMContentLoaded", function() {
-  document.documentElement.requestFullscreen();
-});
-
-   
-    
-    </script>
-    <script>
-    
-    const userAgent = navigator.userAgent.toLowerCase();
-
-if (userAgent.includes('android')) {
-  document.documentElement.classList.add('android');
-} else if (userAgent.includes('windows')) {
-  document.documentElement.classList.add('windows');
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
 }
 
-    
-    
-    
-    </script>
-    
+// Función que se ejecuta al hacer clic
+function activarSiEsPC(e) {
+    // Detectar si es Android (si es Android, NO hace nada y se sale)
+    if (/Android/i.test(navigator.userAgent)) {
+        return;
+    }
+
+    // Verificar si NO estamos ya en pantalla completa.
+    // Si ya está activo, no hace nada. Si se desactivó (por achicar la pantalla), vuelve a entrar.
+    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+    if (!isFullscreen) {
+        entrarPantallaCompleta();
+    }
+
+    // IMPORTANTE: Ya NO removemos el evento. 
+    // Esto permite que el código se "reactive" si el usuario sale de pantalla completa.
+}
+
+// Agregamos el evento global al documento
+document.addEventListener('click', activarSiEsPC);
+   
+</script>
     
 
 
