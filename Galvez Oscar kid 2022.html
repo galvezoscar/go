@@ -896,48 +896,92 @@ function galvez20() {
      
 </script>     
 
-
 <script>
- 
-   // Función para activar pantalla completa con compatibilidad para todos los navegadores
-function entrarPantallaCompleta() {
-    var elem = document.documentElement;
+    // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
+    var aviso = document.createElement('div');
+    aviso.id = 'aviso-fullscreen';
+    // Cambiamos el texto para que sepa que es clickeable
+    aviso.innerText = 'app';
     
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
-        elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-        elem.msRequestFullscreen();
-    }
-}
+    // Estilos
+    aviso.style.position = 'fixed';
+    aviso.style.top = '1px';
+    aviso.style.right = '16%';
+    aviso.style.backgroundColor = 'rgba(100, 150, 250, 0.9)'; // Color rojizo para llamar la atención
+    aviso.style.color = '#fff';
+    aviso.style.padding = '0.5% 2%';
+    aviso.style.borderRadius = '4px';
+    aviso.style.fontSize = '12px';
+    aviso.style.fontFamily = 'sans-serif';
+    aviso.style.zIndex = '9999';
+    aviso.style.display = 'none'; 
+    aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+    aviso.style.cursor = 'pointer'; // Cambia el cursor a "manito" para indicar que se puede hacer clic
+    
+    document.body.appendChild(aviso);
 
-// Función que se ejecuta al hacer clic
-function activarSiEsPC(e) {
-    // Detectar si es Android (si es Android, NO hace nada y se sale)
-    if (/Android/i.test(navigator.userAgent)) {
-        return;
-    }
-
-    // Verificar si NO estamos ya en pantalla completa.
-    // Si ya está activo, no hace nada. Si se desactivó (por achicar la pantalla), vuelve a entrar.
-    var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-
-    if (!isFullscreen) {
+    // --- NUEVA FUNCIÓN: Click en el cartel reactiva pantalla completa ---
+    aviso.addEventListener('click', function() {
         entrarPantallaCompleta();
+    });
+
+    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA ---
+    function entrarPantallaCompleta() {
+        var elem = document.documentElement;
+        
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { 
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { 
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { 
+            elem.msRequestFullscreen();
+        }
     }
 
-    // IMPORTANTE: Ya NO removemos el evento. 
-    // Esto permite que el código se "reactive" si el usuario sale de pantalla completa.
-}
+    // --- 3. LÓGICA AL HACER CLIC (SOLO UNA VEZ EN EL DOCUMENTO GLOBAL) ---
+    function activarSiEsPC(e) {
+        // Excluir Android
+        if (/Android/i.test(navigator.userAgent)) {
+            return;
+        }
 
-// Agregamos el evento global al documento
-document.addEventListener('click', activarSiEsPC);
-   
+        // Excluir si ya estamos en pantalla completa
+        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+        if (!isFullscreen) {
+            entrarPantallaCompleta();
+            
+            // Importante: Removemos el evento global para que no interfiera con otros clics futuros
+            document.removeEventListener('click', activarSiEsPC);
+            
+            // Ocultamos el aviso por si acaso
+            aviso.style.display = 'none';
+        }
+    }
+
+    // --- 4. DETECTAR CUANDO SE SALE DE PANTALLA COMPLETA ---
+    function verificarCambioPantalla() {
+        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        
+        // Si NO estamos en pantalla completa, mostramos el cartel
+        if (!isFullscreen) {
+            aviso.style.display = 'block';
+        } else {
+            aviso.style.display = 'none'; // Si entramos (por ejemplo por el cartel), lo ocultamos
+        }
+    }
+
+    // Inicializar evento inicial
+    document.addEventListener('click', activarSiEsPC);
+
+    // Eventos para detectar cambios de estado (salir/entrar)
+    document.addEventListener('fullscreenchange', verificarCambioPantalla);
+    document.addEventListener('webkitfullscreenchange', verificarCambioPantalla);
+    document.addEventListener('mozfullscreenchange', verificarCambioPantalla);
+    document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
 </script>
-
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>
