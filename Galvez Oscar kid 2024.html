@@ -1184,8 +1184,8 @@ Una mujer amante de los gatos y un ladrón de joyas deciden unir fuerzas para en
  
  
       
-   
-		
+      
+	
 <div class="social-bar">
       
 <div class="icon icon-facebook" target="_blank">
@@ -1200,22 +1200,19 @@ Una mujer amante de los gatos y un ladrón de joyas deciden unir fuerzas para en
 </div>
       
  
-      
      
 
 <div class="icon icon-inicio" > 
 <a  class="target" href="index.html">Home</a></div>
      
 <div class="icon icon-0"> 
-<a  class="target" href="Galvez%20Oscar%20Inicio%202025.html">Peliculas</a></div>
+<a  class="target" href="Galvez%20Oscar%20Inicio%202026.html">Peliculas</a></div>
       
-<div class="icon icon-1" style=" background-color: red;box-shadow: 5px 1px 10px blue;     border-radius: 0 3rem 3rem 0;
-"> 
-<a class="target" type="button"  >Kid</a></div>
+<div class="icon icon-1"> 
+<a class="target" type="button" href="Galvez%20Oscar%20kid%202025.html">Kid</a></div>
     
 
       
-
 <div class="icon icon-3"> 
 <a class="target" href="1404r.html"
    >Anime</a></div>
@@ -1238,34 +1235,36 @@ Una mujer amante de los gatos y un ladrón de joyas deciden unir fuerzas para en
 </div>
     
     
-
+	
       
       
     </div>
     
- <div class="booton1" style="left: -6vw;  top:  75vh; ">
+   
+   
+
+<div class="booton1" style="left: -6vw;  top:  75vh; ">
 <a class="link1"  href="Galvez%20Oscar%20kid%202025.html" ><img class="FLECHA"  src="./151846.png"></a>
     
 <a class="link1"  style="margin-top:   11vh; margin-left:  -5vw; position: absolute" href="Galvez%20Oscar%20kid%202023.html"><img class="FLECHA"  src="./251846.png"></a>
     
 </div>
     
-    </div>
     
-      
-      
-     
+    
+    
+    
+  
   <div><img id="btn" class="logo" src="./Galvez Oscar video_files/letras cartel.gif">
 </div>
    
-    <a class="dad" style="margin-left:  2%;">Kid</a>
+    </div>
 
   
     <div> <a href="javascript:history.back()"><img  class="logo2"  class="volver" src="volver%20flechan(1).png"></a>
 </div>
 
 	
-
 	
 	<a style="cursor: pointer;" onclick="mostrarOcultar">
     <input class="pause" type="button" id="btn2" value="pause" onclick="playPause1()"></a>
@@ -1460,22 +1459,22 @@ function galvez20() {
 };
 
      
-</script> 
+</script>     
+
+
+
     
-    
-    
-    <script>
+<script>
     // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
     var aviso = document.createElement('div');
     aviso.id = 'aviso-fullscreen';
-    // Cambiamos el texto para que sepa que es clickeable
     aviso.innerText = 'app';
     
     // Estilos
     aviso.style.position = 'fixed';
     aviso.style.top = '1px';
     aviso.style.right = '16%';
-    aviso.style.backgroundColor = 'rgba(100, 150, 250, 0.9)'; // Color rojizo para llamar la atención
+    aviso.style.backgroundColor = 'rgba(100, 150, 250, 0.9)';
     aviso.style.color = '#fff';
     aviso.style.padding = '0.5% 2%';
     aviso.style.borderRadius = '4px';
@@ -1484,11 +1483,11 @@ function galvez20() {
     aviso.style.zIndex = '9999';
     aviso.style.display = 'none'; 
     aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
-    aviso.style.cursor = 'pointer'; // Cambia el cursor a "manito" para indicar que se puede hacer clic
+    aviso.style.cursor = 'pointer';
     
     document.body.appendChild(aviso);
 
-    // --- NUEVA FUNCIÓN: Click en el cartel reactiva pantalla completa ---
+    // --- CLICK EN EL CARTEL ---
     aviso.addEventListener('click', function() {
         entrarPantallaCompleta();
     });
@@ -1508,11 +1507,17 @@ function galvez20() {
         }
     }
 
-    // --- 3. LÓGICA AL HACER CLIC (SOLO UNA VEZ EN EL DOCUMENTO GLOBAL) ---
+    // --- 3. LÓGICA AL HACER CLIC ---
     function activarSiEsPC(e) {
         // Excluir Android
         if (/Android/i.test(navigator.userAgent)) {
             return;
+        }
+
+        // --- NUEVA LÓGICA: Excluir si el clic fue en un enlace <a> ---
+        // e.target.closest('a') busca si el elemento clicado o alguno de sus padres es un enlace
+        if (e.target.closest('a')) {
+            return; 
         }
 
         // Excluir si ya estamos en pantalla completa
@@ -1521,7 +1526,7 @@ function galvez20() {
         if (!isFullscreen) {
             entrarPantallaCompleta();
             
-            // Importante: Removemos el evento global para que no interfiera con otros clics futuros
+            // Importante: Removemos el evento global
             document.removeEventListener('click', activarSiEsPC);
             
             // Ocultamos el aviso por si acaso
@@ -1533,23 +1538,25 @@ function galvez20() {
     function verificarCambioPantalla() {
         var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
         
-        // Si NO estamos en pantalla completa, mostramos el cartel
         if (!isFullscreen) {
             aviso.style.display = 'block';
         } else {
-            aviso.style.display = 'none'; // Si entramos (por ejemplo por el cartel), lo ocultamos
+            aviso.style.display = 'none';
         }
     }
 
     // Inicializar evento inicial
     document.addEventListener('click', activarSiEsPC);
 
-    // Eventos para detectar cambios de estado (salir/entrar)
+    // Eventos para detectar cambios de estado
     document.addEventListener('fullscreenchange', verificarCambioPantalla);
     document.addEventListener('webkitfullscreenchange', verificarCambioPantalla);
     document.addEventListener('mozfullscreenchange', verificarCambioPantalla);
     document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
 </script>
+
+
+    
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>
     
