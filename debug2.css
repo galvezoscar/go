@@ -6,15 +6,7 @@
             --card-bg: #ffffff;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            overflow-x: hidden; /* Evita scroll horizontal accidental */
-        }
+       
 
         /* Esta es la clave para deshabilitar la selección visual */
         .no-select {
