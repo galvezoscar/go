@@ -3,7 +3,9 @@
 <html lang="en" id="layer1" class="layer1_class"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+ <meta charset="UTF-8">
+    
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- Hace que la barra de estado en móviles coincida con tu tema -->
@@ -1627,7 +1629,101 @@ function galvez20() {
     document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
 </script>
 
+<script>
+        // 3. BLOQUEO DE EVENTOS CON JAVASCRIPT
 
+        // Referencia al elemento de notificación
+        const toast = document.getElementById('toast');
+        let toastTimeout;
+
+        // Función para mostrar un mensaje temporal
+        function mostrarToast(mensaje) {
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            
+            // Reiniciar el temporizador si ya estaba corriendo
+            clearTimeout(toastTimeout);
+            
+            // Ocultar después de 2 segundos
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // A. EVITAR CLICK DERECHO (Menú Contextual)
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            mostrarToast('El menú contextual está deshabilitado');
+            return false;
+        });
+
+        // B. EVITAR TECLAS DE ZOOM Y COPIADO EN TECLADO (Ctrl +, Ctrl -, Ctrl 0, Ctrl C, Ctrl U, etc.)
+        document.addEventListener('keydown', function(event) {
+            // Teclas Ctrl o Cmd (Mac)
+            if (event.ctrlKey || event.metaKey) {
+                // Bloquear Zoom
+                if (event.key === '+' || event.key === '-' || event.key === '0') {
+                    event.preventDefault();
+                    mostrarToast('El zoom está deshabilitado');
+                    return false;
+                }
+                // Bloquear Guardar (Ctrl+S)
+                if (event.key === 's' || event.key === 'S') {
+                    event.preventDefault();
+                    mostrarToast('Guardar página está deshabilitado');
+                    return false;
+                }
+                // Bloquear Ver Código Fuente (Ctrl+U) - Opcional, pero común en este tipo de peticiones
+                if (event.key === 'u' || event.key === 'U') {
+                    event.preventDefault();
+                    mostrarToast('Ver código fuente está deshabilitado');
+                    return false;
+                }
+                // Bloquear Copiar (Ctrl+C)
+                if (event.key === 'c' || event.key === 'C') {
+                    event.preventDefault();
+                    mostrarToast('Copiar texto está deshabilitado');
+                    return false;
+                }
+            }
+            
+            // Bloquear tecla F12 (Herramientas de desarrollador) - Opcional
+            if (event.key === 'F12') {
+                event.preventDefault();
+                mostrarToast('Herramientas de desarrollador deshabilitadas');
+                return false;
+            }
+        });
+
+        // C. EVITAR ZOOM CON RUEDA DEL RATÓN (Ctrl + Scroll)
+        document.addEventListener('wheel', function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+                mostrarToast('El zoom con rueda está deshabilitado');
+                return false;
+            }
+        }, { passive: false });
+
+        // D. EVITAR ARRASTRAR IMÁGENES (Drag & Drop)
+        document.addEventListener('dragstart', function(event) {
+            // Si el elemento que se intenta arrastrar es una imagen
+            if (event.target.tagName === 'IMG') {
+                event.preventDefault();
+                mostrarToast('Arrastrar imágenes está deshabilitado');
+                return false;
+            }
+        });
+
+        // E. EVITAR EVENTOS TÁCTILES ADICIONALES EN MÓVIL (Para asegurar que no haya gestos de zoom)
+        // Nota: La meta viewport hace la mayor parte del trabajo, esto refuerza el comportamiento
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) { 
+                event.preventDefault(); 
+            }
+        }, { passive: false });
+
+    </script>
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>

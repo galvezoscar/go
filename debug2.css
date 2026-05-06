@@ -1,3 +1,39 @@
+ :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Evita scroll horizontal accidental */
+        }
+
+        /* Esta es la clave para deshabilitar la selección visual */
+        .no-select {
+            -webkit-user-select: none;  /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE10+/Edge */
+            user-select: none;         /* Standard */
+        }
+
+        /* Prevenir arrastre de imágenes específicamente (compatibilidad adicional) */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: auto; /* Asegura que aún podamos hacer click si fuera necesario */
+        }  
+
 
 html{
 position: absolute;
