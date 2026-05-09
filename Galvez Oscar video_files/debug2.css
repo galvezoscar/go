@@ -540,6 +540,42 @@ background: black;
 
 
 
+/* --- Botones --- */
+.control-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    bottom:  4em;
+      width: 100vw;
+    height: 80%;
+    position: absolute;
+ opacity: 0;                /* Invisible inicialmente */
+  transition: opacity 0.3s;
+}
+
+.control-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: #fff;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); width: 100vw;
+    height: 10vh;
+}
+
+/* Efecto Hover en el botón individual */
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+opacity: 1;                /* Invisible inicialmente */
+  transition: opacity 0.3s;}
+.control-btn:hover svg {
+    fill: #ff6b00; /* Naranja al hover */
+}
+
+
+
 
 
 
