@@ -54,26 +54,10 @@ function myFunction() {
  
     
 <script>
-// Estilo para hacerlo responsive (agregado dinámicamente)
-    var style = document.createElement('style');
-    style.innerHTML = `
-        #nuevaimg iframe {
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 16/9;
-        }
-        #nuevaimg {
-            width: 100%;
-            max-width: 640px; /* Puedes ajustar el ancho máximo aquí */
-            margin: 0 auto;
-        }
-    `;
-    document.head.appendChild(style);
 
-     
- 
+                                                    
 function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12391172213426?" ></IFRAME><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<IFRAME id="videoOk"  autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}  
                                                        
 function mostrar85(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
@@ -328,38 +312,12 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 	
 
 <div class="popup" id="popup-20">
-    <div class="fullvid">
-        
-        <!-- Envoltorio para el video -->
-        <div id="videoWrapper">
-            <!-- Tu enlace original (asumo que aquí se inyecta el iframe) -->
-            <a id="nuevaimg"></a>
-            
-            <!-- Carátula negra que aparece al pausar -->
-            <div id="videoPoster" class="video-poster" style="display: none;">
-                <!-- Icono de Play grande centrado -->
-                <div class="poster-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-            </div>
-        </div>
+<div class="fullvid"><a id="nuevaimg"></a>
 
-        <!-- Botones de Control Flotantes -->
-        <div class="video-controls">
-            <button id="btnPlay" class="control-btn">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button id="btnPause" class="control-btn" style="display: none;">
-                <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-        </div>
+	
+<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
 
-        <!-- Tu botón Volver -->
-        <a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()">
-            <img class="volver" src="./Galvez Oscar video_files/volver flechan.png">
-        </a>
-
-    </div>
+</div>
 </div> 
     
 <div class="popup" id="popup-21">
@@ -1524,84 +1482,6 @@ function galvez20() {
         document.addEventListener('click', function() {
             activarAudio();
         });
-    </script>
- <script>
-    
-    document.addEventListener('DOMContentLoaded', function() {
-    const btnPlay = document.getElementById('btnPlay');
-    const btnPause = document.getElementById('btnPause');
-    const wrapper = document.getElementById('videoWrapper');
-    const poster = document.getElementById('videoPoster');
-    
-    let videoUrl = ""; // Aquí guardaremos la URL
-    let isPlaying = false;
-
-    // Función para detectar el iframe (dinámico o estático)
-    function getIframe() {
-        return wrapper.querySelector('iframe');
-    }
-
-    // --- FUNCIÓN PLAY ---
-    function playVideo() {
-        // Si no tenemos URL guardada, intentamos buscarla en el iframe actual
-        const iframe = getIframe();
-        
-        if (iframe && !videoUrl) {
-            videoUrl = iframe.src; // Guardamos la URL original
-        }
-
-        if (videoUrl) {
-            // 1. Si el iframe existe, le volvemos a poner la URL (Reinicia el video)
-            if (iframe) {
-                iframe.src = videoUrl;
-            } else {
-                // Si por alguna razón se eliminó, lo recreamos (opcional)
-                // En la mayoría de casos solo basta restaurar src
-            }
-
-            // 2. Ocultar la carátula negra
-            poster.style.display = 'none';
-            
-            // 3. Cambiar botones
-            btnPlay.style.display = 'none';
-            btnPause.style.display = 'flex';
-            isPlaying = true;
-        }
-    }
-
-    // --- FUNCIÓN PAUSA (STOP) ---
-    function pauseVideo() {
-        const iframe = getIframe();
-
-        if (iframe) {
-            // 1. Guardamos la URL actual si no la hemos guardado
-            if (!videoUrl) videoUrl = iframe.src;
-
-            // 2. ELIMINAMOS la fuente (Stop forzado)
-            iframe.src = ""; 
-        }
-
-        // 3. Mostramos la carátula negra
-        poster.style.display = 'flex';
-
-        // 4. Cambiar botones
-        btnPause.style.display = 'none';
-        btnPlay.style.display = 'flex';
-        isPlaying = false;
-    }
-
-    // --- EVENT LISTENERS ---
-    if(btnPlay && btnPause) {
-        btnPlay.addEventListener('click', playVideo);
-        btnPause.addEventListener('click', pauseVideo);
-        
-        // También permitir hacer clic en la carátula negra para reproducir
-        poster.addEventListener('click', playVideo);
-    }
-});
-    
-    
-    
     </script>
 
 	
