@@ -73,7 +73,7 @@ function myFunction() {
      
  
 function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME preload="none" controls tabindex="0" src="https://ok.ru/videoembed/12391172213426?" ></IFRAME><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12391172213426?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
                                                        
 function mostrar85(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
@@ -1525,86 +1525,6 @@ function galvez20() {
             activarAudio();
         });
     </script>
- <script>
-    
-    document.addEventListener('DOMContentLoaded', function() {
-    const btnPlay = document.getElementById('btnPlay');
-    const btnPause = document.getElementById('btnPause');
-    const wrapper = document.getElementById('videoWrapper');
-    const poster = document.getElementById('videoPoster');
-    
-    let videoUrl = ""; // Aquí guardaremos la URL
-    let isPlaying = false;
-
-    // Función para detectar el iframe (dinámico o estático)
-    function getIframe() {
-        return wrapper.querySelector('iframe');
-    }
-
-    // --- FUNCIÓN PLAY ---
-    function playVideo() {
-        // Si no tenemos URL guardada, intentamos buscarla en el iframe actual
-        const iframe = getIframe();
-        
-        if (iframe && !videoUrl) {
-            videoUrl = iframe.src; // Guardamos la URL original
-        }
-
-        if (videoUrl) {
-            // 1. Si el iframe existe, le volvemos a poner la URL (Reinicia el video)
-            if (iframe) {
-                iframe.src = videoUrl;
-            } else {
-                // Si por alguna razón se eliminó, lo recreamos (opcional)
-                // En la mayoría de casos solo basta restaurar src
-            }
-
-            // 2. Ocultar la carátula negra
-            poster.style.display = 'none';
-            
-            // 3. Cambiar botones
-            btnPlay.style.display = 'none';
-            btnPause.style.display = 'flex';
-            isPlaying = true;
-        }
-    }
-
-    // --- FUNCIÓN PAUSA (STOP) ---
-    function pauseVideo() {
-        const iframe = getIframe();
-
-        if (iframe) {
-            // 1. Guardamos la URL actual si no la hemos guardado
-            if (!videoUrl) videoUrl = iframe.src;
-
-            // 2. ELIMINAMOS la fuente (Stop forzado)
-            iframe.src = ""; 
-        }
-
-        // 3. Mostramos la carátula negra
-        poster.style.display = 'flex';
-
-        // 4. Cambiar botones
-        btnPause.style.display = 'none';
-        btnPlay.style.display = 'flex';
-        isPlaying = false;
-    }
-
-    // --- EVENT LISTENERS ---
-    if(btnPlay && btnPause) {
-        btnPlay.addEventListener('click', playVideo);
-        btnPause.addEventListener('click', pauseVideo);
-        
-        // También permitir hacer clic en la carátula negra para reproducir
-        poster.addEventListener('click', playVideo);
-    }
-});
-    
-    
-    
-    </script>
-
-	
 
     
 </body></html>
