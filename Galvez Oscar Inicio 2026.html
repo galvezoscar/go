@@ -1301,4 +1301,191 @@ function galvez20() {
     </script>
 
     
+<script>
+    // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
+    var aviso = document.createElement('div');
+    aviso.id = 'aviso-fullscreen';
+    aviso.innerText = 'app';
+    
+    // Estilos
+    aviso.style.position = 'fixed';
+    aviso.style.top = '1px';
+    aviso.style.right = '16%';
+    aviso.style.backgroundColor = 'rgba(100, 150, 250, 0.9)';
+    aviso.style.color = '#fff';
+    aviso.style.padding = '0.5% 2%';
+    aviso.style.borderRadius = '4px';
+    aviso.style.fontSize = '12px';
+    aviso.style.fontFamily = 'sans-serif';
+    aviso.style.zIndex = '9999';
+    aviso.style.display = 'none'; 
+    aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+    aviso.style.cursor = 'pointer';
+    
+    document.body.appendChild(aviso);
+
+    // --- CLICK EN EL CARTEL ---
+    aviso.addEventListener('click', function() {
+        entrarPantallaCompleta();
+    });
+
+    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA ---
+    function entrarPantallaCompleta() {
+        var elem = document.documentElement;
+        
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { 
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { 
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { 
+            elem.msRequestFullscreen();
+        }
+    }
+
+    // --- 3. LÓGICA AL HACER CLIC ---
+    function activarSiEsPC(e) {
+        // Excluir Android
+        if (/Android/i.test(navigator.userAgent)) {
+            return;
+        }
+
+        // --- NUEVA LÓGICA: Excluir si el clic fue en un enlace <a> ---
+        // e.target.closest('a') busca si el elemento clicado o alguno de sus padres es un enlace
+        if (e.target.closest('a')) {
+            return; 
+        }
+
+        // Excluir si ya estamos en pantalla completa
+        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+        if (!isFullscreen) {
+            entrarPantallaCompleta();
+            
+            // Importante: Removemos el evento global
+            document.removeEventListener('click', activarSiEsPC);
+            
+            // Ocultamos el aviso por si acaso
+            aviso.style.display = 'none';
+        }
+    }
+
+    // --- 4. DETECTAR CUANDO SE SALE DE PANTALLA COMPLETA ---
+    function verificarCambioPantalla() {
+        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        
+        if (!isFullscreen) {
+            aviso.style.display = 'block';
+        } else {
+            aviso.style.display = 'none';
+        }
+    }
+
+    // Inicializar evento inicial
+    document.addEventListener('click', activarSiEsPC);
+
+    // Eventos para detectar cambios de estado
+    document.addEventListener('fullscreenchange', verificarCambioPantalla);
+    document.addEventListener('webkitfullscreenchange', verificarCambioPantalla);
+    document.addEventListener('mozfullscreenchange', verificarCambioPantalla);
+    document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
+</script>
+
+<script>
+        // 3. BLOQUEO DE EVENTOS CON JAVASCRIPT
+
+        // Referencia al elemento de notificación
+        const toast = document.getElementById('toast');
+        let toastTimeout;
+
+        // Función para mostrar un mensaje temporal
+        function mostrarToast(mensaje) {
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            
+            // Reiniciar el temporizador si ya estaba corriendo
+            clearTimeout(toastTimeout);
+            
+            // Ocultar después de 2 segundos
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // A. EVITAR CLICK DERECHO (Menú Contextual)
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            mostrarToast('El menú contextual está deshabilitado');
+            return false;
+        });
+
+        // B. EVITAR TECLAS DE ZOOM Y COPIADO EN TECLADO (Ctrl +, Ctrl -, Ctrl 0, Ctrl C, Ctrl U, etc.)
+        document.addEventListener('keydown', function(event) {
+            // Teclas Ctrl o Cmd (Mac)
+            if (event.ctrlKey || event.metaKey) {
+                // Bloquear Zoom
+                if (event.key === '+' || event.key === '-' || event.key === '0') {
+                    event.preventDefault();
+                    mostrarToast('El zoom está deshabilitado');
+                    return false;
+                }
+                // Bloquear Guardar (Ctrl+S)
+                if (event.key === 's' || event.key === 'S') {
+                    event.preventDefault();
+                    mostrarToast('Guardar página está deshabilitado');
+                    return false;
+                }
+                // Bloquear Ver Código Fuente (Ctrl+U) - Opcional, pero común en este tipo de peticiones
+                if (event.key === 'u' || event.key === 'U') {
+                    event.preventDefault();
+                    mostrarToast('Ver código fuente está deshabilitado');
+                    return false;
+                }
+                // Bloquear Copiar (Ctrl+C)
+                if (event.key === 'c' || event.key === 'C') {
+                    event.preventDefault();
+                    mostrarToast('Copiar texto está deshabilitado');
+                    return false;
+                }
+            }
+            
+            // Bloquear tecla F12 (Herramientas de desarrollador) - Opcional
+            if (event.key === 'F12') {
+                event.preventDefault();
+                mostrarToast('Herramientas de desarrollador deshabilitadas');
+                return false;
+            }
+        });
+
+        // C. EVITAR ZOOM CON RUEDA DEL RATÓN (Ctrl + Scroll)
+        document.addEventListener('wheel', function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+                mostrarToast('El zoom con rueda está deshabilitado');
+                return false;
+            }
+        }, { passive: false });
+
+        // D. EVITAR ARRASTRAR IMÁGENES (Drag & Drop)
+        document.addEventListener('dragstart', function(event) {
+            // Si el elemento que se intenta arrastrar es una imagen
+            if (event.target.tagName === 'IMG') {
+                event.preventDefault();
+                mostrarToast('Arrastrar imágenes está deshabilitado');
+                return false;
+            }
+        });
+
+        // E. EVITAR EVENTOS TÁCTILES ADICIONALES EN MÓVIL (Para asegurar que no haya gestos de zoom)
+        // Nota: La meta viewport hace la mayor parte del trabajo, esto refuerza el comportamiento
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) { 
+                event.preventDefault(); 
+            }
+        }, { passive: false });
+
+    </script>
+    
 </body></html>
