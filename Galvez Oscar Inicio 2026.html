@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galvez Oscar video</title>
-
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 
 <script>
 function myFunction() {
@@ -571,9 +571,11 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 <div class="popup" id="popup-20">
 <div class="fullvid"><a id="nuevaimg"></a>
 
-	
-<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
+	<img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
 
+<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
+<!-- Este botón aparece automáticamente si hay una TV disponible -->
+<google-cast-launcher></google-cast-launcher>
 </div>
 </div> 
     
@@ -1498,7 +1500,18 @@ function galvez20() {
     video.pause();
     video.currentTime=pause;
 };
+window['__onGCastApiAvailable'] = function(isAvailable) {
+  if (isAvailable) {
+    initializeCastApi();
+  }
+};
 
+function initializeCastApi() {
+  cast.framework.CastContext.getInstance().setOptions({
+    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID, // App genérica
+    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+  });
+}
      
 </script>     
 
@@ -1524,7 +1537,30 @@ function galvez20() {
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>
     
     
-	
+	 <script>
+        // --- SCRIPT PARA ACTIVAR EL SONIDO ---
+        
+        const iframe = document.getElementById('videoOk');
+        let sonidoActivado = false;
+
+        // Función para cambiar el estado de mute a unmute
+        function activarAudio() {
+            if (!sonidoActivado) {
+                // Reemplazamos muted=1 por muted=0 en la URL
+                const urlActual = iframe.src;
+                const urlNueva = urlActual.replace('muted=1', 'muted=0');
+                
+                iframe.src = urlNueva; // Recargamos el iframe con audio
+                sonidoActivado = true;
+                console.log("Sonido activado");
+            }
+        }
+
+        // Escuchamos el primer clic en toda la página
+        document.addEventListener('click', function() {
+            activarAudio();
+        });
+    </script>
 
     
 </body></html>
