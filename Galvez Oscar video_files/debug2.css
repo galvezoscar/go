@@ -27,37 +27,6 @@ border-radius:   1px 54px 1px 55px;
 
 
 
-.g{
-position: absolute;
-cursor: pointer;
-font-size: 1.2w;
-top:  0%;
-left:  0%;
-width: 100%;
-height: 15%;
-background-color: transparent;
-
-} 
- 
- 
- 
-
-.gg{
-position: absolute;
-bottom:   7%;
-right:   -1%;
-width: 8%;
-height: 12%;
-background-color: transparent;
-} 
- 
-
-
-
-
-
-
-
  
 .ma {
 
@@ -103,7 +72,7 @@ object-fit: fill;
 .volver{
 position: relative;
 width: 7%;
-margin-left: 80%;
+margin-left: 8%;
 height: 10%;
     
 } 
