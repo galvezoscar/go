@@ -571,7 +571,7 @@ bottom:   8%;
 right:   -1%;
 width: 4em;
 height: 5vw;
-background-color: hotpink;
+background-color: transparent;
 } 
  
 
@@ -579,7 +579,7 @@ background-color: hotpink;
 .volver{
 position: relative;
 width: 9%;
-margin-left: 72%;
+margin-left: 92%;
 height: 13%;
     
 } 
