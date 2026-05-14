@@ -27,6 +27,8 @@ border-radius:   1px 54px 1px 55px;
 
 
 
+
+
  
 .ma {
 
@@ -68,41 +70,6 @@ object-fit: fill;
 }
 
 
-
-.volver{
-position: relative;
-width: 7%;
-margin-left: 8%;
-height: 10%;
-    
-} 
-
-.volver1{
-position: absolute;
-top: 17%;
-right: 9%;
-} 
-
-.volver2{
-position: absolute;
-right: 22%;
-top: 17%;
-}     
-
-
- 
-
-.volver11{
-width: 10vw;
-height: 2.5vw;
-box-shadow: 1px 1px 20px orangered;
-display:inline-block;
-border-radius: 11px;
-text-align-last: center;
- background-color: orangered;
-font-size:  4vh;
-
-}     
 
 
 .booton1{
@@ -500,14 +467,240 @@ background: black;
 }
 
     
+
+
+/* Tablets (Móviles pequeños) */
+@media (max-width: 575px) {
+  .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: tomato;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+}
+
+
+/* Tablets (Móviles grandes) */
+@media (min-width: 576px) {
   
 
+.g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: blue;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+
+}
+
+
+/* Tablets (768px en adelante) */
+@media (min-width: 768px) {
+ .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 80%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   8%;
+right:   -1%;
+width: 4em;
+height: 5vw;
+background-color: hotpink;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 72%;
+height: 13%;
+    
+} 
+}
+
+
+
+
+/* Tablets (Laptops / Desktops) */
+@media (min-width: 992px) {
+ .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: green;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+}
+
+
+/* Escritorio (1024px en adelante) */
+@media (min-width: 1024px) {
+  .contenedor {
+    display: flex;
+  }
+    
+
+
+.g{
+position: absolute;
+cursor: pointer;
+
+top:  0%;
+left:  0%;
+width: 100%;
+height: 2.5em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 8%;
+height: 2.4em;
+background-color: red;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 93%;
+height: 10%;
+    
+} 
+
+}
 
 
 
 
 
 
+.volver1{
+position: absolute;
+top: 17%;
+right: 9%;
+} 
+
+.volver2{
+position: absolute;
+right: 22%;
+top: 17%;
+}     
+
+
+ 
+
+.volver11{
+width: 10vw;
+height: 2.5vw;
+box-shadow: 1px 1px 20px orangered;
+display:inline-block;
+border-radius: 11px;
+text-align-last: center;
+ background-color: orangered;
+font-size:  4vh;
+
+}     
 
 
 
