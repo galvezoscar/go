@@ -684,6 +684,14 @@ body.is-chrome-android .gg {
     height: 2.4em;
     background-color: blue; /* Un color distinto para Chrome */
 }
+body.is-opera-android .gg {
+    position: absolute;
+    bottom: 1%;
+    right: -1%;
+    width: 8%;
+    height: 2.4em;
+    background-color: goldenrod; /* Un color distinto para Chrome */
+}
 
 /* En Chrome Android */
 body.is-chrome-android .volver {
