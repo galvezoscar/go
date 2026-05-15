@@ -54,14 +54,13 @@ function myFunction() {
  
     
 <script>
- 
- 
+
                                                     
 function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';} 
+document.getElementById('nuevaimg').innerHTML = '<IFRAME id="videoOk"  autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}  
                                                        
 function mostrar85(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
      
 function mostrar86(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME id="videoOk"  src="https://ok.ru/videoembed/13983595235902?autoplay=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}    
@@ -312,35 +311,14 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
     
 	
 
-
 <div class="popup" id="popup-20">
-    <div class="fullvid">
-        
-        <!-- Envoltorio para el video -->
-        <div id="videoWrapper">
-            <!-- Tu enlace original (asumo que aquí se inyecta el iframe) -->
-            <a id="nuevaimg"></a>
-            
-            <!-- Carátula negra que aparece al pausar -->
-            <div id="videoPoster" class="video-poster" style="display: none;">
-                <!-- Icono de Play grande centrado -->
-                <div class="poster-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-            </div>
-        </div>
+<div class="fullvid"><a id="nuevaimg"></a>
 
-       
+	
+<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
 
-        <!-- Tu botón Volver -->
-        <a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()">
-            <img class="volver" src="./Galvez Oscar video_files/volver flechan.png">
-        </a>
-
-    </div>
+</div>
 </div> 
-    
-    
     
 <div class="popup" id="popup-21">
 <div class="fullvid"><a id="nuevaimg1"></a>
@@ -1289,7 +1267,6 @@ function galvez20() {
 </script>     
 
 
-	
 
     
 <script>
@@ -1383,8 +1360,131 @@ function galvez20() {
     document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
 </script>
 
+<script>
+        // 3. BLOQUEO DE EVENTOS CON JAVASCRIPT
+
+        // Referencia al elemento de notificación
+        const toast = document.getElementById('toast');
+        let toastTimeout;
+
+        // Función para mostrar un mensaje temporal
+        function mostrarToast(mensaje) {
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            
+            // Reiniciar el temporizador si ya estaba corriendo
+            clearTimeout(toastTimeout);
+            
+            // Ocultar después de 2 segundos
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // A. EVITAR CLICK DERECHO (Menú Contextual)
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            mostrarToast('El menú contextual está deshabilitado');
+            return false;
+        });
+
+        // B. EVITAR TECLAS DE ZOOM Y COPIADO EN TECLADO (Ctrl +, Ctrl -, Ctrl 0, Ctrl C, Ctrl U, etc.)
+        document.addEventListener('keydown', function(event) {
+            // Teclas Ctrl o Cmd (Mac)
+            if (event.ctrlKey || event.metaKey) {
+                // Bloquear Zoom
+                if (event.key === '+' || event.key === '-' || event.key === '0') {
+                    event.preventDefault();
+                    mostrarToast('El zoom está deshabilitado');
+                    return false;
+                }
+                // Bloquear Guardar (Ctrl+S)
+                if (event.key === 's' || event.key === 'S') {
+                    event.preventDefault();
+                    mostrarToast('Guardar página está deshabilitado');
+                    return false;
+                }
+                // Bloquear Ver Código Fuente (Ctrl+U) - Opcional, pero común en este tipo de peticiones
+                if (event.key === 'u' || event.key === 'U') {
+                    event.preventDefault();
+                    mostrarToast('Ver código fuente está deshabilitado');
+                    return false;
+                }
+                // Bloquear Copiar (Ctrl+C)
+                if (event.key === 'c' || event.key === 'C') {
+                    event.preventDefault();
+                    mostrarToast('Copiar texto está deshabilitado');
+                    return false;
+                }
+            }
+            
+            // Bloquear tecla F12 (Herramientas de desarrollador) - Opcional
+            if (event.key === 'F12') {
+                event.preventDefault();
+                mostrarToast('Herramientas de desarrollador deshabilitadas');
+                return false;
+            }
+        });
+
+        // C. EVITAR ZOOM CON RUEDA DEL RATÓN (Ctrl + Scroll)
+        document.addEventListener('wheel', function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+                mostrarToast('El zoom con rueda está deshabilitado');
+                return false;
+            }
+        }, { passive: false });
+
+        // D. EVITAR ARRASTRAR IMÁGENES (Drag & Drop)
+        document.addEventListener('dragstart', function(event) {
+            // Si el elemento que se intenta arrastrar es una imagen
+            if (event.target.tagName === 'IMG') {
+                event.preventDefault();
+                mostrarToast('Arrastrar imágenes está deshabilitado');
+                return false;
+            }
+        });
+
+        // E. EVITAR EVENTOS TÁCTILES ADICIONALES EN MÓVIL (Para asegurar que no haya gestos de zoom)
+        // Nota: La meta viewport hace la mayor parte del trabajo, esto refuerza el comportamiento
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) { 
+                event.preventDefault(); 
+            }
+        }, { passive: false });
+
+    </script>
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>
+    
+   <script>
+        // --- SCRIPT PARA ACTIVAR EL SONIDO ---
+        
+        const iframe = document.getElementById('videoOk');
+        let sonidoActivado = false;
+
+        // Función para cambiar el estado de mute a unmute
+        function activarAudio() {
+            if (!sonidoActivado) {
+                // Reemplazamos muted=1 por muted=0 en la URL
+                const urlActual = iframe.src;
+                const urlNueva = urlActual.replace('muted=1', 'muted=0');
+                
+                iframe.src = urlNueva; // Recargamos el iframe con audio
+                sonidoActivado = true;
+                console.log("Sonido activado");
+            }
+        }
+
+        // Escuchamos el primer clic en toda la página
+        document.addEventListener('click', function() {
+            activarAudio();
+        });
+    </script>
+
+	
+
     
 </body></html>
