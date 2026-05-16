@@ -1269,13 +1269,12 @@ function galvez20() {
 
 
     <script>
-    // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
+    // --- 1. CREACIÓN DEL CARTEL PEQUEÑO (El original) ---
     var aviso = document.createElement('div');
     aviso.id = 'aviso-fullscreen';
-    aviso.innerText = '⛶ APP'; // Agregué un icono para que se vea mejor
-    aviso.title = "Pulsa aquí para pantalla completa";
+    aviso.innerText = '⛶ APP';
+    aviso.title = "Pantalla Completa";
     
-    // Estilos
     aviso.style.position = 'fixed';
     aviso.style.top = '1px';
     aviso.style.right = '16%';
@@ -1290,91 +1289,98 @@ function galvez20() {
     aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
     aviso.style.cursor = 'pointer';
     aviso.style.fontWeight = 'bold';
-    
     document.body.appendChild(aviso);
 
-    // --- CLICK EN EL CARTEL (Funciona para PC y Android) ---
-    aviso.addEventListener('click', function(e) {
-        // Evitamos que el clic se propague si estuviera dentro de otro elemento
-        e.stopPropagation();
-        entrarPantallaCompleta();
-    });
+    // --- NUEVO: 1.5 CREACIÓN DEL BOTÓN TRANSPARENTE GRANDE ---
+    var overlayBtn = document.createElement('div');
+    overlayBtn.id = 'overlay-fullscreen';
+    // Opcional: Puedes poner un texto sutil si quieres, o dejarlo vacío para que sea totalmente invisible
+    // overlayBtn.innerText = 'Tocar pantalla'; 
+    
+    overlayBtn.style.position = 'fixed';
+    overlayBtn.style.top = '0';
+    overlayBtn.style.left = '0';
+    overlayBtn.style.width = '100%';   // Responsive ancho total
+    overlayBtn.style.height = '100%';  // Responsive alto total
+    overlayBtn.style.backgroundColor = 'transparent'; // Transparente
+    overlayBtn.style.zIndex = '9998';  // Justo debajo del aviso pequeño, pero encima de todo el contenido
+    overlayBtn.style.display = 'none';
+    overlayBtn.style.cursor = 'pointer';
+    document.body.appendChild(overlayBtn);
 
-    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA (Mejorada para Android) ---
+
+    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA ---
     function entrarPantallaCompleta() {
         var elem = document.documentElement;
-        
-        // Opciones para Android: Intenta ocultar la UI de navegación
-        var fsOptions = {
-            navigationUI: 'hide' 
-        };
+        var fsOptions = { navigationUI: 'hide' };
 
-        // Intento estándar (Chrome Android moderno, Firefox, Edge)
         if (elem.requestFullscreen) {
             elem.requestFullscreen(fsOptions).catch(err => console.log(err));
-        } 
-        // Navegadores antiguos (Safari iOS antiguo, Chrome antiguo)
-        else if (elem.webkitRequestFullscreen) { 
+        } else if (elem.webkitRequestFullscreen) { 
             elem.webkitRequestFullscreen();
-        } 
-        else if (elem.mozRequestFullScreen) { 
+        } else if (elem.mozRequestFullScreen) { 
             elem.mozRequestFullScreen();
-        } 
-        else if (elem.msRequestFullscreen) { 
+        } else if (elem.msRequestFullscreen) { 
             elem.msRequestFullscreen();
         }
     }
 
-    // --- 3. LÓGICA AL HACER CLIC (Solo para PC) ---
+    // --- CLICK EN EL CARTEL PEQUEÑO ---
+    aviso.addEventListener('click', function(e) {
+        e.stopPropagation(); // Evita que el clic llegue al botón de abajo si se superponen
+        entrarPantallaCompleta();
+    });
+
+    // --- CLICK EN EL BOTÓN TRANSPARENTE GRANDE ---
+    overlayBtn.addEventListener('click', function() {
+        entrarPantallaCompleta();
+        // La capa se ocultará automáticamente gracias a la función verificarCambioPantalla
+    });
+
+    // --- 3. LÓGICA AL HACER CLIC GLOBAL (PC) ---
     function activarSiEsPC(e) {
-        // EXCLUSIVO: Excluir Android para no romper el scroll o la navegación
+        // Excluir Android
         if (/Android/i.test(navigator.userAgent)) {
             return;
         }
 
-        // Excluir si el clic fue en un enlace <a> o botón interactivo
+        // Excluir clics en enlaces o botones interactivos
         if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) {
             return; 
         }
 
-        // Excluir si ya estamos en pantalla completa
         var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
 
         if (!isFullscreen) {
             entrarPantallaCompleta();
-            
-            // Removemos el evento global para que no moleste
             document.removeEventListener('click', activarSiEsPC);
-            
-            // Ocultamos el aviso
-            aviso.style.display = 'none';
         }
     }
 
-    // --- 4. DETECTAR CUANDO SE SALE DE PANTALLA COMPLETA ---
+    // --- 4. DETECTAR CAMBIOS Y MOSTRAR/OCULTAR BOTONES ---
     function verificarCambioPantalla() {
         var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
         
         if (!isFullscreen) {
+            // Si NO estamos en pantalla completa, mostramos AMBOS botones
             aviso.style.display = 'block';
+            overlayBtn.style.display = 'block';
         } else {
+            // Si ESTAMOS en pantalla completa, ocultamos ambos para permitir usar la web
             aviso.style.display = 'none';
+            overlayBtn.style.display = 'none';
         }
     }
 
     // --- INICIALIZACIÓN ---
-    // Agregamos el evento global (PC)
     document.addEventListener('click', activarSiEsPC);
 
-    // Escuchamos cambios de estado
     document.addEventListener("fullscreenchange", verificarCambioPantalla);
     document.addEventListener("webkitfullscreenchange", verificarCambioPantalla);
     document.addEventListener("mozfullscreenchange", verificarCambioPantalla);
     document.addEventListener("MSFullscreenChange", verificarCambioPantalla);
 
-    // *** CORRECCIÓN IMPORTANTE ***
-    // Ejecutamos una vez la verificación al cargar para mostrar el botón si no estamos en full screen.
-    // Sin esto, el botón nunca aparece porque 'display' empieza en 'none'.
+    // Mostrar botones al cargar si no están en full screen
     verificarCambioPantalla();
 
 </script>
