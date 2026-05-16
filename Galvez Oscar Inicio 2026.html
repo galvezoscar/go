@@ -1269,7 +1269,10 @@ function galvez20() {
 
 
     <script>
-    // --- 1. CREACIÓN DEL CARTEL PEQUEÑO (El original) ---
+    // --- VARIABLE DE CONTROL (Solo para el botón GRANDE) ---
+    var overlayActivatedOnce = false;
+
+    // --- 1. CREACIÓN DEL CARTEL PEQUEÑO (Comportamiento Normal) ---
     var aviso = document.createElement('div');
     aviso.id = 'aviso-fullscreen';
     aviso.innerText = '⛶ APP';
@@ -1291,7 +1294,7 @@ function galvez20() {
     aviso.style.fontWeight = 'bold';
     document.body.appendChild(aviso);
 
-    // --- 1.5 CREACIÓN DEL BOTÓN TRANSPARENTE GRANDE ---
+    // --- 1.5 CREACIÓN DEL BOTÓN TRANSPARENTE GRANDE (Comportamiento Único) ---
     var overlayBtn = document.createElement('div');
     overlayBtn.id = 'overlay-fullscreen';
     
@@ -1323,27 +1326,29 @@ function galvez20() {
         }
     }
 
-    // --- CLICK EN EL CARTEL PEQUEÑO ---
+    // --- CLICK EN EL CARTEL PEQUEÑO (Comportamiento Estándar) ---
     aviso.addEventListener('click', function(e) {
         e.stopPropagation(); 
         entrarPantallaCompleta();
-        // Ocultamos inmediatamente también
+        // Ocultamos inmediatamente porque entramos a FS, pero volverá si salimos
         aviso.style.display = 'none';
         overlayBtn.style.display = 'none';
     });
 
-    // --- CLICK EN EL BOTÓN TRANSPARENTE GRANDE ---
+    // --- CLICK EN EL BOTÓN TRANSPARENTE GRANDE (Comportamiento Único) ---
     overlayBtn.addEventListener('click', function() {
         entrarPantallaCompleta();
         
-        // --- CAMBIO SOLICITADO ---
-        // Ocultar ambos botones INMEDIATAMENTE al hacer clic.
-        // Esto garantiza que el usuario pueda usar la web sin bloqueos al instante.
+        // --- CAMBIO CLAVE ---
+        // Marcamos que el botón grande YA FUE USADO
+        overlayActivatedOnce = true;
+        
+        // Ocultamos ambos visualmente ahora
         overlayBtn.style.display = 'none';
         aviso.style.display = 'none';
     });
 
-    // --- 3. LÓGICA AL HACER CLIC GLOBAL (PC) ---
+    // --- 3. LÓGICA PC ---
     function activarSiEsPC(e) {
         if (/Android/i.test(navigator.userAgent)) {
             return;
@@ -1361,18 +1366,28 @@ function galvez20() {
         }
     }
 
-    // --- 4. DETECTAR CAMBIOS (Red de seguridad) ---
+    // --- 4. DETECTAR CAMBIOS (Lógica Separada) ---
     function verificarCambioPantalla() {
         var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
         
+        // --- LÓGICA PARA EL BOTÓN CHICO (Siempre Toggle Normal) ---
         if (!isFullscreen) {
-            // Si sale de pantalla completa (ej. botón atrás), mostramos los botones de nuevo
-            aviso.style.display = 'block';
-            overlayBtn.style.display = 'block';
+            aviso.style.display = 'block'; // Vuelve a aparecer siempre
         } else {
-            // Asegurar que están ocultos
             aviso.style.display = 'none';
+        }
+
+        // --- LÓGICA PARA EL BOTÓN GRANDE (Memoria de uso) ---
+        if (overlayActivatedOnce) {
+            // Si ya fue usado una vez, NUNCA vuelve a aparecer en esta sesión
             overlayBtn.style.display = 'none';
+        } else {
+            // Si NO ha sido usado, actúa normal (se muestra si no está en FS)
+            if (!isFullscreen) {
+                overlayBtn.style.display = 'block';
+            } else {
+                overlayBtn.style.display = 'none';
+            }
         }
     }
 
