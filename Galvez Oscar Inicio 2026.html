@@ -1291,19 +1291,17 @@ function galvez20() {
     aviso.style.fontWeight = 'bold';
     document.body.appendChild(aviso);
 
-    // --- NUEVO: 1.5 CREACIÓN DEL BOTÓN TRANSPARENTE GRANDE ---
+    // --- 1.5 CREACIÓN DEL BOTÓN TRANSPARENTE GRANDE ---
     var overlayBtn = document.createElement('div');
     overlayBtn.id = 'overlay-fullscreen';
-    // Opcional: Puedes poner un texto sutil si quieres, o dejarlo vacío para que sea totalmente invisible
-    // overlayBtn.innerText = 'Tocar pantalla'; 
     
     overlayBtn.style.position = 'fixed';
     overlayBtn.style.top = '0';
     overlayBtn.style.left = '0';
-    overlayBtn.style.width = '100%';   // Responsive ancho total
-    overlayBtn.style.height = '100%';  // Responsive alto total
-    overlayBtn.style.backgroundColor = 'transparent'; // Transparente
-    overlayBtn.style.zIndex = '9998';  // Justo debajo del aviso pequeño, pero encima de todo el contenido
+    overlayBtn.style.width = '100%';
+    overlayBtn.style.height = '100%';
+    overlayBtn.style.backgroundColor = 'transparent';
+    overlayBtn.style.zIndex = '9998';
     overlayBtn.style.display = 'none';
     overlayBtn.style.cursor = 'pointer';
     document.body.appendChild(overlayBtn);
@@ -1327,24 +1325,30 @@ function galvez20() {
 
     // --- CLICK EN EL CARTEL PEQUEÑO ---
     aviso.addEventListener('click', function(e) {
-        e.stopPropagation(); // Evita que el clic llegue al botón de abajo si se superponen
+        e.stopPropagation(); 
         entrarPantallaCompleta();
+        // Ocultamos inmediatamente también
+        aviso.style.display = 'none';
+        overlayBtn.style.display = 'none';
     });
 
     // --- CLICK EN EL BOTÓN TRANSPARENTE GRANDE ---
     overlayBtn.addEventListener('click', function() {
         entrarPantallaCompleta();
-        // La capa se ocultará automáticamente gracias a la función verificarCambioPantalla
+        
+        // --- CAMBIO SOLICITADO ---
+        // Ocultar ambos botones INMEDIATAMENTE al hacer clic.
+        // Esto garantiza que el usuario pueda usar la web sin bloqueos al instante.
+        overlayBtn.style.display = 'none';
+        aviso.style.display = 'none';
     });
 
     // --- 3. LÓGICA AL HACER CLIC GLOBAL (PC) ---
     function activarSiEsPC(e) {
-        // Excluir Android
         if (/Android/i.test(navigator.userAgent)) {
             return;
         }
 
-        // Excluir clics en enlaces o botones interactivos
         if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) {
             return; 
         }
@@ -1357,16 +1361,16 @@ function galvez20() {
         }
     }
 
-    // --- 4. DETECTAR CAMBIOS Y MOSTRAR/OCULTAR BOTONES ---
+    // --- 4. DETECTAR CAMBIOS (Red de seguridad) ---
     function verificarCambioPantalla() {
         var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
         
         if (!isFullscreen) {
-            // Si NO estamos en pantalla completa, mostramos AMBOS botones
+            // Si sale de pantalla completa (ej. botón atrás), mostramos los botones de nuevo
             aviso.style.display = 'block';
             overlayBtn.style.display = 'block';
         } else {
-            // Si ESTAMOS en pantalla completa, ocultamos ambos para permitir usar la web
+            // Asegurar que están ocultos
             aviso.style.display = 'none';
             overlayBtn.style.display = 'none';
         }
@@ -1380,7 +1384,6 @@ function galvez20() {
     document.addEventListener("mozfullscreenchange", verificarCambioPantalla);
     document.addEventListener("MSFullscreenChange", verificarCambioPantalla);
 
-    // Mostrar botones al cargar si no están en full screen
     verificarCambioPantalla();
 
 </script>
