@@ -1268,12 +1268,12 @@ function galvez20() {
 
 
 
-    
-<script>
+    <script>
     // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
     var aviso = document.createElement('div');
     aviso.id = 'aviso-fullscreen';
-    aviso.innerText = 'app';
+    aviso.innerText = '⛶ APP'; // Agregué un icono para que se vea mejor
+    aviso.title = "Pulsa aquí para pantalla completa";
     
     // Estilos
     aviso.style.position = 'fixed';
@@ -1289,39 +1289,51 @@ function galvez20() {
     aviso.style.display = 'none'; 
     aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
     aviso.style.cursor = 'pointer';
+    aviso.style.fontWeight = 'bold';
     
     document.body.appendChild(aviso);
 
-    // --- CLICK EN EL CARTEL ---
-    aviso.addEventListener('click', function() {
+    // --- CLICK EN EL CARTEL (Funciona para PC y Android) ---
+    aviso.addEventListener('click', function(e) {
+        // Evitamos que el clic se propague si estuviera dentro de otro elemento
+        e.stopPropagation();
         entrarPantallaCompleta();
     });
 
-    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA ---
+    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA (Mejorada para Android) ---
     function entrarPantallaCompleta() {
         var elem = document.documentElement;
         
+        // Opciones para Android: Intenta ocultar la UI de navegación
+        var fsOptions = {
+            navigationUI: 'hide' 
+        };
+
+        // Intento estándar (Chrome Android moderno, Firefox, Edge)
         if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) { 
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) { 
+            elem.requestFullscreen(fsOptions).catch(err => console.log(err));
+        } 
+        // Navegadores antiguos (Safari iOS antiguo, Chrome antiguo)
+        else if (elem.webkitRequestFullscreen) { 
             elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { 
+        } 
+        else if (elem.mozRequestFullScreen) { 
+            elem.mozRequestFullScreen();
+        } 
+        else if (elem.msRequestFullscreen) { 
             elem.msRequestFullscreen();
         }
     }
 
-    // --- 3. LÓGICA AL HACER CLIC ---
+    // --- 3. LÓGICA AL HACER CLIC (Solo para PC) ---
     function activarSiEsPC(e) {
-        // Excluir Android
+        // EXCLUSIVO: Excluir Android para no romper el scroll o la navegación
         if (/Android/i.test(navigator.userAgent)) {
             return;
         }
 
-        // --- NUEVA LÓGICA: Excluir si el clic fue en un enlace <a> ---
-        // e.target.closest('a') busca si el elemento clicado o alguno de sus padres es un enlace
-        if (e.target.closest('a')) {
+        // Excluir si el clic fue en un enlace <a> o botón interactivo
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) {
             return; 
         }
 
@@ -1331,10 +1343,10 @@ function galvez20() {
         if (!isFullscreen) {
             entrarPantallaCompleta();
             
-            // Importante: Removemos el evento global
+            // Removemos el evento global para que no moleste
             document.removeEventListener('click', activarSiEsPC);
             
-            // Ocultamos el aviso por si acaso
+            // Ocultamos el aviso
             aviso.style.display = 'none';
         }
     }
@@ -1350,16 +1362,22 @@ function galvez20() {
         }
     }
 
-    // Inicializar evento inicial
+    // --- INICIALIZACIÓN ---
+    // Agregamos el evento global (PC)
     document.addEventListener('click', activarSiEsPC);
 
-    // Eventos para detectar cambios de estado
-    document.addEventListener('fullscreenchange', verificarCambioPantalla);
-    document.addEventListener('webkitfullscreenchange', verificarCambioPantalla);
-    document.addEventListener('mozfullscreenchange', verificarCambioPantalla);
-    document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
-</script>
+    // Escuchamos cambios de estado
+    document.addEventListener("fullscreenchange", verificarCambioPantalla);
+    document.addEventListener("webkitfullscreenchange", verificarCambioPantalla);
+    document.addEventListener("mozfullscreenchange", verificarCambioPantalla);
+    document.addEventListener("MSFullscreenChange", verificarCambioPantalla);
 
+    // *** CORRECCIÓN IMPORTANTE ***
+    // Ejecutamos una vez la verificación al cargar para mostrar el botón si no estamos en full screen.
+    // Sin esto, el botón nunca aparece porque 'display' empieza en 'none'.
+    verificarCambioPantalla();
+
+</script>
 <script>
         // 3. BLOQUEO DE EVENTOS CON JAVASCRIPT
 
