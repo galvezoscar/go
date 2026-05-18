@@ -1488,5 +1488,49 @@ function galvez20() {
         });
     </script>
 
-    
+    <script>
+    // --- BLOQUEO TOTAL DE INTERACCIÓN ---
+
+    // 1. BLOQUEAR CLIC DERECHO (Menú Contextual)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 2. BLOQUEAR TECLAS (Desarrollador, Guardar, Copiar, Imprimir)
+    document.addEventListener('keydown', function(e) {
+        // Lista de teclas prohibidas
+        if (
+            e.key === 'F12' ||                        // Consola
+            (e.ctrlKey && e.key === 'u') ||           // Ver código fuente
+            (e.ctrlKey && e.key === 's') ||           // Guardar
+            (e.ctrlKey && e.key === 'c') ||           // Copiar
+            (e.ctrlKey && e.key === 'p') ||           // Imprimir
+            (e.ctrlKey && e.shiftKey && e.key === 'I')// Inspeccionar (Chrome)
+        ) {
+            e.preventDefault();
+            alert("Acción deshabilitada"); // Opcional: mensaje de alerta
+            return false;
+        }
+    });
+
+    // 3. BLOQUEAR ZOOM CON RUEDA DEL RATÓN (Ctrl + Scroll)
+    document.addEventListener('wheel', function(e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            return false;
+        }
+    }, { passive: false });
+
+    // 4. EVITAR DOBLE TAP ZOOM EN MÓVIL (Refuerzo)
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        var now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+</script>
 </body></html>
