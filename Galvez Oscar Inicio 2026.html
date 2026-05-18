@@ -1255,17 +1255,36 @@ function galvez20() {
     // Toggle (Alternar) el estado del popup
     trailer.classList.toggle("active");
 
-    // Lógica: Si el popup tiene la clase 'active' (se abrió), ocultamos buscador
+    // Lógica: Si el popup se activó (se abrió)
     if (trailer.classList.contains("active")) {
+        
+        // 1. Ocultar buscador (para limpieza visual)
         if(buscadorInput) buscadorInput.style.display = 'none';
         if(buscadorControles) buscadorControles.style.display = 'none';
+
+        // 2. ENTRAR EN PANTALLA COMPLETA
+        var elem = document.documentElement; 
+        
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+
     } else {
-        // Si no tiene la clase (se cerró), mostramos el input del buscador
-        // Los controles (flechas) aparecerán automáticamente si escribes en el buscador
+        // Si el popup se desactivó (se cerró)
+        
+        // 1. Volvemos a mostrar el buscador para que puedas buscar otra película
         if(buscadorInput) buscadorInput.style.display = 'block';
+
+        // 2. ELIMINAMOS LA ORDEN DE SALIR DE PANTALLA COMPLETA.
+        // Ahora te quedarás en pantalla completa para seguir navegando.
+        // Si en el futuro quieres salir, tendrás que pulsar la tecla ESC de tu teclado.
     }
 
-    // Código original para pausar (se mantiene)
+    // Código original para pausar
     var video = document.querySelector(".red20");
     if(video && video.pause) {
         video.pause();
