@@ -1311,7 +1311,7 @@ function galvez20() {
     
 --><script>
     (function() {
-        // --- 1. DETECTAR SI ES DISPOSITIVO TÁCTIL (ANDROID) O PC (MOUSE) ---
+        // 1. Detectar si es móvil (Android) o PC
         var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         // --- 2. LÓGICA PARA PC (PRIMER TOQUE Y MORIR) ---
@@ -1319,35 +1319,25 @@ function galvez20() {
             let pcClickDone = false;
 
             function handlePcClick() {
-                // Si ya se activó una vez, no hacer nada
                 if (pcClickDone) return;
 
-                // Intentar activar pantalla completa
                 var elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(err => console.log(err));
-                } else if (elem.webkitRequestFullscreen) { 
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { 
-                    elem.msRequestFullscreen();
-                }
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
 
-                // Marcar como hecho
                 pcClickDone = true;
-
-                // ELIMINAR EL EVENTO (La función muere)
+                
+                // AQUÍ ELIMINAMOS LA FUNCIÓN EN PC
                 document.body.removeEventListener('click', handlePcClick);
-                console.log("Modo PC: Fullscreen activado y listener removido.");
+                console.log("PC: Fullscreen activo, función detenida.");
             }
-
-            // Esperar primer clic
             document.body.addEventListener('click', handlePcClick);
         } 
 
-        // --- 3. LÓGICA PARA ANDROID (DESLIZAR ARRIBA/ABAJO) ---
+        // --- 3. LÓGICA PARA ANDROID (DESLIZAR SIEMPRE ACTIVO) ---
         else {
             let touchStartY = 0;
-            const swipeThreshold = 50; // Distancia mínima en píxeles para considerar un deslizamiento
+            const swipeThreshold = 50; // Píxeles mínimos para que cuente como deslizamiento
 
             function handleTouchStart(e) {
                 touchStartY = e.touches[0].clientY;
@@ -1355,35 +1345,31 @@ function galvez20() {
 
             function handleTouchEnd(e) {
                 var touchEndY = e.changedTouches[0].clientY;
-                var diffY = touchStartY - touchEndY; // Positivo = Arriba, Negativo = Abajo
+                var diffY = touchStartY - touchEndY; 
+                // Positivo = Arriba (Dedido sube), Negativo = Abajo (Dedo baja)
 
                 var elem = document.documentElement;
 
-                // DESLIZAR ARRIBA (Finger moves up)
+                // DESLIZAR ARRIBA (Abrir pantalla completa)
                 if (diffY > swipeThreshold) {
-                    if (elem.requestFullscreen) {
-                        elem.requestFullscreen().catch(err => {});
-                    } else if (elem.webkitRequestFullscreen) { 
-                        elem.webkitRequestFullscreen();
-                    }
+                    if (elem.requestFullscreen) elem.requestFullscreen();
+                    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
                 }
                 
-                // DESLIZAR ABAJO (Finger moves down)
+                // DESLIZAR ABAJO (Salir de pantalla completa)
                 else if (diffY < -swipeThreshold) {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) { 
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) { 
-                        document.msExitFullscreen();
-                    }
+                    if (document.exitFullscreen) document.exitFullscreen();
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                    else if (document.msExitFullscreen) document.msExitFullscreen();
                 }
             }
 
-            // Agregar listeners para Android (No se eliminan, siguen vivos)
+            // AGREGAMOS LISTENERS PARA ANDROID
+            // NOTA: NO hay "removeEventListener" aquí, por lo que SIGUE FUNCIONANDO SIEMPRE.
             document.body.addEventListener('touchstart', handleTouchStart, {passive: true});
             document.body.addEventListener('touchend', handleTouchEnd, {passive: true});
-            console.log("Modo Android: Control por gestos activado.");
+            
+            console.log("Android: Gestos de deslizar activados permanentemente.");
         }
     })();
 </script>
