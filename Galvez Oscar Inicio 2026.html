@@ -1295,21 +1295,41 @@ function galvez20() {
 </script>     
 
 
-<!--
-
 <script>
- 
-    addEventListener("click", function() {
-    var el = document.documentElement,
-      rfs = el.requestFullscreen
-        || el.webkitRequestFullScreen
-        || el.mozRequestFullScreen
-        || el.msRequestFullscreen 
-        ;rfs.call(el);});
-        
-   </script> 
-    
--->
+    (function() {
+        let yaSeActivo = false;
+
+        function accionPrimerToque(event) {
+            // Si ya se activó, salir inmediatamente y no hacer nada más
+            if (yaSeActivo) return;
+
+            // Intentar activar pantalla completa en Android y PC
+            var elem = document.documentElement;
+            
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    // Si falla (poco probable), no hacer ruido
+                    console.log("Fullscreen no disponible");
+                });
+            } else if (elem.webkitRequestFullscreen) { /* Safari iOS/Mac */
+                elem.webkitRequestFullscreen();
+            }
+
+            // Marcar como hecho
+            yaSeActivo = true;
+
+            // IMPORTANTE: Eliminar el evento.
+            // Esto es crucial en Android para dejar de consumir recursos
+            // y permitir que los toques siguientes funcionen normalmente.
+            document.body.removeEventListener('click', accionPrimerToque);
+            document.body.removeEventListener('touchstart', accionPrimerToque);
+        }
+
+        // Escuchar primer toque en Android (Touchstart) y PC (Click)
+        document.body.addEventListener('click', accionPrimerToque);
+        document.body.addEventListener('touchstart', accionPrimerToque, {passive: true});
+    })();
+</script>
 <script>
     // 1. Función para activar/desactivar pantalla completa
     function toggleFullScreen() {
