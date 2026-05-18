@@ -13,49 +13,82 @@ user-select: none;
 }
 
 
+#buscadorPeliculas {
+  top: 1%; /* Debajo del input del buscador */
+  left: 75%;
+    height:  1%;
+    width:  20%;
+  
+  /* Posicionamiento (No tocar esto) */
+  position: fixed; 
 
-.powr-hit-counter{
-position: absolute;
-right: 30%;
-top: 6%;
-width: 10%;
-height: 3%; 
-background: blue;
-box-shadow: 5px  5px 3px 7px blue;
-border-radius:   1px 54px 1px 55px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  
+  /* --- ESTILO VISUAL --- */
+  background-color: #000000; /* Fondo negro puro */
+  border: 2px solid #d32f2f; /* Borde rojo oscuro */
+  border-radius: 20px; /* Bordes totalmente redondos (tipo píldora) */
+  color: #fff;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  padding: 8px 5px; /* Altura del cuadro y espacio interno */
+  text-align: center; /* Centrar el texto mientras escribes */
+  outline: none; /* Quitar el borde azul por defecto del navegador */
+  box-sizing: border-box;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.8); /* Sombra profunda */
+  transition: all 0.3s ease; /* Animación suave */
 }
 
 
-
-.g{
+#buscadorControles {
 position: absolute;
-cursor: pointer;
-font-size: 1.2w;
-top:  0%;
-left:  0%;
-width: 100%;
-height: 15%;
-background-color: transparent;
+  position: fixed;
+ top: 10%; /* Debajo del input del buscador */
+  left: 75%;
+    height:  1%;
+    width:  20%;
+  transform: translateX(-50%);
+  display: none; /* Oculto por defecto */
+  gap: 20px;
+  z-index: 9998;
+  background: rgba(0,0,0,0.6);
+  padding: 5px 15px;
+  border-radius: 20px;
+  align-items: center;
+}
 
-} 
- 
- 
- 
+.nav-arrow {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 18px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
 
-.gg{
-position: absolute;
-bottom:   7%;
-right:   -1%;
-width: 8%;
-height: 12%;
-background-color: transparent;
-} 
- 
+.nav-arrow:hover {
+  background: rgba(255,255,255,0.2);
+}
 
+.nav-arrow:active {
+  background: rgba(255,255,255,0.4);
+}
 
-
-
-
+#contadorResultados {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 60px;
+  text-align: center;
+}
+/* ===== FIN CONTROLES ===== */
 
 
  
@@ -99,41 +132,6 @@ object-fit: fill;
 }
 
 
-
-.volver{
-position: relative;
-width: 7%;
-margin-left: 80%;
-height: 10%;
-    
-} 
-
-.volver1{
-position: absolute;
-top: 17%;
-right: 9%;
-} 
-
-.volver2{
-position: absolute;
-right: 22%;
-top: 17%;
-}     
-
-
- 
-
-.volver11{
-width: 10vw;
-height: 2.5vw;
-box-shadow: 1px 1px 20px orangered;
-display:inline-block;
-border-radius: 11px;
-text-align-last: center;
- background-color: orangered;
-font-size:  4vh;
-
-}     
 
 
 .booton1{
@@ -531,14 +529,240 @@ background: black;
 }
 
     
+
+
+/* Tablets (Móviles pequeños) */
+@media (max-width: 575px) {
+  .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: tomato;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+}
+
+
+/* Tablets (Móviles grandes) */
+@media (min-width: 576px) {
   
 
+.g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: blue;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+
+}
+
+
+/* Tablets (768px en adelante) */
+@media (min-width: 768px) {
+ .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 80%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   8%;
+right:   -1%;
+width: 4em;
+height: 5vw;
+background-color: hotpink;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 72%;
+height: 13%;
+    
+} 
+}
+
+
+
+
+/* Tablets (Laptops / Desktops) */
+@media (min-width: 992px) {
+ .g{
+position: absolute;
+cursor: pointer;
+font-size: 1.2w;
+top:  0%;
+left:  0%;
+width: 100%;
+height: 3em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 6em;
+height: 5vw;
+background-color: green;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 92%;
+height: 13%;
+    
+} 
+}
+
+
+/* Escritorio (1024px en adelante) */
+@media (min-width: 1024px) {
+  .contenedor {
+    display: flex;
+  }
+    
+
+
+.g{
+position: absolute;
+cursor: pointer;
+
+top:  0%;
+left:  0%;
+width: 100%;
+height: 2.5em;
+background-color: transparent;
+
+} 
+ 
+ 
+ 
+
+.gg{
+position: absolute;
+bottom:   1%;
+right:   -1%;
+width: 8%;
+height: 2.4em;
+background-color: red;
+} 
+ 
+
+
+.volver{
+position: relative;
+width: 9%;
+margin-left: 93%;
+height: 10%;
+    
+} 
+
+}
 
 
 
 
 
 
+.volver1{
+position: absolute;
+top: 17%;
+right: 9%;
+} 
+
+.volver2{
+position: absolute;
+right: 22%;
+top: 17%;
+}     
+
+
+ 
+
+.volver11{
+width: 10vw;
+height: 2.5vw;
+box-shadow: 1px 1px 20px orangered;
+display:inline-block;
+border-radius: 11px;
+text-align-last: center;
+ background-color: orangered;
+font-size:  4vh;
+
+}     
 
 
 
