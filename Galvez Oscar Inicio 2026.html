@@ -1309,87 +1309,82 @@ function galvez20() {
         
    </script> 
     
--->
-<script>
-    // 1. Función para activar/desactivar pantalla completa
-    function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-            // Intentar activar
-            document.documentElement.requestFullscreen().catch(err => {
-                console.error("Error activando pantalla completa: ", err);
-            });
-        } else {
-            // Si ya está activa, desactivar
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-    }
-
-    // 2. Variables para controlar el tiempo
-    let pressTimer;
-
-    // 3. Eventos para PC (Mouse)
-    document.body.addEventListener('mousedown', function() {
-        // Iniciar temporizador (1000ms = 1 segundo)
-        pressTimer = setTimeout(toggleFullScreen, 1000);
-    });
-
-    document.body.addEventListener('mouseup', function() {
-        // Si sueltas antes de 1 segundo, cancelar
-        clearTimeout(pressTimer);
-    });
-
-    document.body.addEventListener('mouseleave', function() {
-        // Si el mouse sale de la ventana, cancelar
-        clearTimeout(pressTimer);
-    });
-
-    // 4. Eventos para Android/Móvil (Touch)
-    document.body.addEventListener('touchstart', function(e) {
-        // Iniciar temporizador al tocar
-        pressTimer = setTimeout(toggleFullScreen, 1000);
-    }, {passive: true}); // passive: true mejora el rendimiento en scroll
-
-    document.body.addEventListener('touchend', function() {
-        // Al levantar el dedo, cancelar
-        clearTimeout(pressTimer);
-    });
-</script>
-    
-    <script>
+--><script>
     (function() {
-        let yaSeActivo = false;
+        // --- 1. DETECTAR SI ES DISPOSITIVO TÁCTIL (ANDROID) O PC (MOUSE) ---
+        var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-        function accionPrimerToque(event) {
-            // Si ya se activó, salir inmediatamente y no hacer nada más
-            if (yaSeActivo) return;
+        // --- 2. LÓGICA PARA PC (PRIMER TOQUE Y MORIR) ---
+        if (!isTouchDevice) {
+            let pcClickDone = false;
 
-            // Intentar activar pantalla completa en Android y PC
-            var elem = document.documentElement;
-            
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => {
-                    // Si falla (poco probable), no hacer ruido
-                    console.log("Fullscreen no disponible");
-                });
-            } else if (elem.webkitRequestFullscreen) { /* Safari iOS/Mac */
-                elem.webkitRequestFullscreen();
+            function handlePcClick() {
+                // Si ya se activó una vez, no hacer nada
+                if (pcClickDone) return;
+
+                // Intentar activar pantalla completa
+                var elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => console.log(err));
+                } else if (elem.webkitRequestFullscreen) { 
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { 
+                    elem.msRequestFullscreen();
+                }
+
+                // Marcar como hecho
+                pcClickDone = true;
+
+                // ELIMINAR EL EVENTO (La función muere)
+                document.body.removeEventListener('click', handlePcClick);
+                console.log("Modo PC: Fullscreen activado y listener removido.");
             }
 
-            // Marcar como hecho
-            yaSeActivo = true;
+            // Esperar primer clic
+            document.body.addEventListener('click', handlePcClick);
+        } 
 
-            // IMPORTANTE: Eliminar el evento.
-            // Esto es crucial en Android para dejar de consumir recursos
-            // y permitir que los toques siguientes funcionen normalmente.
-            document.body.removeEventListener('click', accionPrimerToque);
-            document.body.removeEventListener('touchstart', accionPrimerToque);
+        // --- 3. LÓGICA PARA ANDROID (DESLIZAR ARRIBA/ABAJO) ---
+        else {
+            let touchStartY = 0;
+            const swipeThreshold = 50; // Distancia mínima en píxeles para considerar un deslizamiento
+
+            function handleTouchStart(e) {
+                touchStartY = e.touches[0].clientY;
+            }
+
+            function handleTouchEnd(e) {
+                var touchEndY = e.changedTouches[0].clientY;
+                var diffY = touchStartY - touchEndY; // Positivo = Arriba, Negativo = Abajo
+
+                var elem = document.documentElement;
+
+                // DESLIZAR ARRIBA (Finger moves up)
+                if (diffY > swipeThreshold) {
+                    if (elem.requestFullscreen) {
+                        elem.requestFullscreen().catch(err => {});
+                    } else if (elem.webkitRequestFullscreen) { 
+                        elem.webkitRequestFullscreen();
+                    }
+                }
+                
+                // DESLIZAR ABAJO (Finger moves down)
+                else if (diffY < -swipeThreshold) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) { 
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) { 
+                        document.msExitFullscreen();
+                    }
+                }
+            }
+
+            // Agregar listeners para Android (No se eliminan, siguen vivos)
+            document.body.addEventListener('touchstart', handleTouchStart, {passive: true});
+            document.body.addEventListener('touchend', handleTouchEnd, {passive: true});
+            console.log("Modo Android: Control por gestos activado.");
         }
-
-        // Escuchar primer toque en Android (Touchstart) y PC (Click)
-        document.body.addEventListener('click', accionPrimerToque);
-        document.body.addEventListener('touchstart', accionPrimerToque, {passive: true});
     })();
 </script>
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
