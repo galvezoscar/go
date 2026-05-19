@@ -288,7 +288,15 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
     
 
 </script> 
-       
+       <script>
+  // Verificar si el user agent contiene la palabra "android"
+  var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+  
+  if (isAndroid) {
+    // Agregar la clase 'android' al cuerpo de la página
+    document.body.classList.add('android');
+  }
+</script>
 </head> 
     
 <body onload="downLoad()" id="layer2" class="carga">
