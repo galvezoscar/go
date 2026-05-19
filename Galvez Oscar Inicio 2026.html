@@ -288,44 +288,10 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
     
 
 </script> 
-       <script>
-  // Verificar si el user agent contiene la palabra "android"
-  var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
-  
-  if (isAndroid) {
-    // Agregar la clase 'android' al cuerpo de la página
-    document.body.classList.add('android');
-  }
-</script>
-    <script>
-  if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-    document.body.classList.add('android');
-  }
-// Ejemplo simplificado para Android
-myWebView.setWebChromeClient(new WebChromeClient());
-
-// Opcional: Configuraciones para evitar que el WebView maneje el fullscreen por sí solo
-WebSettings webSettings = myWebView.getSettings();
-webSettings.setJavaScriptEnabled(true);
-webSettings.setDomStorageEnabled(true);
-
-</script>
-    <script>
-    // Detectar si el navegador es Android
-    if (/Android/i.test(navigator.userAgent)) {
-        // Agregamos la clase 'es-android' al cuerpo de la página
-        document.body.classList.add('es-android');
-        console.log("Dispositivo Android detectado");
-    }
-</script>
-<script>
-  if (/Android/i.test(navigator.userAgent)) {
-    document.body.classList.add('android');
-  }
-</script>
+   
 </head> 
     
-<body  onload="downLoad()" id="layer2" class="android">
+<body  onload="downLoad()" id="layer2" >
    
 <img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
     
@@ -1603,4 +1569,12 @@ function galvez20() {
     }, false);
 
 </script>
+     <script>
+        // Verifica si es Android y agrega la clase 'android' al body
+        if (/Android/i.test(navigator.userAgent)) {
+            document.body.classList.add('android');
+            console.log("Estilos Android activados");
+        }
+    </script>
+    
 </body></html>
