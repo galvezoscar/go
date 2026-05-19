@@ -301,6 +301,14 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
   if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
     document.body.classList.add('android');
   }
+// Ejemplo simplificado para Android
+myWebView.setWebChromeClient(new WebChromeClient());
+
+// Opcional: Configuraciones para evitar que el WebView maneje el fullscreen por sí solo
+WebSettings webSettings = myWebView.getSettings();
+webSettings.setJavaScriptEnabled(true);
+webSettings.setDomStorageEnabled(true);
+
 </script>
 </head> 
     
