@@ -318,9 +318,14 @@ webSettings.setDomStorageEnabled(true);
         console.log("Dispositivo Android detectado");
     }
 </script>
+<script>
+  if (/Android/i.test(navigator.userAgent)) {
+    document.body.classList.add('android');
+  }
+</script>
 </head> 
     
-<body onload="downLoad()" id="layer2" class="carga">
+<body  onload="downLoad()" id="layer2" class="android">
    
 <img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
     
