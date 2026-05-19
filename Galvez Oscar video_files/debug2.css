@@ -542,7 +542,7 @@ background: black;
   left:  0%;
   width: 80%;
   height: 3em;
-  background-color: red;
+  background-color: gold;
 }
 
 .android .gg {
@@ -559,7 +559,8 @@ position: relative;
 width: 9%;
 margin-left: 98%;
 height: 13%;
-    
+  background-color: gold;
+
 } 
 
 /* =========================================
@@ -593,17 +594,12 @@ position: relative;
 width: 9%;
 margin-left: 75%;
 height: 13%;
-    
+  background-color: gold;
+
 } 
 }
 
-.volver{
-position: relative;
-width: 9%;
-margin-left: 92%;
-height: 13%;
-    
-} 
+
 
 .volver1{
 position: absolute;
