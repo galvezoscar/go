@@ -556,10 +556,10 @@ background: black;
 
 .android .volver{
 position: relative;
-width: 5%;
-margin-left: 96%;
+width: 4%;
+margin-left: 95%;
 height: 8%;
-  background-color: red;
+  background-color: gold;
  border-radius: 50%;
 
 } 
