@@ -556,10 +556,11 @@ background: black;
 
 .android .volver{
 position: relative;
-width: 7%;
+width: 5%;
 margin-left: 88%;
-height: 10%;
+height: 8%;
   background-color: gold;
+ border-radius: 50%;
 
 } 
 
@@ -591,11 +592,11 @@ height: 10%;
 
 .android ..volver{
 position: relative;
-width: 7%;
-margin-left: 65%;
-height: 10%;
+width: 5%;
+margin-left: 70%;
+height: 8%;
   background-color: gold;
-
+ border-radius: 50%;
 } 
 }
 
@@ -612,7 +613,6 @@ position: absolute;
 right: 22%;
 top: 17%;
 }     
-
 
  
 
