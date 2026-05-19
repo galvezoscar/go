@@ -554,18 +554,19 @@ background: black;
   background-color: gold;
 }
 
-.android .volver {
-  position: relative;
-  width: 9%;
-  margin-left: 72%;
-  height: 13%;
-}
+.android ..volver{
+position: relative;
+width: 9%;
+margin-left: 93%;
+height: 13%;
+    
+} 
 
 /* =========================================
    2. ESTILOS PARA ANDROID + PANTALLA PEQUEÑA
    (Sobrescribe los estilos de arriba si la pantalla es < 575px)
    ========================================= */
-@media (max-width: 575px) {
+@media (max-width: 775px) {
   
   .android .g {
     position: absolute;
