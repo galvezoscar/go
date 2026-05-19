@@ -297,6 +297,11 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
     document.body.classList.add('android');
   }
 </script>
+    <script>
+  if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+    document.body.classList.add('android');
+  }
+</script>
 </head> 
     
 <body onload="downLoad()" id="layer2" class="carga">
