@@ -310,6 +310,14 @@ webSettings.setJavaScriptEnabled(true);
 webSettings.setDomStorageEnabled(true);
 
 </script>
+    <script>
+    // Detectar si el navegador es Android
+    if (/Android/i.test(navigator.userAgent)) {
+        // Agregamos la clase 'es-android' al cuerpo de la página
+        document.body.classList.add('es-android');
+        console.log("Dispositivo Android detectado");
+    }
+</script>
 </head> 
     
 <body onload="downLoad()" id="layer2" class="carga">
