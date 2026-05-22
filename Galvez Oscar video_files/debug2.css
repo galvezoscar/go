@@ -559,14 +559,45 @@ body:not(.es-android).g {
   left:  0%;
   width: 90%;
   height: 3.5em;
+}.g {
+  position: absolute;
+  font-size: 1.2vw; /* Corregido de 1.2w a 1.2vw */
+  top:  0%;
+  left:  0%;
+  width: 90%;
+  height: 3.5em;
+    background-color: red;
 }
 
 body:not(.es-android) .gg{
   position: absolute;
   bottom:   0%;
   right:   -1%;
+  width: 3em;
+  height: 2.8em;
+}.gg{
+  position: absolute;
+  bottom:   0%;
+  right:   -1%;
   width: 6em;
   height: 2.8em;
+  background-color: red;
+}
+
+body:not(.es-android) .ggg{
+  position: absolute;
+  bottom:   0%;
+  right:   5.5em;
+  width: 3em;
+  height: 2.8em;
+    background-color: green;
+}.ggg{
+  position: absolute;
+  bottom:   0%;
+  right:   1%;
+  width: 6em;
+  height: 2.8em;
+  background-color: red;
 }
 /* =========================================
    1. ESTILOS GENERALES PARA ANDROID
