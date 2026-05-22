@@ -1575,6 +1575,16 @@ function galvez20() {
             document.body.classList.add('android');
             console.log("Estilos Android activados");
         }
+         
+         
+         
+         // Detectar si es Android
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
+if (isAndroid) {
+    // Si es Android, agregamos la clase 'es-android' al cuerpo de la página
+    document.body.classList.add("es-android");
+}
     </script>
     
 </body></html>
