@@ -595,12 +595,7 @@ body:not(.es-android) .ggg{
 
 }
 .ggg{
-  position: absolute;
-  bottom:   0%;
-  right:   5.5em;
-  width: 3em;
-  height: 2.8em;
-    background-color: gold;
+ display: none;
 }
 /* =========================================
    1. ESTILOS GENERALES PARA ANDROID
