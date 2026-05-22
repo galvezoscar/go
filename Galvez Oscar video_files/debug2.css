@@ -594,8 +594,8 @@ body:not(.es-android) .ggg{
     background-color: deeppink;
 
 }
-.ggg{
- display: none;
+.android .ggg{
+  display: none;
 }
 /* =========================================
    1. ESTILOS GENERALES PARA ANDROID
