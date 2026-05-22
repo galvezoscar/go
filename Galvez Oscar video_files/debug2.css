@@ -538,7 +538,7 @@ background: black;
 body:not(.es-android) .volver{
 position: relative;
 width: 4%;
-margin-left: 84%;
+margin-left: 94%;
 height: 8%;
   background-color: gold;
  border-radius: 50%;
@@ -546,7 +546,7 @@ height: 8%;
 } .volver{
 position: relative;
 width: 4%;
-margin-left: 84%;
+margin-left: 94%;
 height: 8%;
   background-color: gold;
  border-radius: 50%;
@@ -557,14 +557,14 @@ body:not(.es-android).g {
   font-size: 1.2vw; /* Corregido de 1.2w a 1.2vw */
   top:  0%;
   left:  0%;
-  width: 90%;
+  width: 95%;
   height: 3.5em;
 }.g {
   position: absolute;
   font-size: 1.2vw; /* Corregido de 1.2w a 1.2vw */
   top:  0%;
   left:  0%;
-  width: 90%;
+  width: 95%;
   height: 3.5em;
     background-color: red;
 }
@@ -590,7 +590,8 @@ body:not(.es-android) .ggg{
   right:   5.5em;
   width: 3em;
   height: 2.8em;
-}.ggg{
+}
+.ggg{
   position: absolute;
   bottom:   0%;
   right:   5.5em;
