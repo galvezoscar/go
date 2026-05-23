@@ -20,8 +20,9 @@ function myFunction() {
 <link rel="stylesheet" href="./Galvez Oscar video_files/debug2.css">
     
     
-<link rel="stylesheet" href="file:///C:/Users/exo/Desktop/indo/debug2.css">
-    
+ <!-- 1. IMPORTANTE: Incluir la SDK de Google Cast -->
+    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+   
   
 <script>
       function downLoad(){
@@ -58,7 +59,7 @@ function myFunction() {
  
                                                     
 function mostrar84(){
-document.getElementById('nuevaimg').innerHTML = '<IFRAME id="videoOk"  autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a><a class="ggg"> </a>';}  
+document.getElementById('nuevaimg').innerHTML = '<IFRAME allow="encrypted-media" id="videoOk"  autoplay preload="none" controls tabindex="0" src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a><a class="ggg"> </a>';}  
                                                        
 function mostrar85(){
 document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11671281470014?autoplay=1&loop=1" allow="autoplay; fullscreen; picture-in-picture"></IFRAME><a class="g"> </a><a class="gg"> </a>';}
@@ -311,15 +312,26 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 </video>
     
     
-
 <div class="popup" id="popup-20">
-<div class="fullvid"><a id="nuevaimg"></a>
-
     
-<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="./Galvez Oscar video_files/volver flechan.png"></a>
+    
+    
+        <div class="fullvid">
+            
+            <a id="nuevaimg"></a>
 
-</div>
-</div> 
+            <!-- AQUÍ SE MANTIENEN TUS LLAMADAS ORIGINALES (asumo que tienes las funciones en otro lado) -->
+            <a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()">
+                <img class="volver" src="./Galvez Oscar video_files/volver flechan.png">
+            </a>
+<a class="g"> </a><a class="gg"> </a><a class="ggg"> </a>
+            <!-- BOTÓN CAST -->
+            <div id="castbtn-container">
+                <google-cast-launcher id="castbtn"></google-cast-launcher>
+            </div>
+
+        </div>
+    </div>
     
 <div class="popup" id="popup-21">
 <div class="fullvid"><a id="nuevaimg1"></a>
@@ -1309,7 +1321,13 @@ function galvez20() {
         
    </script> 
     
---><script>
+-->
+    
+    
+    
+    
+    
+    <script>
     (function() {
         // 1. Detectar si es móvil (Android) o PC
         var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
@@ -1585,6 +1603,31 @@ if (isAndroid) {
     // Si es Android, agregamos la clase 'es-android' al cuerpo de la página
     document.body.classList.add("es-android");
 }
+    </script>
+
+ <!-- JAVASCRIPT SIN CONFLICTOS (Autocontenido) -->
+    <script>
+       
+
+      <!-- JAVASCRIPT SOLO PARA EL CAST -->
+    <script>
+        (function() {
+            var checkInterval = setInterval(function() {
+                if (typeof cast !== 'undefined' && cast.framework) {
+                    clearInterval(checkInterval);
+                    try {
+                        var context = cast.framework.CastContext.getInstance();
+                        context.setOptions({
+                            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+                            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                        });
+                        console.log("Cast listo.");
+                    } catch (e) {
+                        console.warn("Error Cast:", e);
+                    }
+                }
+            }, 500);
+        })();
     </script>
     
 </body></html>
