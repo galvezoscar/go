@@ -657,7 +657,7 @@ height: 8%;
   left:  0%;
   width: 85%;
   height: 3em;
-  background-color: gold;
+  background-color: greenyellow;
 }
 
 .android .gg {
@@ -666,7 +666,7 @@ height: 8%;
   right:   -1%;
   width: 6em;
   height: 2.8em;
-  background-color: gold;
+  background-color: greenyellow;
 }
 
 .android .volver{
@@ -674,7 +674,7 @@ position: relative;
 width: 4%;
 margin-left: 84%;
 height: 8%;
-  background-color: gold;
+  background-color: greenyellow;
  border-radius: 50%;
   top:  1%;
 } 
