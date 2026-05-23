@@ -542,6 +542,7 @@ margin-left: 94%;
 height: 8%;
   background-color: gold;
  border-radius: 50%;
+  top:  1%;
 
 } .volver{
 position: relative;
@@ -550,6 +551,7 @@ margin-left: 94%;
 height: 8%;
   background-color: gold;
  border-radius: 50%;
+  top:  1%;
 
 } 
 
@@ -594,6 +596,15 @@ body:not(.es-android) .ggg{
     background-color: deeppink;
 
 }
+.ggg{
+  position: absolute;
+  bottom:   0%;
+  right:   5.5em;
+  width: 3em;
+  height: 2.8em;
+    background-color: deeppink;
+
+}
 .android .ggg{
   display: none;
 }
@@ -602,12 +613,14 @@ body:not(.es-android) .ggg{
    (Se aplica en Tablets, Laptops, etc.)
    ========================================= */
 .android .g {
-  position: absolute;
+ position: absolute;
   font-size: 1.2vw; /* Corregido de 1.2w a 1.2vw */
   top:  0%;
   left:  0%;
-  width: 80%;
-  height: 3em;
+  width: 95%;
+  height: 4.5em;
+background-color: gold;
+
 }
 
 .android .gg {
@@ -616,6 +629,8 @@ body:not(.es-android) .ggg{
   right:   -1%;
   width: 4em;
   height: 5vw;
+background-color: gold;
+
 }
 
 .android .volver{
@@ -637,31 +652,31 @@ height: 8%;
   
   .android .g {
   position: absolute;
-  cursor: pointer;
   font-size: 1.2vw; /* Corregido de 1.2w a 1.2vw */
   top:  0%;
   left:  0%;
-  width: 80%;
+  width: 85%;
   height: 3em;
   background-color: gold;
 }
 
 .android .gg {
-  position: absolute;
-  bottom:   8%;
+    position: absolute;
+  bottom:   0%;
   right:   -1%;
-  width: 4em;
-  height: 5.5vw;
+  width: 6em;
+  height: 2.8em;
   background-color: gold;
 }
 
 .android .volver{
 position: relative;
-width: 5%;
-margin-left: 70%;
+width: 4%;
+margin-left: 84%;
 height: 8%;
   background-color: gold;
  border-radius: 50%;
+  top:  1%;
 } 
 }
 
