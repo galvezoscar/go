@@ -657,24 +657,24 @@ height: 8%;
   left:  0%;
   width: 85%;
   height: 3em;
-  background-color: greenyellow;
+  background-color: orangered;
 }
 
 .android .gg {
     position: absolute;
-  bottom:   0%;
+  bottom:   3%;
   right:   -1%;
-  width: 6em;
+  width: 3em;
   height: 2.8em;
-  background-color: greenyellow;
+  background-color: orangered;
 }
 
 .android .volver{
 position: relative;
 width: 4%;
-margin-left: 84%;
+margin-left: 80%;
 height: 8%;
-  background-color: greenyellow;
+  background-color: orangered;
  border-radius: 50%;
   top:  1%;
 } 
