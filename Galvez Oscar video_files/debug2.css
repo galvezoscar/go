@@ -540,18 +540,18 @@ position: relative;
 width: 4%;
 margin-left: 94%;
 height: 8%;
-  background-color: gold;
  border-radius: 50%;
   top:  1%;
+  background-color: orangered;
 
 } .volver{
 position: relative;
 width: 4%;
 margin-left: 94%;
 height: 8%;
-  background-color: gold;
  border-radius: 50%;
   top:  1%;
+  background-color: orangered;
 
 } 
 
@@ -569,7 +569,6 @@ body:not(.es-android).g {
   left:  0%;
   width: 95%;
   height: 4.5em;
-    background-color: red;
 }
 
 body:not(.es-android) .gg{
@@ -584,7 +583,6 @@ body:not(.es-android) .gg{
   right:   -1%;
   width: 6em;
   height: 2.8em;
-  background-color: red;
 }
 
 body:not(.es-android) .ggg{
@@ -593,7 +591,6 @@ body:not(.es-android) .ggg{
   right:   5.5em;
   width: 3em;
   height: 2.8em;
-    background-color: deeppink;
 
 }
 .ggg{
@@ -602,7 +599,6 @@ body:not(.es-android) .ggg{
   right:   5.5em;
   width: 3em;
   height: 2.8em;
-    background-color: deeppink;
 
 }
 .android .ggg{
@@ -619,7 +615,6 @@ body:not(.es-android) .ggg{
   left:  0%;
   width: 95%;
   height: 4.5em;
-background-color: gold;
 
 }
 
@@ -629,7 +624,6 @@ background-color: gold;
   right:   -1%;
   width: 4em;
   height: 5vw;
-background-color: gold;
 
 }
 
@@ -638,9 +632,8 @@ position: relative;
 width: 4%;
 margin-left: 95%;
 height: 8%;
-  background-color: gold;
  border-radius: 50%;
-
+  background-color: orangered;
 } 
 
 
@@ -657,7 +650,6 @@ height: 8%;
   left:  0%;
   width: 85%;
   height: 3em;
-  background-color: orangered;
 }
 
 .android .gg {
@@ -666,7 +658,6 @@ height: 8%;
   right:   -1%;
   width: 3em;
   height: 2.8em;
-  background-color: orangered;
 }
 
 .android .volver{
@@ -676,7 +667,7 @@ margin-left: 79%;
 height: 8%;
   background-color: orangered;
  border-radius: 50%;
-  top:  1%;
+  top:  1.3%;
 } 
 }
 
