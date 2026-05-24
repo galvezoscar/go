@@ -662,7 +662,7 @@ height: 8%;
 
 .android .gg {
     position: absolute;
-  bottom:   3%;
+  bottom:   8%;
   right:   -1%;
   width: 3em;
   height: 2.8em;
@@ -672,7 +672,7 @@ height: 8%;
 .android .volver{
 position: relative;
 width: 4%;
-margin-left: 80%;
+margin-left: 79%;
 height: 8%;
   background-color: orangered;
  border-radius: 50%;
