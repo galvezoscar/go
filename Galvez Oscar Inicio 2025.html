@@ -1930,7 +1930,13 @@ function galvez20() {
         
    </script> 
     
---><script>
+-->
+    
+    
+    
+    
+    
+    <script>
     (function() {
         // 1. Detectar si es móvil (Android) o PC
         var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
@@ -2190,15 +2196,47 @@ function galvez20() {
     }, false);
 
 </script>
-    
-<script>
-    
-    
-    
-    
+     <script>
+        // Verifica si es Android y agrega la clase 'android' al body
+        if (/Android/i.test(navigator.userAgent)) {
+            document.body.classList.add('android');
+            console.log("Estilos Android activados");
+        }
+         
+         
+         
+         // Detectar si es Android
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
+if (isAndroid) {
+    // Si es Android, agregamos la clase 'es-android' al cuerpo de la página
+    document.body.classList.add("es-android");
+}
     </script>
-    
-    
-    
+
+ <!-- JAVASCRIPT SIN CONFLICTOS (Autocontenido) -->
+    <script>
+       
+
+      <!-- JAVASCRIPT SOLO PARA EL CAST -->
+    <script>
+        (function() {
+            var checkInterval = setInterval(function() {
+                if (typeof cast !== 'undefined' && cast.framework) {
+                    clearInterval(checkInterval);
+                    try {
+                        var context = cast.framework.CastContext.getInstance();
+                        context.setOptions({
+                            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+                            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                        });
+                        console.log("Cast listo.");
+                    } catch (e) {
+                        console.warn("Error Cast:", e);
+                    }
+                }
+            }, 500);
+        })();
+    </script>
     
 </body></html>
