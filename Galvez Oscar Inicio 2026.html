@@ -124,7 +124,114 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 </script> 
    
 </head> 
+    <!-- ===== CARGA DINÁMICA DE IMÁGENES (sin tocar el HTML existente) ===== -->
+<script>
+(function() {
+    'use strict';
+
+    // 1. Agregar loading="lazy" a TODAS las imágenes existentes
+    var todasLasImg = document.querySelectorAll('img');
     
+    todasLasImg.forEach(function(img) {
+        // Solo si no lo tiene ya
+        if (!img.hasAttribute('loading')) {
+            img.setAttribute('loading', 'lazy');
+        }
+        // Decodificación asíncrona para no bloquear el hilo principal
+        if (!img.hasAttribute('decoding')) {
+            img.setAttribute('decoding', 'async');
+        }
+    });
+
+    // 2. Interceptar NUEVAS imágenes que se inyecten dinámicamente
+    //    (ej: cuando el buscador muestra resultados, o se abre un popup)
+    var observer = new MutationObserver(function(mutaciones) {
+        mutaciones.forEach(function(mutacion) {
+            if (mutacion.addedNodes) {
+                mutacion.addedNodes.forEach(function(nodo) {
+                    // Si el nodo agregado es una imagen
+                    if (nodo.nodeName === 'IMG') {
+                        nodo.setAttribute('loading', 'lazy');
+                        nodo.setAttribute('decoding', 'async');
+                    }
+                    // Si el nodo contiene imágenes hijas
+                    if (nodo.querySelectorAll) {
+                        var imgsInternas = nodo.querySelectorAll('img');
+                        imgsInternas.forEach(function(img) {
+                            if (!img.hasAttribute('loading')) {
+                                img.setAttribute('loading', 'lazy');
+                            }
+                            if (!img.hasAttribute('decoding')) {
+                                img.setAttribute('decoding', 'async');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Observar todo el documento (hijos directos e internos)
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // 3. Opcional: Placeholder visual mientras carga
+    //    Muestra un fondo gris suave en imágenes que aún no cargaron
+    var styleLazy = document.createElement('style');
+    styleLazy.textContent = `
+        img[loading="lazy"] {
+            background-color: #1a1a2e;
+            min-height: 40px;
+            transition: opacity 0.4s ease;
+        }
+        img[loading="lazy"][src]:not([src=""]) {
+            opacity: 0;
+        }
+        img[loading="lazy"].cargada {
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(styleLazy);
+
+    // 4. Detectar cuando cada imagen terminó de cargar y mostrarla con fade
+    function activarFade(img) {
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('cargada');
+        } else {
+            img.addEventListener('load', function() {
+                img.classList.add('cargada');
+            }, { once: true });
+            // Si falla la carga, igual la mostramos (para no quedar invisible)
+            img.addEventListener('error', function() {
+                img.classList.add('cargada');
+                img.style.background = '#2a0a0a';
+            }, { once: true });
+        }
+    }
+
+    // Aplicar fade a las existentes
+    todasLasImg.forEach(activarFade);
+
+    // Aplicar fade a las nuevas que se inyecten
+    var observerFade = new MutationObserver(function(mutaciones) {
+        mutaciones.forEach(function(mutacion) {
+            if (mutacion.addedNodes) {
+                mutacion.addedNodes.forEach(function(nodo) {
+                    if (nodo.nodeName === 'IMG') activarFade(nodo);
+                    if (nodo.querySelectorAll) {
+                        nodo.querySelectorAll('img').forEach(activarFade);
+                    }
+                });
+            }
+        });
+    });
+    observerFade.observe(document.body, { childList: true, subtree: true });
+
+    console.log('Carga dinamica activada: ' + todasLasImg.length + ' imagen(es) en lazy');
+})();
+</script>
 <body  onload="downLoad()" id="layer2" >
    
 <img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
