@@ -217,19 +217,146 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
     // Aplicar fade a las nuevas que se inyecten
     var observerFade = new MutationObserver(function(mutaciones) {
         mutaciones.forEach(function(mutacion) {
-            if (mutacion.addedNodes) {
-                mutacion.addedNodes.forEach(function(nodo) {
-                    if (nodo.nodeName === 'IMG') activarFade(nodo);
-                    if (nodo.querySelectorAll) {
-                        nodo.querySelectorAll('img').forEach(activarFade);
-                    }
-                });
-            }
-        });
-    });
-    observerFade.observe(document.body, { childList: true, subtree: true });
+<!-- ===== CARGA DINÁMICA REAL (sin tocar el HTML existente) ===== -->
+<script>
+(function() {
+    'use strict';
 
-    console.log('Carga dinamica activada: ' + todasLasImg.length + ' imagen(es) en lazy');
+    // Pixel transparente 1x1 como placeholder
+    var PIXEL = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    // ==========================================
+    // 1. INTERCEPTAR: guardar src real en data-src, poner placeholder
+    // ==========================================
+    function interceptar(img) {
+        if (img.getAttribute('data-lz') === '1') return; // ya interceptada
+        var src = img.getAttribute('src');
+        if (!src || src.startsWith('data:')) return; // no interceptar data-uris
+        
+        img.setAttribute('data-src', src);   // guardar la url real
+        img.setAttribute('src', PIXEL);       // poner placeholder
+        img.setAttribute('data-lz', '1');     // marcar como interceptada
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+    }
+
+    // ==========================================
+    // 2. CARGAR: restaurar src real cuando toque
+    // ==========================================
+    function cargar(img) {
+        var realSrc = img.getAttribute('data-src');
+        if (!realSrc) return;
+        
+        img.setAttribute('src', realSrc);
+        img.removeAttribute('data-src');
+        
+        // Fade-in cuando termine de descargar
+        img.onload = function() {
+            img.style.opacity = '1';
+            img.onload = null;
+        };
+        img.onerror = function() {
+            img.style.opacity = '1';
+            img.style.background = '#2a0a0a';
+            img.onerror = null;
+        };
+
+        // Si ya estaba en cache, onload no dispara
+        if (img.complete) {
+            img.style.opacity = '1';
+        }
+    }
+
+    // ==========================================
+    // 3. INTERSECTION OBSERVER: carga al entrar al viewport
+    // ==========================================
+    var io = new IntersectionObserver(function(entries) {
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+                cargar(entries[i].target);
+                io.unobserve(entries[i].target);
+            }
+        }
+    }, {
+        rootMargin: '300px 0px', // empezar a cargar 300px antes de verse
+        threshold: 0.01
+    });
+
+    // ==========================================
+    // 4. MUTATION OBSERVER: atrapar imágenes nuevas Y cambios display
+    // ==========================================
+    var mo = new MutationObserver(function(mutations) {
+        for (var m = 0; m < mutations.length; m++) {
+            var mut = mutations[m];
+
+            // --- Imágenes nuevas inyectadas al DOM ---
+            if (mut.addedNodes) {
+                for (var n = 0; n < mut.addedNodes.length; n++) {
+                    var nodo = mut.addedNodes[n];
+                    if (nodo.nodeName === 'IMG') {
+                        interceptar(nodo);
+                        io.observe(nodo);
+                    }
+                    if (nodo.querySelectorAll) {
+                        var imgs = nodo.querySelectorAll('img');
+                        for (var j = 0; j < imgs.length; j++) {
+                            interceptar(imgs[j]);
+                            io.observe(imgs[j]);
+                        }
+                    }
+                }
+            }
+
+            // --- Un contenedor pasó de display:none a visible ---
+            if (mut.type === 'attributes' && mut.attributeName === 'style') {
+                var target = mut.target;
+                var displayActual = window.getComputedStyle(target).display;
+                if (displayActual !== 'none') {
+                    var internas = target.querySelectorAll('img[data-src]');
+                    for (var k = 0; k < internas.length; k++) {
+                        cargar(internas[k]);
+                        io.unobserve(internas[k]);
+                    }
+                }
+            }
+        }
+    });
+
+    // ==========================================
+    // 5. INICIO: interceptar todo lo que ya existe
+    // ==========================================
+    var todas = document.querySelectorAll('img');
+    var contador = 0;
+    for (var i = 0; i < todas.length; i++) {
+        interceptar(todas[i]);
+        io.observe(todas[i]);
+        contador++;
+    }
+
+    // Activar vigilancia permanente
+    mo.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style']
+    });
+
+    // ==========================================
+    // 6. RE-ESCANEO cada 2 segundos (seguridad extra)
+    //    Atrapa imágenes que se escaparon por plugins o scripts externos
+    // ==========================================
+    setInterval(function() {
+        var pendientes = document.querySelectorAll('img:not([data-lz])');
+        for (var i = 0; i < pendientes.length; i++) {
+            var src = pendientes[i].getAttribute('src');
+            if (src && !src.startsWith('data:')) {
+                interceptar(pendientes[i]);
+                io.observe(pendientes[i]);
+            }
+        }
+    }, 2000);
+
+    console.log('Carga dinamica REAL activada: ' + contador + ' imagen(es) interceptadas');
 })();
 </script>
 <body  onload="downLoad()" id="layer2" >
