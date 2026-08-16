@@ -242,7 +242,18 @@ function fredr344et56f53re(){
 document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="inicio%20artel.gif"  tabindex="0" >';}
     
 
-    
+    // Función para activar audio después de interacción del usuario
+function activarAudio() {
+    var iframe = document.querySelector('#nuevaimg iframe');
+    if (iframe) {
+        var src = iframe.src.split('?')[0];
+        var params = 'autoplay=1&loop=1&mute=0';
+        iframe.src = src + '?' + params;
+        // Ocultar botón
+        var btn = document.querySelector('.btn-audio');
+        if (btn) btn.style.display = 'none';
+    }
+}
 </script>    
 </head> 
     
