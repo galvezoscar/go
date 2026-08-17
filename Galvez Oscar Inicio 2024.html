@@ -459,7 +459,7 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none"  poster=
 
 <div class="slides" style="display: none;">
     
-<p class="año">2024</p>
+
 <section class="content">
     
 
@@ -2261,44 +2261,42 @@ Moon, un joven y curioso búho, termina atrapado por accidente entre las ramas d
     </a>
 	   
     	
- 	
+ 
+ 
 <div class="social-bar">
       
 <div class="icon icon-facebook" target="_blank">
-  
-<a class="target" href="intent://profile/oscar.galvez.756859/#Intent;scheme=fb;package=com.facebook.katana;S.browser_fallback_url=https://www.facebook.com/oscar.galvez.756859;end">Facebook
-</a>
-    
+<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Facebook</a>
 </div>
 <div class="icon icon-twitter" target="_blank">
-<a class="target" href="intent://instagram.com/_u/oscargalvezgo/#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=https://www.instagram.com/oscargalvezgo/;end" 
-   >Instagram</a>
+<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Twitter</a>
 </div>
       
- 
      
 
 <div class="icon icon-inicio" > 
 <a  class="target" href="index.html">Home</a></div>
      
-<div class="icon icon-0"> 
-<a  class="target" href="Galvez%20Oscar%20Inicio%202026.html">Peliculas</a></div>
+<div class="icon icon-0" style=" background-color: red;box-shadow: 5px 1px 10px blue;     border-radius: 0 3rem 3rem 0;
+" > 
+<a  class="target"  >Peliculas</a></div>
       
 <div class="icon icon-1"> 
 <a class="target" type="button" href="Galvez%20Oscar%20kid%202025.html">Kid</a></div>
+   
     
 
       
 <div class="icon icon-3"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >Anime</a></div>
       
 <div class="icon icon-2"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >TV</a></div>
     
 <div class="icon icon-4"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >Paguinas recomendadas</a></div>
      
 <div class="icono icon-5"> 
@@ -2310,35 +2308,31 @@ Moon, un joven y curioso búho, termina atrapado por accidente entre las ramas d
 <a class="target1" id="accionar1">Series</a></div> 
 </div>
     
-    
-	
-      
+  
       
     </div>
     
-   
-<div class="booton1" style="left: -6vw;  top:  75%; ">
+   <div class="booton1" style="left: -6vw;  top:  75vh; ">
 <a class="link1"  href="Galvez%20Oscar%20Inicio%202025.html"  ><img class="FLECHA"  src="./151846.png"></a>
     
 <a class="link1"  style="margin-top:   11vh; margin-left:  -5vw; position: absolute" href="Galvez%20Oscar%20Inicio%202023.html"><img class="FLECHA"  src="./251846.png"></a>
     
 </div>
-    
-    
-    
+   
+    </div>
     
     
   
-  <div><img id="btn" class="logo" src="./Galvez Oscar video_files/letras cartel.gif">
+    <div><img id="btn" class="logo" src="./Galvez Oscar video_files/letras cartel.gif">
 </div>
    
-    </div>
-
+    
   
     <div> <a href="javascript:history.back()"><img  class="logo2"  class="volver" src="volver%20flechan(1).png"></a>
 </div>
 
 	
+
 	
 	<a style="cursor: pointer;" onclick="mostrarOcultar">
     <input class="pause" type="button" id="btn2" value="pause" onclick="playPause1()"></a>
@@ -2354,6 +2348,7 @@ Moon, un joven y curioso búho, termina atrapado por accidente entre las ramas d
 
 </div>
 
+               
     
 <footer>          
 </footer>
@@ -2534,97 +2529,22 @@ function galvez20() {
      
 </script>     
 
-    
+<!--
+
+
 <script>
-    // --- 1. CREACIÓN DEL CARTEL DE AVISO ---
-    var aviso = document.createElement('div');
-    aviso.id = 'aviso-fullscreen';
-    aviso.innerText = 'app';
-    
-    // Estilos
-    aviso.style.position = 'fixed';
-    aviso.style.top = '1px';
-    aviso.style.right = '16%';
-    aviso.style.backgroundColor = 'rgba(100, 150, 250, 0.9)';
-    aviso.style.color = '#fff';
-    aviso.style.padding = '0.5% 2%';
-    aviso.style.borderRadius = '4px';
-    aviso.style.fontSize = '12px';
-    aviso.style.fontFamily = 'sans-serif';
-    aviso.style.zIndex = '9999';
-    aviso.style.display = 'none'; 
-    aviso.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
-    aviso.style.cursor = 'pointer';
-    
-    document.body.appendChild(aviso);
-
-    // --- CLICK EN EL CARTEL ---
-    aviso.addEventListener('click', function() {
-        entrarPantallaCompleta();
-    });
-
-    // --- 2. FUNCIÓN PARA ENTRAR EN PANTALLA COMPLETA ---
-    function entrarPantallaCompleta() {
-        var elem = document.documentElement;
+ 
+    addEventListener("click", function() {
+    var el = document.documentElement,
+      rfs = el.requestFullscreen
+        || el.webkitRequestFullScreen
+        || el.mozRequestFullScreen
+        || el.msRequestFullscreen 
+        ;rfs.call(el);});
         
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) { 
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) { 
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { 
-            elem.msRequestFullscreen();
-        }
-    }
-
-    // --- 3. LÓGICA AL HACER CLIC ---
-    function activarSiEsPC(e) {
-        // Excluir Android
-        if (/Android/i.test(navigator.userAgent)) {
-            return;
-        }
-
-        // --- NUEVA LÓGICA: Excluir si el clic fue en un enlace <a> ---
-        // e.target.closest('a') busca si el elemento clicado o alguno de sus padres es un enlace
-        if (e.target.closest('a')) {
-            return; 
-        }
-
-        // Excluir si ya estamos en pantalla completa
-        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-
-        if (!isFullscreen) {
-            entrarPantallaCompleta();
-            
-            // Importante: Removemos el evento global
-            document.removeEventListener('click', activarSiEsPC);
-            
-            // Ocultamos el aviso por si acaso
-            aviso.style.display = 'none';
-        }
-    }
-
-    // --- 4. DETECTAR CUANDO SE SALE DE PANTALLA COMPLETA ---
-    function verificarCambioPantalla() {
-        var isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-        
-        if (!isFullscreen) {
-            aviso.style.display = 'block';
-        } else {
-            aviso.style.display = 'none';
-        }
-    }
-
-    // Inicializar evento inicial
-    document.addEventListener('click', activarSiEsPC);
-
-    // Eventos para detectar cambios de estado
-    document.addEventListener('fullscreenchange', verificarCambioPantalla);
-    document.addEventListener('webkitfullscreenchange', verificarCambioPantalla);
-    document.addEventListener('mozfullscreenchange', verificarCambioPantalla);
-    document.addEventListener('MSFullscreenChange', verificarCambioPantalla);
-</script>
+   </script> 
+    
+-->
 
     
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
