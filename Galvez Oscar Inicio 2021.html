@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0072)file:///C:/Users/Pato/Desktop/assets/Galvez%20Oscar%20Inicio%202021.html -->
 <html lang="en" id="layer1" class="layer1_class"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galvez Oscar video</title>
+
 
 <script>
 function myFunction() {
@@ -12,27 +12,17 @@ function myFunction() {
 </script>
 <style>
 
-#panel {
-  display: none;
-}
 </style>
-    <script>
-function myFunction() {
-  document.getElementById("panel").style.display = "block";
-}
-</script>
-    
-    
-    
+  
 <link rel="stylesheet" href="./Galvez Oscar video_files/zSlider.css"> 
     
     
 <link rel="stylesheet" href="./Galvez Oscar video_files/debug2.css">
     
     
-    
-<link rel="stylesheet" href="file:///C:/Users/exo/Desktop/indo/debug2.css">
-    
+ <!-- 1. IMPORTANTE: Incluir la SDK de Google Cast -->
+    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+   
   
 <script>
       function downLoad(){
@@ -46,10 +36,6 @@ function myFunction() {
         }
       }
     </script>
-    
-    
-    
-    
  
     
 <script>
@@ -544,25 +530,250 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 </script> 
        
     
-    
-    
-</head> 
-
-
-<body onload="downLoad()">
    
-<div id="layer1" class="layer1_class">
-<img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    </div>
-    
-    
-    
-<div id="layer2" class="layer2_class">
+</head> 
+    <!-- ===== CARGA DINÁMICA DE IMÁGENES (sin tocar el HTML existente) ===== -->
+<script>
+(function() {
+    'use strict';
 
+    // 1. Agregar loading="lazy" a TODAS las imágenes existentes
+    var todasLasImg = document.querySelectorAll('img');
+    
+    todasLasImg.forEach(function(img) {
+        // Solo si no lo tiene ya
+        if (!img.hasAttribute('loading')) {
+            img.setAttribute('loading', 'lazy');
+        }
+        // Decodificación asíncrona para no bloquear el hilo principal
+        if (!img.hasAttribute('decoding')) {
+            img.setAttribute('decoding', 'async');
+        }
+    });
+
+    // 2. Interceptar NUEVAS imágenes que se inyecten dinámicamente
+    //    (ej: cuando el buscador muestra resultados, o se abre un popup)
+    var observer = new MutationObserver(function(mutaciones) {
+        mutaciones.forEach(function(mutacion) {
+            if (mutacion.addedNodes) {
+                mutacion.addedNodes.forEach(function(nodo) {
+                    // Si el nodo agregado es una imagen
+                    if (nodo.nodeName === 'IMG') {
+                        nodo.setAttribute('loading', 'lazy');
+                        nodo.setAttribute('decoding', 'async');
+                    }
+                    // Si el nodo contiene imágenes hijas
+                    if (nodo.querySelectorAll) {
+                        var imgsInternas = nodo.querySelectorAll('img');
+                        imgsInternas.forEach(function(img) {
+                            if (!img.hasAttribute('loading')) {
+                                img.setAttribute('loading', 'lazy');
+                            }
+                            if (!img.hasAttribute('decoding')) {
+                                img.setAttribute('decoding', 'async');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Observar todo el documento (hijos directos e internos)
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // 3. Opcional: Placeholder visual mientras carga
+    //    Muestra un fondo gris suave en imágenes que aún no cargaron
+    var styleLazy = document.createElement('style');
+    styleLazy.textContent = `
+        img[loading="lazy"] {
+            background-color: #1a1a2e;
+            min-height: 40px;
+            transition: opacity 0.4s ease;
+        }
+        img[loading="lazy"][src]:not([src=""]) {
+            opacity: 0;
+        }
+        img[loading="lazy"].cargada {
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(styleLazy);
+
+    // 4. Detectar cuando cada imagen terminó de cargar y mostrarla con fade
+    function activarFade(img) {
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('cargada');
+        } else {
+            img.addEventListener('load', function() {
+                img.classList.add('cargada');
+            }, { once: true });
+            // Si falla la carga, igual la mostramos (para no quedar invisible)
+            img.addEventListener('error', function() {
+                img.classList.add('cargada');
+                img.style.background = '#2a0a0a';
+            }, { once: true });
+        }
+    }
+
+    // Aplicar fade a las existentes
+    todasLasImg.forEach(activarFade);
+
+    // Aplicar fade a las nuevas que se inyecten
+    var observerFade = new MutationObserver(function(mutaciones) {
+        mutaciones.forEach(function(mutacion) {
+<!-- ===== CARGA DINÁMICA REAL (sin tocar el HTML existente) ===== -->
+<script>
+(function() {
+    'use strict';
+
+    // Pixel transparente 1x1 como placeholder
+    var PIXEL = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    // ==========================================
+    // 1. INTERCEPTAR: guardar src real en data-src, poner placeholder
+    // ==========================================
+    function interceptar(img) {
+        if (img.getAttribute('data-lz') === '1') return; // ya interceptada
+        var src = img.getAttribute('src');
+        if (!src || src.startsWith('data:')) return; // no interceptar data-uris
         
+        img.setAttribute('data-src', src);   // guardar la url real
+        img.setAttribute('src', PIXEL);       // poner placeholder
+        img.setAttribute('data-lz', '1');     // marcar como interceptada
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+    }
 
+    // ==========================================
+    // 2. CARGAR: restaurar src real cuando toque
+    // ==========================================
+    function cargar(img) {
+        var realSrc = img.getAttribute('data-src');
+        if (!realSrc) return;
+        
+        img.setAttribute('src', realSrc);
+        img.removeAttribute('data-src');
+        
+        // Fade-in cuando termine de descargar
+        img.onload = function() {
+            img.style.opacity = '1';
+            img.onload = null;
+        };
+        img.onerror = function() {
+            img.style.opacity = '1';
+            img.style.background = '#2a0a0a';
+            img.onerror = null;
+        };
 
+        // Si ya estaba en cache, onload no dispara
+        if (img.complete) {
+            img.style.opacity = '1';
+        }
+    }
 
-<div id="iniciopreload">
+    // ==========================================
+    // 3. INTERSECTION OBSERVER: carga al entrar al viewport
+    // ==========================================
+    var io = new IntersectionObserver(function(entries) {
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+                cargar(entries[i].target);
+                io.unobserve(entries[i].target);
+            }
+        }
+    }, {
+        rootMargin: '300px 0px', // empezar a cargar 300px antes de verse
+        threshold: 0.01
+    });
+
+    // ==========================================
+    // 4. MUTATION OBSERVER: atrapar imágenes nuevas Y cambios display
+    // ==========================================
+    var mo = new MutationObserver(function(mutations) {
+        for (var m = 0; m < mutations.length; m++) {
+            var mut = mutations[m];
+
+            // --- Imágenes nuevas inyectadas al DOM ---
+            if (mut.addedNodes) {
+                for (var n = 0; n < mut.addedNodes.length; n++) {
+                    var nodo = mut.addedNodes[n];
+                    if (nodo.nodeName === 'IMG') {
+                        interceptar(nodo);
+                        io.observe(nodo);
+                    }
+                    if (nodo.querySelectorAll) {
+                        var imgs = nodo.querySelectorAll('img');
+                        for (var j = 0; j < imgs.length; j++) {
+                            interceptar(imgs[j]);
+                            io.observe(imgs[j]);
+                        }
+                    }
+                }
+            }
+
+            // --- Un contenedor pasó de display:none a visible ---
+            if (mut.type === 'attributes' && mut.attributeName === 'style') {
+                var target = mut.target;
+                var displayActual = window.getComputedStyle(target).display;
+                if (displayActual !== 'none') {
+                    var internas = target.querySelectorAll('img[data-src]');
+                    for (var k = 0; k < internas.length; k++) {
+                        cargar(internas[k]);
+                        io.unobserve(internas[k]);
+                    }
+                }
+            }
+        }
+    });
+
+    // ==========================================
+    // 5. INICIO: interceptar todo lo que ya existe
+    // ==========================================
+    var todas = document.querySelectorAll('img');
+    var contador = 0;
+    for (var i = 0; i < todas.length; i++) {
+        interceptar(todas[i]);
+        io.observe(todas[i]);
+        contador++;
+    }
+
+    // Activar vigilancia permanente
+    mo.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style']
+    });
+
+    // ==========================================
+    // 6. RE-ESCANEO cada 2 segundos (seguridad extra)
+    //    Atrapa imágenes que se escaparon por plugins o scripts externos
+    // ==========================================
+    setInterval(function() {
+        var pendientes = document.querySelectorAll('img:not([data-lz])');
+        for (var i = 0; i < pendientes.length; i++) {
+            var src = pendientes[i].getAttribute('src');
+            if (src && !src.startsWith('data:')) {
+                interceptar(pendientes[i]);
+                io.observe(pendientes[i]);
+            }
+        }
+    }, 2000);
+
+    console.log('Carga dinamica REAL activada: ' + contador + ' imagen(es) interceptadas');
+})();
+</script>
+<body  onload="downLoad()" id="layer2" >
+   
+<img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
+    
+    
+    
+
 <div id="panel">
 
     
@@ -575,29 +786,42 @@ document.getElementById('nuevaimg').innerHTML = '<video  preload="none" poster="
 <source src="#.webm" type="video/webm">
 </video>
     
-	
     
 <div class="popup" id="popup-20">
-<div class="fullvid"><a id="nuevaimg"></a>
+    
+    
+    
+        <div class="fullvid">
+            
+            <a id="nuevaimg"></a>
 
-	
-<a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()"><img class="volver" src="Galvez Oscar video_files/volver flechan.png"></a>
+            <!-- AQUÍ SE MANTIENEN TUS LLAMADAS ORIGINALES (asumo que tienes las funciones en otro lado) -->
+            <a class="vol" onclick="galvez20()" id="nuevaimg1" href="javascript: fredr344et56f53re()">
+                <img class="volver" src="./Galvez Oscar video_files/volver flechan.png">
+            </a>
+<a class="g"> </a><a class="gg"> </a><a class="ggg"> </a>
+            <!-- BOTÓN CAST -->
+            <div id="castbtn-container">
+                <google-cast-launcher id="castbtn"></google-cast-launcher>
+            </div>
 
-</div>
-</div> 
+        </div>
+    </div>
     
 <div class="popup" id="popup-21">
 <div class="fullvid"><a id="nuevaimg1"></a>
-<a class="vol" href="Galvez Oscar video_files/volver flechan.png">b</a>
+<a class="vol" href="file:///C:/Users/2/Desktop/GOpeliculas-goentretenimiento/Go%20Animacion%20familia%20(2021).html%20#slidero">b</a>
 </div>
 </div>      
 
-	
-	
- 
+    
+    
+      
+
 <div id="videotrailer">
 
-    
+
+
 
 
 <div class="container">
@@ -1476,6 +1700,7 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
 </div>
         
 
+        
 
 
 <div class="volver2">
@@ -1489,8 +1714,12 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
 "  ><cam href="#">
 <a class="volver11">GENERO</a></cam></div> 
 </div>
-          	
+    
+    
          
+
+    
+    
 <article>
 
 <div class="show" id="slider1">
@@ -1791,36 +2020,24 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
     </div>
     <div class="z-slide-indicator" style="left: -0.1485px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.1015px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div><div class="z-slide-indicator" style="left: 0.125px;"><span class="z-slide-dot active"></span><span class="z-slide-dot"></span><span class="z-slide-dot"></span></div></div></article>
    
-    
 
-  	
-			
+      
+            
 <a style="cursor: pointer;" onclick="mostrarOcultar(&#39;mi-super-contenido&#39;)">
     <input class="play" style="color: red" type="button" id="btn1" value="trailer" onclick="playPause()">
     </a>
-	   
-    	
-		
-
-   
-
-	   		
-		
-		
+       
+        
+        
 <div class="social-bar">
       
 <div class="icon icon-facebook" target="_blank">
-  
-<a class="target" href="intent://profile/oscar.galvez.756859/#Intent;scheme=fb;package=com.facebook.katana;S.browser_fallback_url=https://www.facebook.com/oscar.galvez.756859;end">Facebook
-</a>
-    
+<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Facebook</a>
 </div>
 <div class="icon icon-twitter" target="_blank">
-<a class="target" href="intent://instagram.com/_u/oscargalvezgo/#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=https://www.instagram.com/oscargalvezgo/;end" 
-   >Instagram</a>
+<a class="target" href="file:///C:/Users/2/Desktop/cargar/Go%2018%20Inicio_files/index.html">Twitter</a>
 </div>
       
- 
      
 
 <div class="icon icon-inicio" > 
@@ -1830,33 +2047,33 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
 <a  class="target" href="Galvez%20Oscar%20Inicio%202026.html">Peliculas</a></div>
       
 <div class="icon icon-1"> 
-<a class="target" type="button" href="Galvez%20Oscar%20kid%202025.html">Kid</a></div>
+<a class="target" type="button" href="Galves%20oscar%20Inicio%20Animacion.html">Kid</a></div>
     
 
       
 <div class="icon icon-3"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >Anime</a></div>
       
 <div class="icon icon-2"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >TV</a></div>
     
 <div class="icon icon-4"> 
-<a class="target" href="1404r.html"
+<a class="target" 
    >Paguinas recomendadas</a></div>
      
 <div class="icono icon-5"> 
  
 <div class="icon icon-4" onclick="cambiaVisibilidad()">
 <a class="target1" style="display: none;" id="accionar">Peliculas</a></div>
-	
+    
 <div class="icon icon-4" onclick="cambiaVisibilidad()">
 <a class="target1" id="accionar1">Series</a></div> 
 </div>
     
     
-	
+    
       
       
     </div>
@@ -1869,7 +2086,7 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
     
 </div>
     
-    
+    </div>
     
     
     
@@ -1877,30 +2094,29 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
   <div><img id="btn" class="logo" src="./Galvez Oscar video_files/letras cartel.gif">
 </div>
    
-    </div>
+    
 
   
     <div> <a href="javascript:history.back()"><img  class="logo2"  class="volver" src="volver%20flechan(1).png"></a>
 </div>
 
-	
-	
-	<a style="cursor: pointer;" onclick="mostrarOcultar">
+    
+    
+    <a style="cursor: pointer;" onclick="mostrarOcultar">
     <input class="pause" type="button" id="btn2" value="pause" onclick="playPause1()"></a>
     
 </figure>
-	    
-    	
-	
+        
+        
+    
     
     
 
-		
+        
 
 </div>
 
                
-        
     
 <footer>          
 </footer>
