@@ -112,18 +112,8 @@ document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/vide
 
             
 function fredr344et56f53re(){
-document.getElementById('nuevaimg').innerHTML = '<video preload="none" poster="inicio%20artel.gif" tabindex="0">';}
-
-function activarAudio() {
-    var iframe = document.querySelector('#nuevaimg iframe');
-    if (iframe) {
-        var src = iframe.src.split('?')[0];
-        var params = 'autoplay=1&loop=1&mute=0';
-        iframe.src = src + '?' + params;
-        var btn = document.querySelector('.btn-audio');
-        if (btn) btn.style.display = 'none';
-    }
-}
+document.getElementById('nuevaimg').innerHTML = '<video  preload="none"  poster="inicio%20artel.gif"  tabindex="0" >';}
+    
 
 </script>    
 <script>
@@ -180,16 +170,16 @@ function mostrar00017(){
 document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/7516014316230?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
 
 function mostrar00018(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/13906650860281?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
-
-function mostrar0019(){
 document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/1932396792400?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
 
+function mostrar0019(){
+document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/5091843771007?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
+
 function mostrar00020(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/2415921400406?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
 
 function mostrar00021(){
-document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/2415921400406?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
+document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/7423772134020?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
 
 </script>
     
@@ -1420,13 +1410,10 @@ document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/vide
 </div>
 
                
+       
     
 <footer>          
 </footer>
-
-
-
-	
            <script>
  $(document).ready(function() {
     $("carga").fadeOut("slow");;
@@ -1594,13 +1581,51 @@ function galvez22() {
 
     
 function galvez20() { 
-    var trailer = document.getElementById("popup-20") 
-    var video = document.querySelector(".red20")
-    trailer.classList.toggle("active");
-    video.pause();
-    video.currentTime=pause;
-};
+    var trailer = document.getElementById("popup-20"); 
+    
+    // Seleccionamos los elementos del buscador
+    var buscadorInput = document.getElementById("buscadorPeliculas");
+    var buscadorControles = document.getElementById("buscadorControles");
 
+    // Toggle (Alternar) el estado del popup
+    trailer.classList.toggle("active");
+
+    // Lógica: Si el popup se activó (se abrió)
+    if (trailer.classList.contains("active")) {
+        
+        // 1. Ocultar buscador (para limpieza visual)
+        if(buscadorInput) buscadorInput.style.display = 'none';
+        if(buscadorControles) buscadorControles.style.display = 'none';
+
+        // 2. ENTRAR EN PANTALLA COMPLETA
+        var elem = document.documentElement; 
+        
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+
+    } else {
+        // Si el popup se desactivó (se cerró)
+        
+        // 1. Volvemos a mostrar el buscador para que puedas buscar otra película
+        if(buscadorInput) buscadorInput.style.display = 'block';
+
+        // 2. ELIMINAMOS LA ORDEN DE SALIR DE PANTALLA COMPLETA.
+        // Ahora te quedarás en pantalla completa para seguir navegando.
+        // Si en el futuro quieres salir, tendrás que pulsar la tecla ESC de tu teclado.
+    }
+
+    // Código original para pausar
+    var video = document.querySelector(".red20");
+    if(video && video.pause) {
+        video.pause();
+        video.currentTime = pause;
+    }
+};
      
 </script>     
 
@@ -1620,69 +1645,191 @@ function galvez20() {
    </script> 
     
 -->
-
     
+    
+    
+    
+    
+    <script>
+    (function() {
+        // 1. Detectar si es móvil (Android) o PC
+        var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+        // --- 2. LÓGICA PARA PC (PRIMER TOQUE Y MORIR) ---
+        if (!isTouchDevice) {
+            let pcClickDone = false;
+
+            function handlePcClick() {
+                if (pcClickDone) return;
+
+                var elem = document.documentElement;
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+
+                pcClickDone = true;
+                
+                // AQUÍ ELIMINAMOS LA FUNCIÓN EN PC
+                document.body.removeEventListener('click', handlePcClick);
+                console.log("PC: Fullscreen activo, función detenida.");
+            }
+            document.body.addEventListener('click', handlePcClick);
+        } 
+
+        // --- 3. LÓGICA PARA ANDROID (DESLIZAR SIEMPRE ACTIVO) ---
+        else {
+            let touchStartY = 0;
+            const swipeThreshold = 50; // Píxeles mínimos para que cuente como deslizamiento
+
+            function handleTouchStart(e) {
+                touchStartY = e.touches[0].clientY;
+            }
+
+            function handleTouchEnd(e) {
+                var touchEndY = e.changedTouches[0].clientY;
+                var diffY = touchStartY - touchEndY; 
+                // Positivo = Arriba (Dedido sube), Negativo = Abajo (Dedo baja)
+
+                var elem = document.documentElement;
+
+                // DESLIZAR ARRIBA (Abrir pantalla completa)
+                if (diffY > swipeThreshold) {
+                    if (elem.requestFullscreen) elem.requestFullscreen();
+                    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                }
+                
+                // DESLIZAR ABAJO (Salir de pantalla completa)
+                else if (diffY < -swipeThreshold) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                    else if (document.msExitFullscreen) document.msExitFullscreen();
+                }
+            }
+
+            // AGREGAMOS LISTENERS PARA ANDROID
+            // NOTA: NO hay "removeEventListener" aquí, por lo que SIGUE FUNCIONANDO SIEMPRE.
+            document.body.addEventListener('touchstart', handleTouchStart, {passive: true});
+            document.body.addEventListener('touchend', handleTouchEnd, {passive: true});
+            
+            console.log("Android: Gestos de deslizar activados permanentemente.");
+        }
+    })();
+</script>
 <script src="./Galvez Oscar video_files/zSlider.js.descarga"></script>
 <script src="./Galvez Oscar video_files/app.js.descarga"></script>
 
 
-<!-- ===== SCRIPT BUSCADOR AGREGADO ===== -->
+<!-- ===== SCRIPT BUSCADOR AGREGADO CON NAVEGACIÓN ===== -->
 <script>
 (function(){
     var buscador = document.getElementById('buscadorPeliculas');
-    var resultado = document.getElementById('resultadoBusqueda');
+    var resultadoTexto = document.getElementById('resultadoBusqueda');
+    var controles = document.getElementById('buscadorControles');
+    var contadorSpan = document.getElementById('contadorResultados');
+    var btnAnterior = document.getElementById('btnAnterior');
+    var btnSiguiente = document.getElementById('btnSiguiente');
     
-    // Guardar estado original de los slides (los que tienen data-buscable="si")
-    var slidesBuscables = document.querySelectorAll('.slides[data-buscable="si"]');
-    var totalPeliculas = slidesBuscables.length;
-    
+    // Variables para el slider de resultados
+    var listaResultados = []; // Array que guarda los elementos encontrados
+    var indiceActual = 0;     // Posición actual en el array
+
+    // Función para mostrar un resultado específico
+    function mostrarResultadoEnIndice(index) {
+        // Ocultar todos los slides buscables primero
+        var slidesBuscables = document.querySelectorAll('.slides[data-buscable="si"]');
+        slidesBuscables.forEach(function(slide){
+            slide.style.display = 'none';
+        });
+
+        // Mostrar solo el que corresponde al índice
+        if (listaResultados.length > 0) {
+            listaResultados[index].style.display = 'block';
+            // Actualizar contador (ej: 1 / 5)
+            contadorSpan.textContent = (index + 1) + ' / ' + listaResultados.length;
+        }
+    }
+
+    // Evento Input (Escribir en el buscador)
     buscador.addEventListener('input', function(){
         var texto = this.value.toLowerCase().trim();
-        
+        listaResultados = []; // Reiniciar lista
+        indiceActual = 0;
+
+        // Si está vacío, limpiar todo
         if(texto === ''){
-            // Si el buscador esta vacio, restaurar todo a su estado original
-            slidesBuscables.forEach(function(slide){
+            document.querySelectorAll('.slides[data-buscable="si"]').forEach(function(slide){
                 slide.style.display = 'none';
-                slide.setAttribute('data-resultado', '');
             });
-            resultado.style.display = 'none';
-            resultado.textContent = '';
+            resultadoTexto.style.display = 'none';
+            controles.style.display = 'none';
             return;
         }
-        
-        var encontrados = 0;
-        
+
+        // Buscar coincidencias
+        var slidesBuscables = document.querySelectorAll('.slides[data-buscable="si"]');
         slidesBuscables.forEach(function(slide){
             var nombre = (slide.getAttribute('data-nombre') || '').toLowerCase();
-            // Tambien buscar en la descripcion
             var desc = (slide.querySelector('.description') || {}).textContent || '';
             desc = desc.toLowerCase();
             var generos = '';
-            var linksGenero = slide.querySelectorAll('.link');
-            linksGenero.forEach(function(l){ generos += ' ' + l.textContent; });
+            slide.querySelectorAll('.link').forEach(function(l){ generos += ' ' + l.textContent; });
             generos = generos.toLowerCase();
             
+            // Si coincide, agregar a la lista (no mostrar todavía)
             if(nombre.indexOf(texto) !== -1 || desc.indexOf(texto) !== -1 || generos.indexOf(texto) !== -1){
-                slide.style.display = 'block';
-                slide.setAttribute('data-resultado', 'si');
-                encontrados++;
+                listaResultados.push(slide);
             } else {
                 slide.style.display = 'none';
-                slide.setAttribute('data-resultado', '');
             }
         });
-        
-        // Mostrar resultado
-        if(encontrados > 0){
-            resultado.style.display = 'block';
-            resultado.textContent = encontrados + ' pelicula(s) encontrada(s)';
+
+        // Mostrar resultados
+        if(listaResultados.length > 0){
+            resultadoTexto.style.display = 'block';
+            resultadoTexto.textContent = listaResultados.length + ' resultado(s)';
+            
+            // Mostrar controles y primer resultado
+            controles.style.display = 'flex';
+            mostrarResultadoEnIndice(0);
         } else {
-            resultado.style.display = 'block';
-            resultado.textContent = 'No se encontraron resultados para "' + texto + '"';
+            resultadoTexto.style.display = 'block';
+            resultadoTexto.textContent = 'No se encontraron resultados';
+            controles.style.display = 'none';
         }
     });
+
+    // Botón Siguiente
+    btnSiguiente.addEventListener('click', function(){
+        if(listaResultados.length === 0) return;
+        
+        // Ocultar el actual
+        listaResultados[indiceActual].style.display = 'none';
+        
+        // Avanzar índice (si llega al final, vuelve al principio)
+        indiceActual++;
+        if(indiceActual >= listaResultados.length){
+            indiceActual = 0;
+        }
+        
+        // Mostrar el nuevo
+        mostrarResultadoEnIndice(indiceActual);
+    });
+
+    // Botón Anterior
+    btnAnterior.addEventListener('click', function(){
+        if(listaResultados.length === 0) return;
+        
+        listaResultados[indiceActual].style.display = 'none';
+        
+        // Retroceder índice (si llega al inicio, va al final)
+        indiceActual--;
+        if(indiceActual < 0){
+            indiceActual = listaResultados.length - 1;
+        }
+        
+        mostrarResultadoEnIndice(indiceActual);
+    });
     
-    // Al presionar Escape, limpiar el buscador
+    // Limpiar con Escape
     buscador.addEventListener('keydown', function(e){
         if(e.key === 'Escape'){
             this.value = '';
@@ -1693,9 +1840,117 @@ function galvez20() {
 })();
 </script>
 <!-- ===== FIN SCRIPT BUSCADOR ===== -->
-    
-    
-    
+     <script>
+        // --- SCRIPT PARA ACTIVAR EL SONIDO ---
+        
+        const iframe = document.getElementById('videoOk');
+        let sonidoActivado = false;
 
+        // Función para cambiar el estado de mute a unmute
+        function activarAudio() {
+            if (!sonidoActivado) {
+                // Reemplazamos muted=1 por muted=0 en la URL
+                const urlActual = iframe.src;
+                const urlNueva = urlActual.replace('muted=1', 'muted=0');
+                
+                iframe.src = urlNueva; // Recargamos el iframe con audio
+                sonidoActivado = true;
+                console.log("Sonido activado");
+            }
+        }
+
+        // Escuchamos el primer clic en toda la página
+        document.addEventListener('click', function() {
+            activarAudio();
+        });
+    </script>
+
+    <script>
+    // --- BLOQUEO TOTAL DE INTERACCIÓN ---
+
+    // 1. BLOQUEAR CLIC DERECHO (Menú Contextual)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 2. BLOQUEAR TECLAS (Desarrollador, Guardar, Copiar, Imprimir)
+    document.addEventListener('keydown', function(e) {
+        // Lista de teclas prohibidas
+        if (
+            e.key === 'F12' ||                        // Consola
+            (e.ctrlKey && e.key === 'u') ||           // Ver código fuente
+            (e.ctrlKey && e.key === 's') ||           // Guardar
+            (e.ctrlKey && e.key === 'c') ||           // Copiar
+            (e.ctrlKey && e.key === 'p') ||           // Imprimir
+            (e.ctrlKey && e.shiftKey && e.key === 'I')// Inspeccionar (Chrome)
+        ) {
+            e.preventDefault();
+            alert("Acción deshabilitada"); // Opcional: mensaje de alerta
+            return false;
+        }
+    });
+
+    // 3. BLOQUEAR ZOOM CON RUEDA DEL RATÓN (Ctrl + Scroll)
+    document.addEventListener('wheel', function(e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            return false;
+        }
+    }, { passive: false });
+
+    // 4. EVITAR DOBLE TAP ZOOM EN MÓVIL (Refuerzo)
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        var now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+</script>
+     <script>
+        // Verifica si es Android y agrega la clase 'android' al body
+        if (/Android/i.test(navigator.userAgent)) {
+            document.body.classList.add('android');
+            console.log("Estilos Android activados");
+        }
+         
+         
+         
+         // Detectar si es Android
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
+if (isAndroid) {
+    // Si es Android, agregamos la clase 'es-android' al cuerpo de la página
+    document.body.classList.add("es-android");
+}
+    </script>
+
+ <!-- JAVASCRIPT SIN CONFLICTOS (Autocontenido) -->
+    <script>
+       
+
+      <!-- JAVASCRIPT SOLO PARA EL CAST -->
+    <script>
+        (function() {
+            var checkInterval = setInterval(function() {
+                if (typeof cast !== 'undefined' && cast.framework) {
+                    clearInterval(checkInterval);
+                    try {
+                        var context = cast.framework.CastContext.getInstance();
+                        context.setOptions({
+                            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+                            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                        });
+                        console.log("Cast listo.");
+                    } catch (e) {
+                        console.warn("Error Cast:", e);
+                    }
+                }
+            }, 500);
+        })();
+    </script>
     
 </body></html>
