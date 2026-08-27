@@ -112,8 +112,18 @@ document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/vide
 
             
 function fredr344et56f53re(){
-document.getElementById('nuevaimg').innerHTML = '<video  preload="none"  poster="inicio%20artel.gif"  tabindex="0" >';}
-    
+document.getElementById('nuevaimg').innerHTML = '<video preload="none" poster="inicio%20artel.gif" tabindex="0">';}
+
+function activarAudio() {
+    var iframe = document.querySelector('#nuevaimg iframe');
+    if (iframe) {
+        var src = iframe.src.split('?')[0];
+        var params = 'autoplay=1&loop=1&mute=0';
+        iframe.src = src + '?' + params;
+        var btn = document.querySelector('.btn-audio');
+        if (btn) btn.style.display = 'none';
+    }
+}
 
 </script>    
 <script>
@@ -1413,6 +1423,10 @@ document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/vide
     
 <footer>          
 </footer>
+
+
+
+	
            <script>
  $(document).ready(function() {
     $("carga").fadeOut("slow");;
