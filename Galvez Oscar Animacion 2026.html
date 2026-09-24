@@ -47,15 +47,18 @@ function myFunction() {
     <style>
 
 
-		.vol{
+	.vol{
   position: fixed !important;
-  top: 10px;
-  right: 10px;
-  z-index: 999999;
+  top: 15px !important;
+  right: 15px !important;
+  width: 50px !important;
+  height: 50px !important;
+  display: block !important;
+  z-index: 999999 !important;
 }
-.fullvid{
-  width: 100%;
-  height: 100%;
+.vol .volver{
+  width: 40px !important;
+  height: auto !important;
 }
 	</style>
     
@@ -88,9 +91,8 @@ function mostrar00011(){
 document.getElementById('nuevaimg').innerHTML = '<iframe src="https://ok.ru/videoembed/15271409355366?autoplay=1&loop=1" allow="autoplay"></iframe><a class="g"> </a><a class="gg"> </a>';}
     
  function mostrar00014(){
-document.getElementById('nuevaimg').innerHTML = '<div style="width:100%; height:400px; overflow:hidden; background:#000;"><iframe src="https://www.bilibili.tv/en/video/4800715995093504?autoplay=1&loop=1" allow="autoplay; fullscreen" allowfullscreen style="width:100%; height:500px; margin-top:-70px; border:0;"></iframe></div>';
+document.getElementById('nuevaimg').innerHTML = '<div style="width:100%; height:350px; overflow:hidden; background:#000;"><iframe src="https://www.bilibili.tv/en/video/4800715995093504?autoplay=1&loop=1" allow="autoplay; fullscreen" allowfullscreen style="width:100%; height:450px; margin-top:-90px; border:0;"></iframe></div>';
 
-// ESTE ES EL CAMBIO IMPORTANTE, no nuevaimg, sino popup-20
 let elem = document.getElementById('popup-20');
 if(elem.requestFullscreen){ elem.requestFullscreen(); }
 }
