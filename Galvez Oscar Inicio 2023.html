@@ -2314,4 +2314,118 @@ if (isAndroid) {
         })();
     </script>
     
+
+
+<!-- Panel Info 2026: mismo estilo solicitado, sin alterar las clases .g y .gg ni las funciones existentes. -->
+<style id="galvez-info-2026-style">
+/* Panel estilo Netflix a la izquierda. En PC aparece al pasar por cualquier zona del reproductor. El panel no captura eventos para no bloquear controles. En móvil se mantiene la zona Info porque el iframe externo no transmite sus toques al documento. No modifica .g ni .gg. */
+.fullvid{position:relative;isolation:isolate;}
+.galvez-info-hotspot-2026{position:absolute;z-index:2147483002;top:14px;left:14px;display:flex;align-items:center;gap:8px;padding:11px 15px;border:1px solid rgba(255,255,255,.28);border-radius:5px;background:rgba(18,18,18,.88);color:#fff;font:700 14px/1.2 Arial,sans-serif;box-shadow:0 3px 16px #0009;opacity:.72;transition:opacity .2s ease,background .2s ease,transform .2s ease;cursor:default;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
+.galvez-info-hotspot-2026 span:first-child{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border:1px solid #fff;border-radius:50%;font-size:15px;}
+.galvez-info-hotspot-2026:hover,.galvez-info-hotspot-2026:focus-visible,.galvez-info-hotspot-2026.touch-active{background:#e50914;opacity:1;outline:2px solid rgba(255,255,255,.85);outline-offset:2px;transform:scale(1.03);}
+.galvez-info-panel-2026{position:absolute;z-index:2147483001;top:0;left:0;right:auto;bottom:12%;width:min(49%,570px);height:auto;max-height:88%;overflow:hidden;box-sizing:border-box;padding:clamp(20px,2.5vw,38px);padding-top:clamp(64px,8vh,86px);color:#fff;font:clamp(13px,1.15vw,17px)/1.5 Arial,sans-serif;background:linear-gradient(90deg,rgba(8,8,8,.99) 0%,rgba(8,8,8,.96) 70%,rgba(8,8,8,.72) 100%);border-right:1px solid rgba(255,255,255,.18);border-radius:0 8px 8px 0;box-shadow:12px 0 34px rgba(0,0,0,.48);opacity:0;visibility:hidden;transform:translateX(-18px);transition:opacity .24s ease,transform .24s ease,visibility .24s;pointer-events:none;}
+.galvez-info-panel-2026.is-visible{opacity:1;visibility:visible;transform:translateX(0);pointer-events:none;}
+.galvez-info-panel-2026 h3{position:relative;margin:0 0 18px;padding:0 0 13px;font-size:clamp(22px,2.5vw,36px);font-weight:800;line-height:1.08;letter-spacing:-.45px;color:#fff;text-shadow:0 3px 16px #000;overflow-wrap:anywhere;}
+.galvez-info-panel-2026 h3:after{content:"";position:absolute;left:0;bottom:0;width:64px;height:4px;border-radius:3px;background:#e50914;box-shadow:0 0 12px #e5091466;}
+.galvez-info-panel-2026 p{margin:9px 0;color:#f4f4f4;white-space:normal;overflow-wrap:anywhere;}
+.galvez-info-panel-2026 .galvez-info-year-2026,.galvez-info-panel-2026 .galvez-info-genres-2026{display:table;width:fit-content;max-width:100%;box-sizing:border-box;margin:7px 0;padding:5px 9px;border:1px solid rgba(255,255,255,.18);border-radius:4px;background:rgba(255,255,255,.09);color:#f5f5f5;font-size:.88em;font-weight:700;}
+.galvez-info-panel-2026 .galvez-info-description-2026{margin-top:20px;font-size:clamp(13px,1.15vw,17px);line-height:1.58;color:#ededed;text-shadow:0 1px 4px #000;}
+@media (hover:hover) and (pointer:fine){.fullvid.info-mouse-active-2026 .galvez-info-panel-2026{opacity:1;visibility:visible;transform:translateX(0);pointer-events:none}.fullvid.info-mouse-active-2026 .galvez-info-hotspot-2026{opacity:1}.galvez-info-hotspot-2026:hover{opacity:1}}
+@media (max-width:700px){.galvez-info-hotspot-2026{top:9px;left:9px;padding:8px 10px;font-size:12px;opacity:.9;gap:6px}.galvez-info-hotspot-2026 span:first-child{width:20px;height:20px;font-size:13px}.galvez-info-panel-2026{left:0;right:auto;top:0;bottom:14%;width:min(82%,450px);height:auto;max-height:86%;padding:13px;padding-top:54px;border-radius:0 7px 7px 0;font-size:clamp(11px,2.9vw,14px);line-height:1.35;background:linear-gradient(90deg,rgba(8,8,8,.99),rgba(8,8,8,.96));}.galvez-info-panel-2026 h3{font-size:clamp(18px,4.6vw,25px);margin-bottom:10px;padding-bottom:9px}.galvez-info-panel-2026 p{margin:5px 0}.galvez-info-panel-2026 .galvez-info-description-2026{margin-top:12px;font-size:clamp(11px,2.9vw,14px);line-height:1.4}}
+@media (max-height:420px) and (orientation:landscape){.galvez-info-panel-2026{bottom:10%;max-height:90%;padding:9px;padding-top:42px;font-size:11px;line-height:1.2}.galvez-info-panel-2026 h3{font-size:17px;margin-bottom:5px;padding-bottom:7px}.galvez-info-panel-2026 p{margin:3px 0}.galvez-info-hotspot-2026{top:5px;left:5px;padding:6px 8px}}
+</style>
+<script id="galvez-info-2026-script">
+(function(){
+  'use strict';
+  var peliculaActual = null;
+  function texto(el){ return el ? (el.textContent || '').replace(/\s+/g,' ').trim() : ''; }
+  function normalizarGeneros(valor){ return (valor || '').replace(/C\s*ficcion/ig,'Ciencia ficción').replace(/C\s*ficción/ig,'Ciencia ficción').replace(/Romantica/ig,'Romántica').replace(/Accion/ig,'Acción').replace(/Aventuras/ig,'Aventura').replace(/Thriller Acción n/ig,'Thriller, Acción').trim(); }
+  function registrarPeliculaDesde(elemento){
+    var slide = elemento && elemento.closest ? elemento.closest('.slides') : null;
+    if(!slide) return;
+    var imagen = slide.querySelector('.logopeli');
+    var titulo = '';
+    if (imagen) {
+      var ruta = imagen.getAttribute('src') || '';
+      ruta = ruta.split('/').pop().split('\\').pop();
+      try { ruta = decodeURIComponent(ruta); } catch(e) {}
+      titulo = ruta.replace(/\.(gif|jpe?g|png|webp)$/i, '').replace(/\s+/g, ' ').trim();
+      titulo = titulo.replace(/\s*\(\d{4}\)\s*$/,'').trim();
+    }
+    if (!titulo) titulo = (slide.getAttribute('data-nombre') || '').trim()
+      .replace(/\s+(Comedia|Romantica|Romántica|Animacion|Animación|Aventura|Accion|Acción|Terror|Thriller|Drama|Familia|Deporte|Reboot|C ficcion|Ciencia ficcion)\b/ig, '')
+      .replace(/\s+20\d{2}\s*$/,'').trim();
+    peliculaActual = {
+      titulo: titulo || (slide.getAttribute('data-nombre') || 'Información').trim(),
+      descripcion: texto(slide.querySelector('.description')),
+      anio: texto(slide.querySelector('.año, .ano, .year')),
+      generos: normalizarGeneros(texto(slide.querySelector('.genero')))
+    };
+    document.querySelectorAll('.galvez-info-panel-2026').forEach(renderizarPanel);
+  }
+  function ajustarContenido(panel){
+    var desc = panel.querySelector('.galvez-info-description-2026');
+    if(!desc) return;
+    desc.style.fontSize = '';
+    var size = parseFloat(getComputedStyle(desc).fontSize) || 14;
+    var intentos = 0;
+    while(panel.scrollHeight > panel.clientHeight && size > 9 && intentos < 12){
+      size -= 0.5; desc.style.fontSize = size + 'px'; intentos++;
+    }
+  }
+  function renderizarPanel(panel){
+    var p = peliculaActual || {titulo:'Información', descripcion:'Seleccioná un título y abrí el video con GO.', anio:'', generos:''};
+    panel.querySelector('.galvez-info-title-2026').textContent = p.titulo || 'Información';
+    panel.querySelector('.galvez-info-description-2026').textContent = p.descripcion || 'No hay descripción disponible.';
+    panel.querySelector('.galvez-info-year-2026').textContent = p.anio ? 'Año: ' + p.anio : '';
+    panel.querySelector('.galvez-info-genres-2026').textContent = p.generos ? 'Género: ' + p.generos : '';
+    requestAnimationFrame(function(){ ajustarContenido(panel); });
+  }
+  function instalar(){
+    document.addEventListener('click', function(ev){
+      var go = ev.target && ev.target.closest ? ev.target.closest('.go, a.red20') : null;
+      if(!go) return;
+      var slide = go.closest('.slides');
+      if(slide) registrarPeliculaDesde(slide);
+    }, true);
+    document.querySelectorAll('.fullvid').forEach(function(zona){
+      if(zona.querySelector('.galvez-info-hotspot-2026')) return;
+      var hotspot = document.createElement('div');
+      hotspot.className = 'galvez-info-hotspot-2026';
+      hotspot.setAttribute('role','note');
+      hotspot.setAttribute('aria-label','Pasá o apoyá el dedo aquí para ver la información');
+      hotspot.innerHTML = '<span aria-hidden="true">ⓘ</span><span>Info</span>';
+      var panel = document.createElement('div');
+      panel.className = 'galvez-info-panel-2026';
+      panel.setAttribute('aria-label','Información');
+      panel.innerHTML = '<h3 class="galvez-info-title-2026">Información</h3><p class="galvez-info-year-2026"></p><p class="galvez-info-genres-2026"></p><p class="galvez-info-description-2026">Seleccioná un título y abrí el video con GO.</p>';
+      hotspot.addEventListener('touchstart', function(){ hotspot.classList.add('touch-active'); panel.classList.add('is-visible'); renderizarPanel(panel); }, {passive:true});
+      function ocultarTouch(){ hotspot.classList.remove('touch-active'); panel.classList.remove('is-visible'); }
+      hotspot.addEventListener('touchend', ocultarTouch, {passive:true});
+      hotspot.addEventListener('touchcancel', ocultarTouch, {passive:true});
+      zona.appendChild(hotspot); zona.appendChild(panel);
+      // En PC, la información se muestra cuando hay movimiento del mouse y se oculta tras 2,5 s de inactividad.
+      var temporizadorInactividad = null;
+      function mostrarPorMovimiento(){
+        if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+        zona.classList.add('info-mouse-active-2026');
+        if(temporizadorInactividad) window.clearTimeout(temporizadorInactividad);
+        temporizadorInactividad = window.setTimeout(function(){
+          zona.classList.remove('info-mouse-active-2026');
+        }, 2500);
+      }
+      zona.addEventListener('mousemove', mostrarPorMovimiento, {passive:true});
+      zona.addEventListener('pointermove', mostrarPorMovimiento, {passive:true});
+      zona.addEventListener('mouseleave', function(){
+        zona.classList.remove('info-mouse-active-2026');
+        if(temporizadorInactividad) window.clearTimeout(temporizadorInactividad);
+      }, {passive:true});
+      renderizarPanel(panel);
+    });
+    window.addEventListener('resize', function(){ document.querySelectorAll('.galvez-info-panel-2026').forEach(ajustarContenido); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar); else instalar();
+})();
+</script>
+
 </body></html>
