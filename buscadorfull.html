@@ -48,7 +48,7 @@
     .fullvid{position:relative;display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;background:#000;overflow:hidden;}
     .fullvid #nuevaimg{display:block;width:100%;height:100%;margin:0;padding:0;}
     .fullvid iframe,.fullvid video{display:block;width:100%;height:100%;min-width:100%;min-height:100%;aspect-ratio:auto;max-width:none;max-height:none;border:0;border-radius:0;background:#000;}
-    .fullvid .vol{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:1000001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff40;border-radius:50%;background:#111d;color:white;text-decoration:none;font-size:22px;backdrop-filter:blur(8px);}
+    .fullvid .vol{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:1000001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff40;border-radius:50%;background:#111d;color:white;text-decoration:none;font-size:22px;backdrop-filter:blur(8px);cursor:pointer;}
     .fullvid .vol:hover{background:#ed4052;}
     
     @media(max-width:1000px){#cineResultados{grid-template-columns:repeat(5,minmax(0,1fr))}}
@@ -79,7 +79,7 @@
     <!-- REPRODUCTOR POPUP GLOBAL -->
     <div aria-hidden="true" id="popup-20" class="popup" role="dialog">
         <div class="fullvid">
-            <a aria-label="Video" id="nuevaimg"></a>
+            <div id="nuevaimg" style="width:100%; height:100%; position:absolute; inset:0;"></div>
             <a aria-label="Cerrar video" class="vol" href="#cerrar-video" id="cerrarVideo" title="Cerrar video"><span aria-hidden="true">✕</span></a>
         </div>
     </div>
@@ -119,7 +119,6 @@
                 const scriptText = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
                 
                 const mapFunciones = {};
-                // Detecta exactamente tu estructura original: function mostrarX() { document.getElementById('nuevaimg').innerHTML = '...' }
                 const funcMatches = scriptText.matchAll(/function\s+(mostrar\d+)\s*\(\)\s*\{\s*document\.getElementById\(['"]nuevaimg['"]\)\.innerHTML\s*=\s*['"]([^'"]+)['"]/g);
                 for (const match of funcMatches) {
                     mapFunciones[match[1]] = match[2];
@@ -183,7 +182,6 @@
 
         let results = [], page = 0, total = 0;
 
-        // TU FUNCIÓN ORIGINAL ADAPTADA: Activa el popup igual que tus páginas de años
         window.galvez20 = function() {
             var p = document.getElementById('popup-20');
             if(!p) return;
@@ -203,7 +201,12 @@
         };
 
         function mostrar(urlVideo) {
-            document.getElementById('nuevaimg').innerHTML = urlVideo;
+            let videoHtml = urlVideo;
+            // Asegurar atributos de reproducción en el iframe
+            if (videoHtml && !videoHtml.includes('allow=')) {
+                videoHtml = videoHtml.replace('<iframe', '<iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen');
+            }
+            document.getElementById('nuevaimg').innerHTML = videoHtml;
             window.galvez20();
         }
 
@@ -221,6 +224,12 @@
             if(b) b.addEventListener('click', function(e){ e.preventDefault(); cerrar(); });
             document.addEventListener('keydown', function(e){ if(e.key === 'Escape') cerrar(); });
         });
+
+        // Configurar el botón de cerrar inmediatamente por si el DOM ya cargó
+        const btnCerrarGlobal = document.getElementById('cerrarVideo');
+        if(btnCerrarGlobal){
+            btnCerrarGlobal.onclick = function(e){ e.preventDefault(); cerrar(); };
+        }
 
         function updateControls() {
             controls.style.display = total > 1 ? 'flex' : 'none';
@@ -273,7 +282,6 @@
                 layer.append(badgeAnio, badgeGo);
                 card.append(im, layer);
                 
-                // Al hacer clic, ejecuta tu misma lógica original de mostrar y abrir el popup
                 card.addEventListener('click', () => mostrar(item.urlVideo));
                 out.appendChild(card);
             });
