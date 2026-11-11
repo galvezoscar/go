@@ -89,7 +89,7 @@
 (function(){
     'use strict';
     
-    // Lista de tus páginas de años
+    // Lista exacta con tus nombres de archivos (desde 2026 hasta 2019)
     const paginasAnios = [
         'buscador (2026).html',
         'buscador (2025).html',
@@ -98,8 +98,7 @@
         'buscador (2022).html',
         'buscador (2021).html',
         'buscador (2020).html',
-        'buscador (2019).html',
-        
+        'buscador (2019).html'
     ];
 
     let catalogoGlobal = [];
@@ -118,10 +117,8 @@
                 const doc = parser.parseFromString(htmlText, 'text/html');
                 let anioPagina = url.match(/\d{4}/)?.[0] || '';
 
-                // Extraer el texto completo de los scripts de la página donde están las funciones mostrarX()
                 const scriptText = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
                 
-                // Mapear cada función mostrarX() con su URL exacta de OK.ru
                 const mapFunciones = {};
                 const funcMatches = scriptText.matchAll(/function\s+(mostrar\d+)\s*\(\)\s*\{\s*document\.getElementById\(['"]nuevaimg['"]\)\.innerHTML\s*=\s*['"]([^'"]+)['"]/g);
                 for (const match of funcMatches) {
@@ -148,6 +145,171 @@
                         const href = btnRed.getAttribute('href') || '';
                         const matchFn = href.match(/(mostrar\d+)/);
                         if (matchFn && mapFunciones[matchFn[1]]) {
+                            urlVideo = mapFunciones[matchFn[1]];
+                        }
+                    }
+
+                    if (urlVideo) {
+                        catalogoGlobal.push({
+                            nombre: nombre,
+                            descripcion: desc,
+                            genero: generos,
+                            anio: anioEl.trim(),
+                            imagen: imgSrc,
+                            urlVideo: urlVideo
+                        });
+                    }
+                });
+                cargados++;
+            } catch (e) {
+                console.warn('Aviso al cargar:', url);
+            }
+        }
+        status.textContent = `¡Buscador maestro listo! (${catalogoGlobal.length} películas indexadas de ${cargados} archivos).`;
+    }
+
+    function initMaster() {
+        const input = document.getElementById('buscadorPeliculas');
+        const go = document.getElementById('btnBuscarGo');
+        const clear = document.getElementById('btnLimpiarBusqueda');
+        const out = document.getElementById('cineResultados');
+        const controls = document.getElementById('buscadorControles');
+        const prev = document.getElementById('btnAnterior');
+        const next = document.getElementById('btnSiguiente');
+        const counter = document.getElementById('contadorResultados');
+        const status = document.getElementById('resultadoBusqueda');
+
+        const normalize = v => String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\.(jpg|jpeg|png|gif|webp)$/i,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+
+        let results = [], page = 0, total = 0;
+
+        function openVideo(item) {
+            const p = document.getElementById('popup-20');
+            const vContainer = document.getElementById('nuevaimg');
+            if (!p || !vContainer) return;
+
+            vContainer.innerHTML = item.urlVideo;
+            p.classList.add('active');
+            
+            const frame = p.querySelector('iframe');
+            if(frame){
+                frame.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+                frame.setAttribute('allowfullscreen','');
+            }
+            try {
+                if(p.requestFullscreen && !document.fullscreenElement){
+                    p.requestFullscreen().catch(()=>{});
+                }
+            } catch(_){}
+        }
+
+        function cerrarPopup(){
+            const p = document.getElementById('popup-20'), v = document.getElementById('nuevaimg');
+            if(v) v.innerHTML = '';
+            if(p) p.classList.remove('active');
+            if(document.fullscreenElement && document.exitFullscreen){
+                try{document.exitFullscreen().catch(()=>{});}catch(_){}
+            }
+        }
+
+        document.getElementById('cerrarVideo').addEventListener('click', e => { e.preventDefault(); cerrarPopup(); });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrarPopup(); });
+
+        function updateControls() {
+            controls.style.display = total > 1 ? 'flex' : 'none';
+            counter.textContent = total ? (page + 1) + ' / ' + total : '0 / 0';
+            prev.disabled = page <= 0;
+            next.disabled = page >= total - 1;
+        }
+
+        function render() {
+            out.innerHTML = '';
+            total = Math.ceil(results.length / 7);
+            
+            if (!input.value.trim()) {
+                controls.style.display = 'none';
+                status.textContent = `Catálogo listo (${catalogoGlobal.length} películas). Escribí para buscar.`;
+                return;
+            }
+            
+            if (!results.length) {
+                out.innerHTML = '<div class="cine-vacio"><strong>No se encontraron carteles</strong>Probá con otro nombre, género o año.</div>';
+                status.textContent = '0 resultados';
+                updateControls();
+                return;
+            }
+            
+            const start = page * 7;
+            results.slice(start, start + 7).forEach(item => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'cine-tarjeta';
+                card.setAttribute('aria-label', 'Abrir video: ' + item.nombre);
+                
+                const im = document.createElement('img');
+                im.src = item.imagen;
+                im.alt = '';
+                im.loading = 'lazy';
+                im.addEventListener('error', () => card.remove(), {once: true});
+                
+                const layer = document.createElement('span');
+                layer.className = 'cine-capa';
+                
+                const badgeAnio = document.createElement('span');
+                badgeAnio.className = 'cine-anio-badge';
+                badgeAnio.textContent = item.anio;
+                
+                const badgeGo = document.createElement('span');
+                badgeGo.className = 'cine-go';
+                badgeGo.textContent = 'GO';
+                
+                layer.append(badgeAnio, badgeGo);
+                card.append(im, layer);
+                
+                card.addEventListener('click', () => openVideo(item));
+                out.appendChild(card);
+            });
+            
+            status.textContent = results.length + ' resultado' + (results.length === 1 ? '' : 's');
+            updateControls();
+        }
+
+        function search() {
+            const q = normalize(input.value);
+            page = 0;
+            if (!q) {
+                results = [];
+                render();
+                return;
+            }
+            const terms = q.split(' ');
+            results = catalogoGlobal.filter(item => {
+                const searchableText = normalize(`${item.nombre} `${item.descripcion} `${item.genero} `${item.anio}`);
+                return terms.every(t => searchableText.includes(t));
+            });
+            render();
+        }
+
+        prev.addEventListener('click', () => { if (page > 0) { page--; render(); } });
+        next.addEventListener('click', () => { if (page < total - 1) { page++; render(); } });
+        input.addEventListener('input', search);
+        input.addEventListener('search', search);
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); if (results.length === 1) openVideo(results[0]); }
+            if (e.key === 'Escape') { input.value = ''; search(); }
+        });
+        go.addEventListener('click', () => { if (results.length === 1) openVideo(results[0]); });
+        clear.addEventListener('click', () => { input.value = ''; search(); input.focus(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await cargarCatalogoGlobal();
+        initMaster();
+    });
+})();
+</script>
+</body>
+</html>matchFn && mapFunciones[matchFn[1]]) {
                             urlVideo = mapFunciones[matchFn[1]];
                         }
                     }
