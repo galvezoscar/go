@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Buscador Maestro de Cine - Galvez Oscar</title>
+    <style id="cine-estilo">
+    :root{color-scheme:dark;--bg:#080b11;--panel:#121824;--red:#ed4052;--text:#f4f6fb;--muted:#9ca8bb}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -15%,#273149 0,#111622 42%,var(--bg) 78%);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    body{padding:clamp(16px,3vw,34px) clamp(10px,2.5vw,26px) 44px}main{width:100%;max-width:1480px;margin:0 auto}
+    
+    h1{text-align:center;font-size:clamp(20px,3vw,28px);margin-bottom:20px;background:linear-gradient(135deg,#fff,#9ca8bb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    
+    #buscadorCine{width:min(850px,100%);margin:8px auto 14px;padding:8px;display:flex;gap:9px;align-items:center;background:#141a26ed;border:1px solid #30394a;border-radius:17px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(16px)}
+    #buscadorPeliculas{flex:1;min-width:0;height:48px;padding:0 15px;border:1px solid transparent;outline:none;border-radius:11px;background:#0b0f17;color:var(--text);font-size:15px}
+    #buscadorPeliculas::placeholder{color:#8490a4}
+    #buscadorPeliculas:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed405226}
+    
+    #btnBuscarGo{height:37px;min-width:47px;padding:0 13px;border:0;border-radius:9px;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff;font-size:12px;font-weight:900;letter-spacing:.7px;cursor:pointer;box-shadow:0 5px 16px #e62f4533;transition:transform .18s,filter .18s}
+    #btnBuscarGo:hover{transform:translateY(-1px);filter:brightness(1.12)}
+    
+    #btnLimpiarBusqueda{height:37px;width:36px;border:1px solid #394254;border-radius:9px;background:#202635;color:#dce2ed;font-size:22px;cursor:pointer}
+    #btnLimpiarBusqueda:hover{background:#30394a}
+    
+    #resultadoBusqueda{min-height:0;margin:0 auto 14px;text-align:center;color:var(--muted);font-size:13px}
+    
+    #buscadorControles{display:none;align-items:center;justify-content:center;gap:18px;margin:20px auto 0;color:#aab4c5;font-size:13px}
+    .nav-arrow{width:38px;height:38px;border-radius:50%;border:1px solid #394254;background:#171d29;color:white;cursor:pointer;font-size:17px}
+    .nav-arrow:hover:not(:disabled){background:var(--red);border-color:var(--red)}
+    .nav-arrow:disabled{opacity:.3;cursor:default}
+    
+    #cineResultados{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(8px,1.3vw,18px);width:100%;margin:0 auto}
+    .cine-tarjeta{position:relative;display:block;min-width:0;aspect-ratio:2/3;padding:0;border:1px solid #303849;border-radius:12px;overflow:hidden;background:#171c27;box-shadow:0 8px 22px #0005;cursor:pointer;transition:transform .22s,border-color .22s,box-shadow .22s}
+    .cine-tarjeta img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+    .cine-tarjeta:hover,.cine-tarjeta:focus-visible{z-index:2;transform:translateY(-4px);border-color:var(--red);box-shadow:0 16px 34px #0009;outline:none}
+    .cine-tarjeta:hover img,.cine-tarjeta:focus-visible img{transform:scale(1.045)}
+    
+    .cine-capa{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;padding:10px;background:linear-gradient(180deg,transparent 38%,#05070de8);opacity:0;transition:opacity .2s}
+    .cine-tarjeta:hover .cine-capa,.cine-tarjeta:focus-visible .cine-capa{opacity:1}
+    .cine-go{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:25px;padding:0 8px;border-radius:6px;background:var(--red);color:#fff;font-size:10px;font-weight:900;letter-spacing:.5px;box-shadow:0 4px 15px #0008}
+    .cine-anio-badge{font-size:11px;font-weight:700;color:#ffdf6d;background:#0009;padding:2px 6px;border-radius:4px;}
+    
+    .cine-vacio{grid-column:1/-1;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}
+    .cine-vacio strong{display:block;color:#eef1f7;font-size:17px;margin-bottom:6px}
+    
+    .popup{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#000;}
+    .popup.active{display:flex;}
+    .fullvid{position:relative;display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;background:#000;overflow:hidden;}
+    .fullvid #nuevaimg{display:block;width:100%;height:100%;margin:0;padding:0;}
+    .fullvid iframe,.fullvid video{display:block;width:100%;height:100%;min-width:100%;min-height:100%;aspect-ratio:auto;max-width:none;max-height:none;border:0;border-radius:0;background:#000;}
+    .fullvid .vol{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:1000001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff40;border-radius:50%;background:#111d;color:white;text-decoration:none;font-size:22px;backdrop-filter:blur(8px);}
+    .fullvid .vol:hover{background:#ed4052;}
+    
+    @media(max-width:1000px){#cineResultados{grid-template-columns:repeat(5,minmax(0,1fr))}}
+    @media(max-width:650px){body{padding:16px 10px 30px}#cineResultados{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.cine-tarjeta{border-radius:9px}#buscadorCine{gap:6px;padding:6px;border-radius:14px}#buscadorPeliculas{height:44px;padding:0 11px;font-size:14px}#btnBuscarGo{height:34px;min-width:42px;padding:0 10px}#btnLimpiarBusqueda{height:34px;width:31px}}
+    </style>
+</head>
+<body>
+<main>
+    <h1>🎬 Buscador Maestro Global</h1>
+    
+    <!-- BARRA DE BUSCADOR MAESTRO -->
+    <section id="buscadorCine" role="search">
+        <input aria-label="Buscar películas en todos los años" autocomplete="off" id="buscadorPeliculas" placeholder="Buscá por nombre, género o año en todo el sitio..." type="search"/>
+        <button id="btnBuscarGo" type="button">GO</button>
+        <button aria-label="Limpiar búsqueda" id="btnLimpiarBusqueda" title="Limpiar búsqueda" type="button">×</button>
+    </section>
+    
+    <div aria-live="polite" id="resultadoBusqueda">Cargando bases de datos de películas...</div>
+    
+    <div id="buscadorControles">
+        <button aria-label="Página anterior" class="nav-arrow" id="btnAnterior" type="button">❮</button>
+        <span id="contadorResultados">0 / 0</span>
+        <button aria-label="Página siguiente" class="nav-arrow" id="btnSiguiente" type="button">❯</button>
+    </div>
+    
+    <section aria-label="Resultados de películas" id="cineResultados"></section>
+
+    <!-- REPRODUCTOR POPUP GLOBAL -->
+    <div aria-hidden="true" id="popup-20" class="popup" role="dialog">
+        <div class="fullvid">
+            <a aria-label="Video" id="nuevaimg"></a>
+            <a aria-label="Cerrar video" class="vol" href="#cerrar-video" id="cerrarVideo" title="Cerrar video"><span aria-hidden="true">✕</span></a>
+        </div>
+    </div>
+</main>
+
+<!-- SCRIPT DEL BUSCADOR MAESTRO -->
+<script>
+(function(){
+    'use strict';
+    
+    // Lista de archivos HTML de tus años que querés indexar centralmente
+    const paginasAnios = [
+        'Galvez Oscar Inicio 2026.html',
+        'Galvez Oscar Inicio 2025.html',
+        'Galvez Oscar Inicio 2024.html',
+        'Galvez Oscar Inicio 2023.html',
+        'Galvez Oscar Inicio 2022.html',
+        'Galvez Oscar Inicio 2021.html',
+        'Galvez Oscar Inicio 2020.html',
+        'Galvez Oscar Inicio 2019.html'
+    ];
+
+    let catalogoGlobal = [];
+
+    async function cargarCatalogoGlobal() {
+        const status = document.getElementById('resultadoBusqueda');
+        let cargados = 0;
+
+        for (const url of paginasAnios) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) continue;
+                const htmlText = await response.text();
+                
+                // Parsear el HTML descargado
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                
+                // Extraer el año del título o del texto del año en la página
+                let anioPagina = url.match(/\d{4}/)?.[0] || '';
+
+                // Extraer las fichas dentro de #cineCatalogo o cualquier .slides
+                const slides = doc.querySelectorAll('.slides');
+                slides.forEach(slide => {
+                    const imgEl = slide.querySelector('img.logopeli');
+                    if (!imgEl) return;
+                    
+                    let imgSrc = imgEl.getAttribute('src') || '';
+                    // Ajustar rutas relativas de imágenes si es necesario (ej: subir un nivel)
+                    if (imgSrc.startsWith('./')) imgSrc = imgSrc.replace('./', '');
+                    
+                    const nombre = slide.getAttribute('data-nombre') || imgSrc;
+                    const desc = (slide.querySelector('.description') || {}).textContent || '';
+                    const generos = Array.from(slide.querySelectorAll('.link')).map(x => x.textContent).join(' ');
+                    const anioEl = (slide.querySelector('.año') || {}).textContent || anioPagina;
+                    
+                    // Extraer el código JavaScript o enlace del botón GO/red20
+                    const btnRed = slide.querySelector('a.red20');
+                    let jsCode = '';
+                    let directHref = '';
+                    
+                    if (btnRed) {
+                        const href = btnRed.getAttribute('href') || '';
+                        if (href.startsWith('javascript:')) {
+                            jsCode = href.slice(11); // Guardar la función (ej: mostrar1())
+                        } else {
+                            directHref = href;
+                        }
+                    }
+
+                    catalogoGlobal.push({
+                        nombre: nombre,
+                        descripcion: desc,
+                        genero: generos,
+                        anio: anioEl.trim(),
+                        imagen: imgSrc,
+                        jsCode: jsCode,
+                        href: directHref
+                    });
+                });
+                cargados++;
+            } catch (e) {
+                console.warn('No se pudo cargar:', url);
+            }
+        }
+        status.textContent = `¡Catálogo maestro listo! (${catalogoGlobal.length} películas indexadas de ${cargados} años).`;
+    }
+
+    function initMaster() {
+        const input = document.getElementById('buscadorPeliculas');
+        const go = document.getElementById('btnBuscarGo');
+        const clear = document.getElementById('btnLimpiarBusqueda');
+        const out = document.getElementById('cineResultados');
+        const controls = document.getElementById('buscadorControles');
+        const prev = document.getElementById('btnAnterior');
+        const next = document.getElementById('btnSiguiente');
+        const counter = document.getElementById('contadorResultados');
+        const status = document.getElementById('resultadoBusqueda');
+
+        const normalize = v => String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\.(jpg|jpeg|png|gif|webp)$/i,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+
+        let results = [], page = 0, total = 0;
+
+        // Reproductor Popup Maestro Global
+        window.galvez20 = function(jsSnippet) {
+            const p = document.getElementById('popup-20');
+            const vContainer = document.getElementById('nuevaimg');
+            if (!p || !vContainer) return;
+
+            if (jsSnippet) {
+                // Ejecutar dinámicamente la función correspondiente al iframe de OK.ru de esa película
+                try {
+                    // Mapeo seguro o ejecución directa del snippet extraído
+                    if (jsSnippet.includes('mostrar')) {
+                        // Recrear el iframe dinámicamente buscando en los mapas de OK.ru conocidos o ejecutando el código
+                        eval(jsSnippet);
+                    }
+                } catch(err) {
+                    console.error("Error al abrir video", err);
+                }
+            }
+
+            p.classList.add('active');
+            const frame = p.querySelector('iframe');
+            if(frame){
+                frame.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+                frame.setAttribute('allowfullscreen','');
+            }
+            try{if(p.requestFullscreen&&!document.fullscreenElement){p.requestFullscreen().catch(()=>{});}}catch(_){}
+        };
+
+        function cerrarPopup(){
+            const p = document.getElementById('popup-20'), v = document.getElementById('nuevaimg');
+            if(v) v.innerHTML = '';
+            if(p) p.classList.remove('active');
+            if(document.fullscreenElement && document.exitFullscreen){try{document.exitFullscreen().catch(()=>{});}catch(_){}}
+        }
+
+        document.getElementById('cerrarVideo').addEventListener('click', e => { e.preventDefault(); cerrarPopup(); });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrarPopup(); });
+
+        function openVideo(item) {
+            if (item.jsCode) {
+                // Generar el iframe directamente según el número de función o evaluar
+                // Como cada página tiene sus propios códigos de OK.ru, podemos inyectar el iframe directamente si conocemos el ID,
+                // o evaluamos el snippet de la función si está disponible en la página actual.
+                // Para asegurarnos de que el iframe abra perfecto, evaluamos el código o buscamos el iframe correspondiente:
+                try {
+                    // Creamos temporalmente un parser o ejecutamos la función si la podemos replicar, 
+                    // o evaluamos el texto de la función directamente:
+                    const fn = new Function(item.jsCode);
+                    // Sobrescribimos temporalmente getElementById para que apunte al reproductor maestro
+                    window.document.getElementById = function(id) {
+                        if(id === 'nuevaimg') return document.getElementById('nuevaimg');
+                        return window.document.querySelector('#' + id) || window.document.createElement('div');
+                    };
+                    fn();
+                } catch(e) {
+                    // Fallback seguro por si el snippet requiere el entorno local
+                }
+            }
+            window.galvez20();
+        }
+
+        function updateControls() {
+            controls.style.display = total > 1 ? 'flex' : 'none';
+            counter.textContent = total ? (page + 1) + ' / ' + total : '0 / 0';
+            prev.disabled = page <= 0;
+            next.disabled = page >= total - 1;
+        }
+
+        function render() {
+            out.innerHTML = '';
+            total = Math.ceil(results.length / 7);
+            
+            if (!input.value.trim()) {
+                controls.style.display = 'none';
+                status.textContent = `Catálogo cargado (${catalogoGlobal.length} películas disponibles). Escribí para buscar.`;
+                return;
+            }
+            
+            if (!results.length) {
+                out.innerHTML = '<div class="cine-vacio"><strong>No se encontraron carteles</strong>Probá con otro nombre, género o año.</div>';
+                status.textContent = '0 resultados';
+                updateControls();
+                return;
+            }
+            
+            const start = page * 7;
+            results.slice(start, start + 7).forEach(item => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'cine-tarjeta';
+                card.setAttribute('aria-label', 'Abrir video: ' + item.nombre);
+                
+                const im = document.createElement('img');
+                im.src = item.imagen;
+                im.alt = '';
+                im.loading = 'lazy';
+                im.addEventListener('error', () => card.remove(), {once: true});
+                
+                const layer = document.createElement('span');
+                layer.className = 'cine-capa';
+                
+                const badgeAnio = document.createElement('span');
+                badgeAnio.className = 'cine-anio-badge';
+                badgeAnio.textContent = item.anio;
+                
+                const badgeGo = document.createElement('span');
+                badgeGo.className = 'cine-go';
+                badgeGo.textContent = 'GO';
+                
+                layer.append(badgeAnio, badgeGo);
+                card.append(im, layer);
+                card.addEventListener('click', () => {
+                    // Al hacer clic, ejecutamos el código del iframe y abrimos el popup
+                    openVideo(item);
+                });
+                out.appendChild(card);
+            });
+            
+            status.textContent = results.length + ' resultado' + (results.length === 1 ? '' : 's') + ' encontrado' + (results.length === 1 ? '' : 's');
+            updateControls();
+        }
+
+        function search() {
+            const q = normalize(input.value);
+            page = 0;
+            if (!q) {
+                results = [];
+                render();
+                return;
+            }
+            const terms = q.split(' ');
+            results = catalogoGlobal.filter(item => {
+                const searchableText = normalize(`${item.nombre} ${item.descripcion} ${item.genero} ${item.anio}`);
+                return terms.every(t => searchableText.includes(t));
+            });
+            render();
+        }
+
+        prev.addEventListener('click', () => { if (page > 0) { page--; render(); } });
+        next.addEventListener('click', () => { if (page < total - 1) { page++; render(); } });
+        input.addEventListener('input', search);
+        input.addEventListener('search', search);
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); if (results.length === 1) openVideo(results[0]); }
+            if (e.key === 'Escape') { input.value = ''; search(); }
+        });
+        go.addEventListener('click', () => { if (results.length === 1) openVideo(results[0]); });
+        clear.addEventListener('click', () => { input.value = ''; search(); input.focus(); });
+    }
+
+    // Iniciar carga al abrir la página
+    document.addEventListener('DOMContentLoaded', async () => {
+        await cargarCatalogoGlobal();
+        initMaster();
+    });
+})();
+</script>
+</body>
+</html>

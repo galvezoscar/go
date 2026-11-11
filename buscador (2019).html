@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Galvez Oscar Inicio 2019</title><style id="cine-estilo">
+:root{color-scheme:dark;--bg:#080b11;--panel:#121824;--red:#ed4052;--text:#f4f6fb;--muted:#9ca8bb}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -15%,#273149 0,#111622 42%,var(--bg) 78%);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{padding:clamp(16px,3vw,34px) clamp(10px,2.5vw,26px) 44px}main{width:100%;max-width:1480px;margin:0 auto}
+#buscadorCine{width:min(850px,100%);margin:8px auto 22px;padding:8px;display:flex;gap:9px;align-items:center;background:#141a26ed;border:1px solid #30394a;border-radius:17px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(16px)}
+#buscadorPeliculas{flex:1;min-width:0;height:48px;padding:0 15px;border:1px solid transparent;outline:none;border-radius:11px;background:#0b0f17;color:var(--text);font-size:15px}#buscadorPeliculas::placeholder{color:#8490a4}#buscadorPeliculas:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed405226}
+#btnBuscarGo{height:37px;min-width:47px;padding:0 13px;border:0;border-radius:9px;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff;font-size:12px;font-weight:900;letter-spacing:.7px;cursor:pointer;box-shadow:0 5px 16px #e62f4533;transition:transform .18s,filter .18s}#btnBuscarGo:hover{transform:translateY(-1px);filter:brightness(1.12)}
+#btnLimpiarBusqueda{height:37px;width:36px;border:1px solid #394254;border-radius:9px;background:#202635;color:#dce2ed;font-size:22px;cursor:pointer}#btnLimpiarBusqueda:hover{background:#30394a}
+#resultadoBusqueda{min-height:0;margin:0 auto 14px;text-align:center;color:var(--muted);font-size:13px}
+#buscadorControles{display:none;align-items:center;justify-content:center;gap:18px;margin:20px auto 0;color:#aab4c5;font-size:13px}.nav-arrow{width:38px;height:38px;border-radius:50%;border:1px solid #394254;background:#171d29;color:white;cursor:pointer;font-size:17px}.nav-arrow:hover:not(:disabled){background:var(--red);border-color:var(--red)}.nav-arrow:disabled{opacity:.3;cursor:default}
+#cineResultados{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(8px,1.3vw,18px);width:100%;margin:0 auto}
+.cine-tarjeta{position:relative;display:block;min-width:0;aspect-ratio:2/3;padding:0;border:1px solid #303849;border-radius:12px;overflow:hidden;background:#171c27;box-shadow:0 8px 22px #0005;cursor:pointer;transition:transform .22s,border-color .22s,box-shadow .22s}.cine-tarjeta img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}.cine-tarjeta:hover,.cine-tarjeta:focus-visible{z-index:2;transform:translateY(-4px);border-color:var(--red);box-shadow:0 16px 34px #0009;outline:none}.cine-tarjeta:hover img,.cine-tarjeta:focus-visible img{transform:scale(1.045)}
+.cine-capa{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding:12px;background:linear-gradient(180deg,transparent 38%,#05070de8);opacity:0;transition:opacity .2s}.cine-tarjeta:hover .cine-capa,.cine-tarjeta:focus-visible .cine-capa{opacity:1}.cine-go{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:27px;padding:0 10px;border-radius:7px;background:var(--red);color:#fff;font-size:11px;font-weight:900;letter-spacing:.5px;box-shadow:0 4px 15px #0008}
+.cine-vacio{grid-column:1/-1;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}.cine-vacio strong{display:block;color:#eef1f7;font-size:17px;margin-bottom:6px}
+#cineCatalogo{display:none!important}
+.popup{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#000;}
+.popup.active{display:flex;}
+.fullvid{position:relative;display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;background:#000;overflow:hidden;}
+.fullvid #nuevaimg{display:block;width:100%;height:100%;margin:0;padding:0;}
+.fullvid iframe,.fullvid video{display:block;width:100%;height:100%;min-width:100%;min-height:100%;aspect-ratio:auto;max-width:none;max-height:none;border:0;border-radius:0;background:#000;}
+.fullvid .vol{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:1000001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff40;border-radius:50%;background:#111d;color:white;text-decoration:none;font-size:22px;backdrop-filter:blur(8px);}
+.fullvid .vol:hover{background:#ed4052;}
+@media(max-width:1000px){#cineResultados{grid-template-columns:repeat(5,minmax(0,1fr))}}@media(max-width:650px){body{padding:16px 10px 30px}#cineResultados{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.cine-tarjeta{border-radius:9px}#buscadorCine{gap:6px;padding:6px;border-radius:14px}#buscadorPeliculas{height:44px;padding:0 11px;font-size:14px}#btnBuscarGo{height:34px;min-width:42px;padding:0 10px}#btnLimpiarBusqueda{height:34px;width:31px}}
+</style></head>
+<body>
+<main>
+    <!-- BARRA DE BUSCADOR -->
+    <section id="buscadorCine" role="search">
+        <input aria-label="Buscar películas" autocomplete="off" id="buscadorPeliculas" placeholder="Buscar película por nombre, género o año..." type="search"/>
+        <button id="btnBuscarGo" type="button">GO</button>
+        <button aria-label="Limpiar búsqueda" id="btnLimpiarBusqueda" title="Limpiar búsqueda" type="button">×</button>
+    </section>
+    <div aria-live="polite" id="resultadoBusqueda"></div>
+    <div id="buscadorControles">
+        <button aria-label="Página anterior" class="nav-arrow" id="btnAnterior" type="button">❮</button>
+        <span id="contadorResultados">0 / 0</span>
+        <button aria-label="Página siguiente" class="nav-arrow" id="btnSiguiente" type="button">❯</button>
+    </div>
+    <section aria-label="Resultados de películas" id="cineResultados"></section>
+
+    <!-- CATÁLOGO DE PELÍCULAS 2019 (OCULTO PARA QUE EL BUSCADOR LAS LEA) -->
+    <div aria-hidden="true" id="cineCatalogo">
+        <div class="slides" data-buscable="si" data-nombre="Abigail y la ciudad perdida 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Abigail y la ciudad perdida.gif"/>
+                <div class="genero"><a class="link">Aventuras</a><a class="link">C Ficcion</a><a class="link">Fantasia</a></div>
+                <p class="description">Katie regresa a la casa adoptiva en la que creció, un lugar donde su madre adoptiva guarda un oscuro secreto.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar1()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Adios sistema solar The Wandering Earth 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Adios sistema solar.gif"/>
+                <div class="genero"><a class="link">C Ficcion</a><a class="link">Accion</a><a class="link">Drama</a></div>
+                <p class="description">Liu Qi y Han Duoduo escapan a la superficie, pero los problemas con Júpiter y los terremotos comienzan mientras están fuera.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar2()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Spider Man Lejos de Casa 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019)  Spider Man  Lejos de Casa.GIF"/>
+                <div class="genero"><a class="link">Accion</a><a class="link">C Ficcion</a><a class="link">Fantasia</a></div>
+                <p class="description">Peter Parker sale de viaje por Europa con sus amigos, pero las vacaciones dan un giro inesperado cuando aparece Nick Furia.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar3()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Terror a 47 Metros 2 El Segundo Ataque 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Terror a 47 Metros 2 El Segundo Ataque.gif"/>
+                <div class="genero"><a class="link">Terror</a><a class="link">Aventura</a></div>
+                <p class="description">Mientras bucean, cuatro adolescentes encuentran ruinas mayas donde se oculta un banco de voraces tiburones blancos.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar4()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Campamento alienigena 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Campamento alienígena (2020).gif"/>
+                <div class="genero"><a class="link">Aventura</a><a class="link">C Ficcion</a></div>
+                <p class="description">Cuatro adolescentes se convierten en aliados cuando una raza alienígena invade su campamento de verano.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar5()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Dora y la ciudad perdida 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/2019 Dora y la ciudad perdida.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Aventura</a></div>
+                <p class="description">Dora y su amigo el mono Botas viven una aventura para salvar a sus padres y desentrañar el misterio de una ciudad inca.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar6()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Dumbo 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Dumbo.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Aventura</a></div>
+                <p class="description">El dueño de un circo recluta a una exestrella y a sus hijos para cuidar a un elefante recién nacido con orejas muy grandes.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar7()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="El niño que pudo ser rey 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) El niño que pudo ser rey.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Aventura</a></div>
+                <p class="description">Alex, un chico de 12 años, encuentra la espada Excalibur y debe evitar que la hechicera Morgana destruya el mundo.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar8()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="El rey leon 2019">
+            <section class="content">
+                <img class="logopeli" src="Galvez Oscar video_files/(2019) el rey leon.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Aventura</a></div>
+                <p class="description">Tras el asesinato de su padre, Simba es apartado de su reino y debe descubrir el significado de la valentía para regresar.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar9()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="El caballero de las sombras 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) El caballero de las sombras.gif"/>
+                <div class="genero"><a class="link">Accion</a><a class="link">Fantasia</a></div>
+                <p class="description">Para resolver la desaparición de las jóvenes del pueblo, el detective Fei se une al cazador de demonios Pu Songling.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar10()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Hacker 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Hacker.gif"/>
+                <div class="genero"><a class="link">Suspenso</a><a class="link">Accion</a></div>
+                <p class="description">Benjamin descubre que su madre no murió en un accidente y sus pistas lo conducen a funcionarios del Servicio Secreto.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar11()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Hombres de negro 4 International 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) hombres de negro 4.gif"/>
+                <div class="genero"><a class="link">Accion</a><a class="link">C Ficcion</a></div>
+                <p class="description">Los Hombres de Negro deben descubrir un topo dentro de la organización mientras luchan contra alienígenas camuflados.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar12()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Jumanji El siguiente nivel 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Jumanji El siguiente nivel.gif"/>
+                <div class="genero"><a class="link">Humor</a><a class="link">Accion</a></div>
+                <p class="description">Los jugadores vuelven a Jumanji pero sus personajes se han intercambiado entre sí con una apariencia diferente.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar13()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="La Dama y El Vagabundo 2019">
+            <section class="content">
+                <img class="logopeli" src="Galvez Oscar video_files/(2019) La Dama y El Vagabundo.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Romantica</a></div>
+                <p class="description">Reina es una perrita mimada que, tras la llegada de un bebé, encuentra en el perro callejero Golfo a su compañero ideal.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar14()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="2 Minutes of Fame 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/2 Minutes of Fame (2020).gif"/>
+                <div class="genero"><a class="link">Humor</a><a class="link">Stand Up</a></div>
+                <p class="description">La sensación de las redes sociales Jay Pharoah viaja a Los Ángeles con el sueño de convertirse en una estrella del monólogo.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar15()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Los calienta bancas 2 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/los calienta bancas 2..gif"/>
+                <div class="genero"><a class="link">Humor</a><a class="link">Deporte</a></div>
+                <p class="description">Ben McGrath recibe una segunda oportunidad entrenando a un equipo de sóftbol tras un accidente que arruinó su carrera.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar16()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Reinicio de jay y bob el silencio 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Reinicio de jay y bob el silencio (2019).gif"/>
+                <div class="genero"><a class="link">Humor</a><a class="link">Satira</a></div>
+                <p class="description">Dos gamberros y desastrosos fumetas se convierten en víctimas de un maléfico plan diseñado por una productora.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar17()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Pinocho 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Pinocho (2019).gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Fantasia</a></div>
+                <p class="description">Adaptación del clásico cuento de la marioneta creada por el viejo carpintero Gepeto que mágicamente cobra vida.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar18()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Peleando en familia 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Peleando en familia.gif"/>
+                <div class="genero"><a class="link">Deportes</a><a class="link">Humor</a></div>
+                <p class="description">Paige, de una familia de luchadores ingleses, recibe la oportunidad de formar parte de la WWE.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar19()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Rambo 5 La Ultima Mision 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Rambo 5 La Última Misión (2019).gif"/>
+                <div class="genero"><a class="link">Accion</a><a class="link">Suspenso</a></div>
+                <p class="description">John Rambo va en búsqueda de su nieta tras enterarse de que ha desaparecido tras cruzar la frontera a México.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar20()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Robo 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Robo.gif"/>
+                <div class="genero"><a class="link">Infantil</a><a class="link">Aventura</a></div>
+                <p class="description">Mitya, un niño de 12 años que sueña con ilustrar cómics, encuentra apoyo en un robot con el que vive grandes aventuras.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar21()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Jojo Rabbit 2019">
+            <section class="content">
+                <img class="logopeli" src="Galvez Oscar video_files/jojo rabbit.gif"/>
+                <div class="genero"><a class="link">Humor</a><a class="link">Belico</a></div>
+                <p class="description">Durante la Segunda Guerra Mundial, un niño de las Juventudes Hitlerianas descubre que su madre oculta a una niña judía.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar22()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Mowgli La leyenda de la selva 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/Mowgli La leyenda de la selva (2020).gif"/>
+                <div class="genero"><a class="link">Aventura</a><a class="link">Drama</a></div>
+                <p class="description">La historia de Mowgli criado por una manada de lobos en la selva, debiendo enfrentarse a sus orígenes humanos.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar23()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+        <div class="slides" data-buscable="si" data-nombre="Alita Battle Angel 2019">
+            <section class="content">
+                <img class="logopeli" src="./Galvez Oscar video_files/(2019) Alita- Battle Angel.gif"/>
+                <div class="genero"><a class="link">Accion</a><a class="link">C Ficcion</a></div>
+                <p class="description">En el 2563, un doctor encuentra entre la chatarra la cabeza de una ciborg cuyo cerebro humano está milagrosamente intacto.</p>
+                <p class="año">2019</p>
+                <div class="meta"><a class="red20" href="javascript: mostrar24()"><button class="go" onclick="galvez20()">go</button></a></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR POPUP -->
+    <div aria-hidden="true" id="popup-20" class="popup" role="dialog">
+        <div class="fullvid">
+            <a aria-label="Video" id="nuevaimg"></a>
+            <a aria-label="Cerrar video" class="vol" href="#cerrar-video" id="cerrarVideo" title="Cerrar video"><span aria-hidden="true">✕</span></a>
+        </div>
+    </div>
+</main>
+
+<!-- FUNCIONES DE REPRODUCCIÓN -->
+<script id="funciones-video">
+function mostrar1(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar2(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/13395616664275?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar3(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/15194470287904?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar4(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/14465300957757?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar5(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12403845958310?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar6(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/1141577774139?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar7(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11095427844670?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar8(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12505176541874?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar9(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12116015778482?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar10(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/14749531310788?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar11(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12477843180094?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar12(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12009166408403?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar13(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12096101812749?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar14(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11647613471361?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar15(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11928424876554?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar16(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/7149895551550?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar17(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12052560349761?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar18(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/10821435918977?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar19(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/10999988554367?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar20(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/11421088746045?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar21(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/13395616664275?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar22(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/15194470287904?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar23(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/14465300957757?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+function mostrar24(){ document.getElementById('nuevaimg').innerHTML = '<IFRAME src="https://ok.ru/videoembed/12403845958310?autoplay=1&loop=1" allow="autoplay"></IFRAME>'; }
+</script>
+
+<script id="control-video">
+(function(){
+ function cerrar(){var p=document.getElementById('popup-20'),v=document.getElementById('nuevaimg');if(v)v.innerHTML='';if(p)p.classList.remove('active');if(document.fullscreenElement&&document.exitFullscreen){try{document.exitFullscreen().catch(function(){});}catch(_){} }}
+ window.galvez20=function(){var p=document.getElementById('popup-20');if(!p)return;p.classList.add('active');var frame=p.querySelector('iframe');if(frame){frame.setAttribute('allow','autoplay; fullscreen; picture-in-picture');frame.setAttribute('allowfullscreen','');frame.setAttribute('title','Reproductor de video');}try{if(p.requestFullscreen&&!document.fullscreenElement){var r=p.requestFullscreen();if(r&&r.catch)r.catch(function(){});}}catch(_){} };
+ document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('cerrarVideo');if(b)b.addEventListener('click',function(e){e.preventDefault();cerrar();});document.addEventListener('keydown',function(e){if(e.key==='Escape')cerrar();});});
+})();
+</script>
+
+<!-- MOTOR DEL BUSCADOR -->
+<script id="buscador-dinamico">
+(function(){'use strict';
+function init(){
+ const input=document.getElementById('buscadorPeliculas'),go=document.getElementById('btnBuscarGo'),clear=document.getElementById('btnLimpiarBusqueda');
+ const out=document.getElementById('cineResultados'),controls=document.getElementById('buscadorControles'),prev=document.getElementById('btnAnterior'),next=document.getElementById('btnSiguiente'),counter=document.getElementById('contadorResultados'),status=document.getElementById('resultadoBusqueda');
+ const normalize=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\.(jpg|jpeg|png|gif|webp)$/i,'').replace(/\b(19|20)\d{2}\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+ const fichas=Array.from(document.querySelectorAll('#cineCatalogo .slides[data-buscable="si"]'));
+ const title=f=>f.getAttribute('data-nombre')||((f.querySelector('img.logopeli')||{}).getAttribute?.('src')||'');
+ const textOf=f=>normalize([f.getAttribute('data-nombre'),(f.querySelector('.description')||{}).textContent,Array.from(f.querySelectorAll('.link')).map(x=>x.textContent).join(' '),(f.querySelector('.año')||{}).textContent,title(f)].join(' '));
+ const posterOf=f=>{const im=f.querySelector('img.logopeli');return im?im.getAttribute('src'):'';};
+ let results=[],page=0,total=0,touchStart=null;
+ function openVideo(f){const a=f.querySelector('a.red20');if(!a)return;const href=a.getAttribute('href')||'';if(href.startsWith('javascript:')){try{(new Function(href.slice(11)))();}catch(e){a.click();}}else a.click();if(typeof window.galvez20==='function')window.galvez20();}
+ function updateControls(){controls.style.display=total>1?'flex':'none';counter.textContent=total?(page+1)+' / '+total:'0 / 0';prev.disabled=page<=0;next.disabled=page>=total-1;}
+ function render(){out.innerHTML='';total=Math.ceil(results.length/7);if(!input.value.trim()){controls.style.display='none';status.textContent='';return;}
+  if(!results.length){out.innerHTML='<div class="cine-vacio"><strong>No se encontraron carteles</strong>Probá con otro nombre, género o año.</div>';status.textContent='';updateControls();return;}
+  const start=page*7;results.slice(start,start+7).forEach(f=>{const src=posterOf(f);if(!src)return;const card=document.createElement('button');card.type='button';card.className='cine-tarjeta';card.setAttribute('aria-label','Abrir video: '+title(f));const im=document.createElement('img');im.src=src;im.alt='';im.loading='lazy';im.decoding='async';im.addEventListener('error',()=>card.remove(),{once:true});const layer=document.createElement('span');layer.className='cine-capa';const badge=document.createElement('span');badge.className='cine-go';badge.textContent='GO';layer.appendChild(badge);card.append(im,layer);card.addEventListener('click',()=>openVideo(f));out.appendChild(card);});
+  status.textContent=results.length+' resultado'+(results.length===1?'':'s');updateControls();}
+ function search(){const q=normalize(input.value);page=0;if(!q){results=[];out.innerHTML='';status.textContent='';controls.style.display='none';counter.textContent='0 / 0';return;}const terms=q.split(' ');results=fichas.filter(f=>terms.every(t=>textOf(f).includes(t))&&!!posterOf(f));render();}
+ function runGo(){search();if(!results.length)return;const q=normalize(input.value);const exact=results.find(f=>normalize(title(f))===q||normalize(f.getAttribute('data-nombre'))===q);if(exact)openVideo(exact);else if(results.length===1)openVideo(results[0]);else{const first=out.querySelector('.cine-tarjeta');if(first)first.focus();}}
+ prev.addEventListener('click',()=>{if(page>0){page--;render();}});next.addEventListener('click',()=>{if(page<total-1){page++;render();}});input.addEventListener('input',search);input.addEventListener('search',search);input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();runGo();}if(e.key==='Escape'){input.value='';search();}});go.addEventListener('click',runGo);clear.addEventListener('click',()=>{input.value='';search();input.focus();});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
+</body>
+</html>
