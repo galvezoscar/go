@@ -118,9 +118,12 @@
                 const doc = parser.parseFromString(htmlText, 'text/html');
                 let anioPagina = url.match(/\d{4}/)?.[0] || '';
 
-                // Extraer script original y mapear la URL directa del video de OK.ru de cada función mostrarX()
+                // Extraer el bloque de scripts completo de la página de año
                 const scriptText = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
+                
+                // Mapear cada función mostrarX() extrayendo la URL completa o el código iframe exacto
                 const mapFunciones = {};
+                // Buscamos tanto si asigna un iframe entero como si asigna una URL de ok.ru/videoembed/...
                 const funcMatches = scriptText.matchAll(/function\s+(mostrar\d+)\s*\(\)\s*\{\s*document\.getElementById\(['"]nuevaimg['"]\)\.innerHTML\s*=\s*['"]([^'"]+)['"]/g);
                 for (const match of funcMatches) {
                     mapFunciones[match[1]] = match[2];
@@ -151,6 +154,11 @@
                     }
 
                     if (urlVideo) {
+                        // Si por alguna razón extrajo solo la URL en lugar del iframe completo, la envolvemos bien
+                        if (!urlVideo.includes('<iframe')) {
+                            urlVideo = `<iframe src="${urlVideo}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+                        }
+
                         catalogoGlobal.push({
                             nombre: nombre,
                             descripcion: desc,
