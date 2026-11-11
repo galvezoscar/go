@@ -31,7 +31,7 @@
     .cine-vacio{grid-column:1/-1;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}
     .cine-vacio strong{display:block;color:#eef1f7;font-size:17px;margin-bottom:6px}
 
-    /* Reproductor inmersivo original */
+    /* Reproductor inmersivo */
     .popup{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#000;}
     .popup.active{display:flex;}
     .fullvid{position:relative;display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;background:#000;overflow:hidden;isolation:isolate;}
@@ -40,7 +40,7 @@
     .fullvid .vol{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:1000001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid #ffffff40;border-radius:50%;background:#111d;color:white;text-decoration:none;font-size:22px;backdrop-filter:blur(8px);cursor:pointer;}
     .fullvid .vol:hover{background:#ed4052;}
     
-    /* Panel de información estilo Netflix idéntico al de tus páginas */
+    /* Panel de información estilo Netflix */
     .galvez-info-hotspot-2026{position:absolute;z-index:2147483002;top:14px;left:14px;display:flex;align-items:center;gap:8px;padding:11px 15px;border:1px solid rgba(255,255,255,.28);border-radius:5px;background:rgba(18,18,18,.88);color:#fff;font:700 14px/1.2 Arial,sans-serif;box-shadow:0 3px 16px #0009;opacity:.72;transition:opacity .2s ease,background .2s ease,transform .2s ease;cursor:default;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
     .galvez-info-hotspot-2026 span:first-child{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border:1px solid #fff;border-radius:50%;font-size:15px;}
     .galvez-info-hotspot-2026:hover,.galvez-info-hotspot-2026:focus-visible,.galvez-info-hotspot-2026.touch-active{background:#e50914;opacity:1;outline:2px solid rgba(255,255,255,.85);outline-offset:2px;transform:scale(1.03);}
@@ -78,7 +78,7 @@
     
     <section aria-label="Resultados de películas" id="cineResultados"></section>
 
-    <!-- REPRODUCTOR POPUP GLOBAL CON PANEL DE INFO Y BOTÓN DE CIERRE -->
+    <!-- REPRODUCTOR POPUP GLOBAL -->
     <div aria-hidden="true" id="popup-20" class="popup" role="dialog">
         <div class="fullvid">
             <a aria-label="Video" id="nuevaimg"></a>
@@ -91,7 +91,6 @@
 (function(){
     'use strict';
     
-    // Lista de tus archivos de años a escanear
     const paginasAnios = [
         'buscador (2026).html',
         'buscador (2025).html',
@@ -119,7 +118,7 @@
                 const doc = parser.parseFromString(htmlText, 'text/html');
                 let anioPagina = url.match(/\d{4}/)?.[0] || '';
 
-                // Extraer script de funciones de video de cada archivo original
+                // Extraer script original y mapear la URL directa del video de OK.ru de cada función mostrarX()
                 const scriptText = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
                 const mapFunciones = {};
                 const funcMatches = scriptText.matchAll(/function\s+(mostrar\d+)\s*\(\)\s*\{\s*document\.getElementById\(['"]nuevaimg['"]\)\.innerHTML\s*=\s*['"]([^'"]+)['"]/g);
@@ -185,7 +184,7 @@
 
         let results = [], page = 0, total = 0;
 
-        // Lógica de control de video idéntica a tus páginas originales
+        // Función de cierre idéntica a tus páginas originales
         function cerrar(){
             var p = document.getElementById('popup-20'), v = document.getElementById('nuevaimg');
             if(v) v.innerHTML = '';
@@ -214,33 +213,33 @@
         };
 
         function mostrarPelicula(item) {
-            document.getElementById('nuevaimg').innerHTML = item.urlVideo;
+            // Reconstruimos el iframe limpio y aseguramos el formato exacto para que cargue siempre
+            let embedString = item.urlVideo;
+            if (!embedString.includes('<iframe')) {
+                embedString = `<iframe src="${item.urlVideo}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            } else if (!embedString.includes('allow=')) {
+                embedString = embedString.replace('<iframe', '<iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen');
+            }
+            
+            document.getElementById('nuevaimg').innerHTML = embedString;
+            
             if (typeof window.galvezInfoSetMovie === 'function') {
                 window.galvezInfoSetMovie({
-                    getAttribute: (attr) => attr === 'data-nombre' ? item.nombre : null,
-                    querySelector: (sel) => {
-                        if (sel.includes('description')) return { textContent: item.descripcion };
-                        if (sel.includes('año') || sel.includes('ano')) return { textContent: item.anio };
-                        if (sel.includes('genero')) return { textContent: item.genero };
-                        if (sel.includes('logopeli')) return { getAttribute: () => item.imagen };
-                        return null;
-                    },
-                    closest: () => null
+                    titulo: item.nombre,
+                    descripcion: item.descripcion,
+                    anio: item.anio,
+                    genero: item.genero
                 });
             }
             window.galvez20();
         }
 
-        document.addEventListener('DOMContentLoaded', function(){
-            var b = document.getElementById('cerrarVideo');
-            if(b) b.addEventListener('click', function(e){ e.preventDefault(); cerrar(); });
-            document.addEventListener('keydown', function(e){ if(e.key === 'Escape') cerrar(); });
-        });
-
+        // Evento para el botón de cerrar
         const btnCerrarGlobal = document.getElementById('cerrarVideo');
         if(btnCerrarGlobal){
             btnCerrarGlobal.onclick = function(e){ e.preventDefault(); cerrar(); };
         }
+        document.addEventListener('keydown', function(e){ if(e.key === 'Escape') cerrar(); });
 
         function updateControls() {
             controls.style.display = total > 1 ? 'flex' : 'none';
@@ -336,10 +335,95 @@
 })();
 </script>
 
-<!-- Script del panel de información estilo Netflix idéntico al de tus páginas -->
+<!-- Script del panel de información estilo Netflix -->
 <script id="galvez-info-2026-script">
 (function(){
   'use strict';
   var peliculaActual = null;
   function texto(el){ return el ? (el.textContent || '').replace(/\s+/g,' ').trim() : ''; }
-  function normalizarGeneros(valor){ return (valor || '').replace(/C\s*ficcion/ig,'Ciencia ficción').replace(/C\s*ficción/ig,'Ciencia ficción').replace(/Romantica/ig,'Romántica').replace(/Accion/ig,'Acción').replace(/Avent
+  function normalizarGeneros(valor){ return (valor || '').replace(/C\s*ficcion/ig,'Ciencia ficción').replace(/C\s*ficción/ig,'Ciencia ficción').replace(/Romantica/ig,'Romántica').replace(/Accion/ig,'Acción').replace(/Aventuras/ig,'Aventura').trim(); }
+  function registrarPeliculaDesde(elemento){
+    if(elemento && elemento.titulo) {
+        peliculaActual = { titulo: elemento.titulo, descripcion: elemento.descripcion, anio: elemento.anio, generos: normalizarGeneros(elemento.genero) };
+    } else {
+        var slide = elemento && elemento.closest ? elemento.closest('.slides[data-nombre]') : null;
+        if(!slide) return;
+        var imagen = slide.querySelector('.logopeli');
+        var titulo = '';
+        if (imagen) {
+          var ruta = imagen.getAttribute('src') || '';
+          ruta = ruta.split('/').pop().split('\\').pop();
+          try { ruta = decodeURIComponent(ruta); } catch(e) {}
+          titulo = ruta.replace(/\.(gif|jpe?g|png|webp)$/i, '').replace(/\s+/g, ' ').trim();
+          titulo = titulo.replace(/\s*\(\d{4}\)\s*$/,'').trim();
+        }
+        peliculaActual = {
+          titulo: titulo || (slide.getAttribute('data-nombre') || 'Información').trim(),
+          descripcion: texto(slide.querySelector('.description')),
+          anio: texto(slide.querySelector('.año, .ano, .year')),
+          generos: normalizarGeneros(texto(slide.querySelector('.genero')))
+        };
+    }
+    document.querySelectorAll('.galvez-info-panel-2026').forEach(renderizarPanel);
+  }
+  window.galvezInfoSetMovie = registrarPeliculaDesde;
+  function ajustarContenido(panel){
+    var desc = panel.querySelector('.galvez-info-description-2026');
+    if(!desc) return;
+    desc.style.fontSize = '';
+    var size = parseFloat(getComputedStyle(desc).fontSize) || 14;
+    var intentos = 0;
+    while(panel.scrollHeight > panel.clientHeight && size > 9 && intentos < 12){
+      size -= 0.5; desc.style.fontSize = size + 'px'; intentos++;
+    }
+  }
+  function renderizarPanel(panel){
+    var p = peliculaActual || {titulo:'Información de la película', descripcion:'Seleccioná una película y abrí su video con el botón GO.', anio:'', generos:''};
+    panel.querySelector('.galvez-info-title-2026').textContent = p.titulo || 'Información de la película';
+    panel.querySelector('.galvez-info-description-2026').textContent = p.descripcion || 'No hay una descripción disponible.';
+    panel.querySelector('.galvez-info-year-2026').textContent = p.anio ? 'Año: ' + p.anio : '';
+    panel.querySelector('.galvez-info-genres-2026').textContent = p.generos ? 'Género: ' + p.generos : '';
+    requestAnimationFrame(function(){ ajustarContenido(panel); });
+  }
+  function instalar(){
+    document.querySelectorAll('.fullvid').forEach(function(zona){
+      if(zona.querySelector('.galvez-info-hotspot-2026')) return;
+      var hotspot = document.createElement('div');
+      hotspot.className = 'galvez-info-hotspot-2026';
+      hotspot.setAttribute('role','note');
+      hotspot.setAttribute('aria-label','Pasá o apoyá el dedo aquí para ver la información');
+      hotspot.innerHTML = '<span aria-hidden="true">ⓘ</span><span>Info</span>';
+      var panel = document.createElement('div');
+      panel.className = 'galvez-info-panel-2026';
+      panel.setAttribute('aria-label','Información de la película');
+      panel.innerHTML = '<h3 class="galvez-info-title-2026">Información de la película</h3><p class="galvez-info-year-2026"></p><p class="galvez-info-genres-2026"></p><p class="galvez-info-description-2026">Seleccioná una película y abrí su video con el botón GO.</p>';
+      hotspot.addEventListener('touchstart', function(){ hotspot.classList.add('touch-active'); panel.classList.add('is-visible'); renderizarPanel(panel); }, {passive:true});
+      function ocultarTouch(){ hotspot.classList.remove('touch-active'); panel.classList.remove('is-visible'); }
+      hotspot.addEventListener('touchend', ocultarTouch, {passive:true});
+      hotspot.addEventListener('touchcancel', ocultarTouch, {passive:true});
+      zona.appendChild(hotspot); zona.appendChild(panel);
+      
+      var temporizadorInactividad = null;
+      function mostrarPorMovimiento(){
+        if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+        zona.classList.add('info-mouse-active-2026');
+        if(temporizadorInactividad) window.clearTimeout(temporizadorInactividad);
+        temporizadorInactividad = window.setTimeout(function(){
+          zona.classList.remove('info-mouse-active-2026');
+        }, 2500);
+      }
+      zona.addEventListener('mousemove', mostrarPorMovimiento, {passive:true});
+      zona.addEventListener('pointermove', mostrarPorMovimiento, {passive:true});
+      zona.addEventListener('mouseleave', function(){
+        zona.classList.remove('info-mouse-active-2026');
+        if(temporizadorInactividad) window.clearTimeout(temporizadorInactividad);
+      }, {passive:true});
+      renderizarPanel(panel);
+    });
+    window.addEventListener('resize', function(){ document.querySelectorAll('.galvez-info-panel-2026').forEach(ajustarContenido); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar); else instalar();
+})();
+</script>
+</body>
+</html>
