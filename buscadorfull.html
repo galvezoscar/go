@@ -39,12 +39,12 @@ header h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.04em}
 #panelInfoMaestro.visible{display:block}#panelInfoMaestro h2{margin:0 0 9px;font-size:clamp(18px,3vw,24px);line-height:1.15}
 #infoMeta{margin:0 0 12px;color:#ff7b89;font-size:12px;font-weight:800}#infoDescripcion{margin:0;color:#e0e5ee;font-size:14px;line-height:1.5}#infoGeneros{margin-top:12px;color:#aebbd0;font-size:12px}
 #cerrarVisor{
-    position:fixed;
-    z-index:1000006;
-    right:max(14px,env(safe-area-inset-right));
-    top:max(14px,env(safe-area-inset-top));
-    bottom:auto;
-    display:none;
+    position:fixed !important;
+    z-index:2147483647 !important;
+    top:max(14px,env(safe-area-inset-top)) !important;
+    right:max(14px,env(safe-area-inset-right)) !important;
+    bottom:auto !important;
+    display:block !important;
     width:42px;
     height:42px;
     border:1px solid #ffffff55;
@@ -52,7 +52,8 @@ header h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.04em}
     background:#111e;
     color:white;
     font-size:22px;
-    cursor:pointer}
+    cursor:pointer;
+}
 @media(max-width:1000px){#cineResultados{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:650px){body{padding:14px 10px 28px}#cineResultados{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.cine-tarjeta{border-radius:9px}#buscadorCine{gap:6px;padding:6px;border-radius:14px}#buscadorPeliculas{height:44px;padding:0 11px;font-size:14px}#btnBuscarGo{height:34px;min-width:42px}#btnLimpiarBusqueda{height:34px;width:31px}.cine-capa{opacity:1;align-items:flex-end;padding:7px;background:linear-gradient(180deg,transparent 60%,#05070d9e)}#panelInfoMaestro{top:58px;left:12px;width:min(330px,calc(100vw - 24px));padding:15px;max-height:calc(100dvh - 100px)}#infoDescripcion{font-size:13px}}
 </style>
