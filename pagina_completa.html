@@ -86,11 +86,8 @@ header h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.04em}
 (() => {
 'use strict';
 const PAGINAS = [
-
-
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202026.html',tipo:'Inicio',anio:2026},
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202025.html',tipo:'Inicio',anio:2025},
-  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202025%202%20.html',tipo:'Inicio',anio:2025},
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202024.html',tipo:'Inicio',anio:2024},
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202023.html',tipo:'Inicio',anio:2023},
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202022.html',tipo:'Inicio',anio:2022},
@@ -232,38 +229,22 @@ function mostrarInfo(p) {
   $('btnInfoMaestro').setAttribute('aria-expanded','false');
 }
 
-
 function reproducir(p) {
   mostrarInfo(p);
   const visor = $('visorOriginal');
   visor.classList.add('abierto');
   visor.setAttribute('aria-hidden','false');
-  $('btnInfoMaestro').style.display='block';
-  $('cerrarVisor').style.display='block';
+  $('btnInfoMaestro').style.display='block'; $('cerrarVisor').style.display='block';
 
-  const frame = $('paginaOriginal');
-
-  if (p.urlVideo) {
-    const url = p.urlVideo.split('?')[0];
-    frame.src = url + '?autoplay=1&loop=1&mute=0';
-  } else {
-    frame.src = 'about:blank';
-    $('resultadoBusqueda').textContent = 'No se encontró el enlace directo del video.';
-  }
-
-  // Pantalla completa: se conserva el código original
+  // Usa la misma función de pantalla completa de la página original.
+  // Se ejecuta desde el clic de GO y afecta a toda la página, no al video.
   var elem = document.documentElement;
   if (elem.requestFullscreen) {
     var solicitud = elem.requestFullscreen();
-    if (solicitud && solicitud.catch) {
-      solicitud.catch(function(err) {
-        console.warn('No se pudo activar pantalla completa:', err);
-      });
-    }
+    if (solicitud && solicitud.catch) solicitud.catch(function(err) { console.warn('No se pudo activar pantalla completa:', err); });
   } else if (elem.webkitRequestFullscreen) {
     elem.webkitRequestFullscreen();
   }
-}
 
   const frame = $('paginaOriginal');
   
