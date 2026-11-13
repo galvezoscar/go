@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b11">
+<title>Gálvez Oscar - Buscador maestro</title>
+<style>
+:root{color-scheme:dark;--bg:#080b11;--panel:#121824;--red:#ed4052;--text:#f4f6fb;--muted:#9ca8bb}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -15%,#273149 0,#111622 42%,var(--bg) 78%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{padding:clamp(14px,3vw,32px) clamp(10px,2.5vw,26px) 42px}
+main{width:100%;max-width:1480px;margin:0 auto}
+header{text-align:center;margin:0 auto 18px}
+header h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.04em}
+#buscadorCine{width:min(850px,100%);margin:8px auto 14px;padding:8px;display:flex;gap:9px;align-items:center;background:#141a26ed;border:1px solid #30394a;border-radius:17px;box-shadow:0 18px 50px #0007}
+#buscadorPeliculas{flex:1;min-width:0;height:48px;padding:0 15px;border:1px solid transparent;outline:none;border-radius:11px;background:#0b0f17;color:var(--text);font-size:15px}
+#buscadorPeliculas::placeholder{color:#8490a4}#buscadorPeliculas:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed405226}
+#btnBuscarGo{height:37px;min-width:47px;padding:0 13px;border:0;border-radius:9px;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff;font-size:12px;font-weight:900;cursor:pointer}
+#filtrosCine{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 auto 14px}
+#filtrosCine select{min-width:155px;max-width:100%;height:39px;padding:0 12px;border:1px solid #394254;border-radius:9px;background:#171d29;color:#f4f6fb;font-size:13px}
+#resultadoBusqueda{min-height:20px;margin:0 auto 14px;text-align:center;color:var(--muted);font-size:13px}
+#cineResultados{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(8px,1.3vw,18px);width:100%;margin:0 auto}
+.cine-tarjeta{position:relative;display:block;min-width:0;aspect-ratio:2/3;padding:0;border:1px solid #303849;border-radius:12px;overflow:hidden;background:#171c27;box-shadow:0 8px 22px #0005;cursor:pointer}
+.cine-tarjeta img{display:block;width:100%;height:100%;object-fit:cover}
+.cine-capa{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding:12px;background:linear-gradient(180deg,transparent 38%,#05070de8);opacity:0;transition:opacity .2s}
+.cine-tarjeta:hover .cine-capa,.cine-tarjeta:focus-visible .cine-capa{opacity:1}
+.cine-go{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:29px;padding:0 12px;border-radius:7px;background:var(--red);color:#fff;font-size:11px;font-weight:900}
+#verMasCine{display:block;margin:22px auto 0;padding:11px 28px;border:1px solid #49546a;border-radius:9px;background:#202635;color:white;font-weight:800;cursor:pointer}
+#verMasCine:disabled{display:none}.cine-vacio{grid-column:1/-1;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}
+#estadoCarga{max-width:850px;margin:14px auto;color:#e3b8bd;text-align:center;font-size:13px;line-height:1.5}
+/* Reproductor */
+#visorOriginal{position:fixed;inset:0;z-index:999990;display:none;background:#000}
+#visorOriginal.abierto{display:block}
+#paginaOriginal{width:100%;height:100%;border:0;background:#000}
+#btnInfoMaestro{position:fixed;z-index:1000005;left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));display:none;padding:10px 16px;border:1px solid #ffffff55;border-radius:8px;background:#111e;color:#fff;font-size:12px;font-weight:900;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(8px)}
+#panelInfoMaestro{position:fixed;z-index:1000004;left:max(14px,env(safe-area-inset-left));top:62px;display:none;width:min(360px,calc(100vw - 28px));max-height:calc(100dvh - 100px);overflow:auto;padding:18px 19px;border:1px solid #ffffff30;border-radius:12px;background:linear-gradient(145deg,#171e2bed,#080b12f2);box-shadow:0 18px 55px #000b;color:#fff}
+#panelInfoMaestro.visible{display:block}#panelInfoMaestro h2{margin:0 0 9px;font-size:clamp(18px,3vw,24px);line-height:1.15}
+#infoMeta{margin:0 0 12px;color:#ff7b89;font-size:12px;font-weight:800}#infoDescripcion{margin:0;color:#e0e5ee;font-size:14px;line-height:1.5}#infoGeneros{margin-top:12px;color:#aebbd0;font-size:12px}
+#cerrarVisor{
+    position:fixed !important;
+    z-index:2147483647 !important;
+    top:max(14px,env(safe-area-inset-top)) !important;
+    right:max(14px,env(safe-area-inset-right)) !important;
+    bottom:auto !important;
+    display:none;
+    width:42px;
+    height:42px;
+    border:1px solid #ffffff55;
+    border-radius:50%;
+    background:#111e;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+}
+#escudoAnticlics {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 35px;
+    z-index: 999991;
+    background: transparent;
+    pointer-events: auto;
+    display: none;
+}
+@media(max-width:1000px){#cineResultados{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:14px 10px 28px}#cineResultados{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.cine-tarjeta{border-radius:9px}#buscadorCine{gap:6px;padding:6px;border-radius:14px}#buscadorPeliculas{height:44px;padding:0 11px;font-size:15px}#btnBuscarGo{height:34px;min-width:42px}.cine-capa{opacity:1;align-items:flex-end;padding:7px;background:linear-gradient(180deg,transparent 60%,#05070d9e)}#panelInfoMaestro{top:58px;left:12px;width:min(330px,calc(100vw - 24px));padding:15px;max-height:calc(100dvh - 100px)}#infoDescripcion{font-size:13px}}
+</style>
+</head>
+<body>
+<main>
+<header><h1>Gálvez Oscar</h1></header>
+<section id="buscadorCine" role="search">
+  <input id="buscadorPeliculas" type="search" autocomplete="off" placeholder="Buscar por nombre, palabras clave, género o año..." aria-label="Buscar películas">
+  <button id="btnBuscarGo" type="button">GO</button>
+</section>
+<section id="filtrosCine" aria-label="Filtros">
+  <select id="filtroGenero" aria-label="Filtrar por género"><option value="">Todos los géneros</option></select>
+  <select id="filtroAnio" aria-label="Filtrar por año"><option value="">Todos los años</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option></select>
+</section>
+<div id="resultadoBusqueda" aria-live="polite">Cargando páginas...</div>
+<div id="estadoCarga" role="status"></div>
+<section id="cineResultados" aria-label="Resultados"></section>
+<button id="verMasCine" type="button">Ver más</button>
+</main>
+<div id="visorOriginal" aria-hidden="true">
+  <div id="escudoAnticlics"></div>
+  <!-- Se removió 'fullscreen' y 'allowfullscreen' para bloquear totalmente la pantalla completa -->
+  <iframe id="paginaOriginal" title="Reproductor original" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+</div>
+<button id="btnInfoMaestro" type="button" aria-expanded="false">INFO</button>
+<section id="panelInfoMaestro" aria-live="polite">
+  <h2 id="infoTitulo"></h2><div id="infoMeta"></div><p id="infoDescripcion"></p><div id="infoGeneros"></div>
+</section>
+<button id="cerrarVisor" type="button" aria-label="Cerrar video">×</button>
+<script>
+(() => {
+'use strict';
+const PAGINAS = [
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202026.html',tipo:'Inicio',anio:2026},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202025.html',tipo:'Inicio',anio:2025},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202024.html',tipo:'Inicio',anio:2024},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202023.html',tipo:'Inicio',anio:2023},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202022.html',tipo:'Inicio',anio:2022},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202021.html',tipo:'Inicio',anio:2021},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202020.html',tipo:'Inicio',anio:2020},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202019.html',tipo:'Inicio',anio:2019},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202026.html',tipo:'Animacion',anio:2026},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202025.html',tipo:'Animacion',anio:2025},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202024.html',tipo:'Animacion',anio:2024},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202023.html',tipo:'Animacion',anio:2023},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202022.html',tipo:'Animacion',anio:2022},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202021.html',tipo:'Animacion',anio:2021},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202020.html',tipo:'Animacion',anio:2020},
+  {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202019.html',tipo:'Animacion',anio:2019}
+];
+const $ = id => document.getElementById(id);
+const normalizar = texto => String(texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\.(jpg|jpeg|png|gif|webp)$/i,'').replace(/\b(19|20)\d{2}\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+let peliculas = [], filtradas = [], cantidadMostrada = 0;
+const LOTE = 28;
+
+function nodosPeliculas(doc) {
+  let nodos = Array.from(doc.querySelectorAll('.slides')).filter(n => n.querySelector('a.red20, a[href^="javascript:"]') && n.querySelector('img'));
+  if (nodos.length) return nodos;
+  const enlaces = Array.from(doc.querySelectorAll('a.red20, a[href^="javascript:"]')).filter(a => /mostrar\w*\s*\(/i.test(a.getAttribute('href') || ''));
+  const vistos = new Set();
+  for (const a of enlaces) {
+    let n = a;
+    for (let i=0; i<7 && n && !(n.querySelector && n.querySelector('img')); i++) n=n.parentElement;
+    if (n && !vistos.has(n)) { vistos.add(n); nodos.push(n); }
+  }
+  return nodos;
+}
+function leerFicha(nodo, pagina, indice) {
+  const img = nodo.querySelector('img.logopeli') || nodo.querySelector('img');
+  const link = nodo.querySelector('a.red20') || nodo.querySelector('a[href^="javascript:"]');
+  if (!img || !link) return null;
+  const src = img.getAttribute('src') || img.getAttribute('data-src') || img.getAttribute('data-original') || '';
+  const titulo = (nodo.getAttribute('data-nombre') || img.getAttribute('alt') || decodeURIComponent(src.split('/').pop() || '')).trim();
+  if (!titulo) return null;
+
+  const hrefLink = link.getAttribute('href') || '';
+  const matchOk = hrefLink.match(/https?:\/\/[^\s'"]+ok\.ru\/videoembed\/[^\s'"]+/i) || hrefLink.match(/\/\/[^\s'"]+ok\.ru\/videoembed\/[^\s'"]+/i);
+  let urlVideo = matchOk ? matchOk[0] : '';
+  if (urlVideo.startsWith('//')) urlVideo = 'https:' + urlVideo;
+  if (urlVideo && !urlVideo.includes('autoplay=1')) {
+    urlVideo += (urlVideo.includes('?') ? '&' : '?') + 'autoplay=1&end=3600';
+  }
+
+  const generoNodo = nodo.querySelector('.genero');
+  const generos = generoNodo ? Array.from(generoNodo.querySelectorAll('a,span')).map(x=>x.textContent.trim()).filter(Boolean) : [];
+  const generoTexto = generos.length ? generos.join(' · ') : (generoNodo ? generoNodo.textContent.trim() : '');
+  const descripcion = (nodo.querySelector('.description') || {}).textContent?.trim() || '';
+  const anioTexto = (nodo.querySelector('.año, .anio, [data-anio]') || {}).textContent?.trim() || String(pagina.anio);
+  return {
+    titulo, clave: normalizar(titulo), descripcion, generoTexto,
+    generos: generos.length ? generos : generoTexto.split(/[·,]/).map(x=>x.trim()).filter(Boolean),
+    anio: (anioTexto.match(/20\d{2}|19\d{2}/) || [String(pagina.anio)])[0],
+    imagen: src ? new URL(src, pagina.url).href : '',
+    urlVideo, pagina: pagina.url, tipo: pagina.tipo, indice
+  };
+}
+async function cargarPagina(pagina) {
+  const respuesta = await fetch(pagina.url, {cache:'no-store', credentials:'same-origin'});
+  if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
+  const html = await respuesta.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const nodos = nodosPeliculas(doc);
+  return nodos.map((n,i)=>leerFicha(n,pagina,i)).filter(Boolean);
+}
+function agregarSinDuplicados(lista) {
+  const mapa = new Map(peliculas.map(p=>[p.clave,p]));
+  for (const p of lista) {
+    if (!p.clave) continue;
+    const anterior = mapa.get(p.clave);
+    if (!anterior) mapa.set(p.clave,p);
+    else if (!anterior.imagen && p.imagen) mapa.set(p.clave,p);
+  }
+  peliculas = Array.from(mapa.values());
+}
+function actualizarGeneros() {
+  const actual = $('filtroGenero').value;
+  const todos = new Map();
+  peliculas.forEach(p=>p.generos.forEach(g=>{const k=normalizar(g);if(k && !todos.has(k))todos.set(k,g);}));
+  $('filtroGenero').innerHTML = '<option value="">Todos los géneros</option>' + Array.from(todos.values()).sort((a,b)=>a.localeCompare(b,'es')).map(g=>`<option value="${g.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">${g}</option>`).join('');
+  if (Array.from(todos.values()).includes(actual)) $('filtroGenero').value=actual;
+}
+function crearTarjeta(p) {
+  if (!p.imagen) return null;
+  const b=document.createElement('button'); b.type='button'; b.className='cine-tarjeta'; b.setAttribute('aria-label','Abrir '+p.titulo);
+  const img=document.createElement('img'); img.src=p.imagen; img.alt=p.titulo; img.loading='lazy'; img.decoding='async';
+  img.onerror=()=>b.remove();
+  const capa=document.createElement('span'); capa.className='cine-capa';
+  const go=document.createElement('span'); go.className='cine-go'; go.textContent='GO'; capa.appendChild(go);
+  b.append(img,capa); b.addEventListener('click',()=>reproducir(p)); return b;
+}
+function renderizar(reiniciar=false) {
+  if(reiniciar){cantidadMostrada=0;$('cineResultados').innerHTML='';}
+  const fin=Math.min(cantidadMostrada+LOTE,filtradas.length);
+  for(let i=cantidadMostrada;i<fin;i++){const tarjeta=crearTarjeta(filtradas[i]);if(tarjeta)$('cineResultados').appendChild(tarjeta);}
+  cantidadMostrada=fin;
+  $('verMasCine').style.display=cantidadMostrada<filtradas.length?'block':'none';
+  $('resultadoBusqueda').textContent=filtradas.length+' resultados';
+  if(!filtradas.length)$('cineResultados').innerHTML='<div class="cine-vacio">No se encontraron resultados.</div>';
+}
+function aplicarFiltros() {
+  const terminos=normalizar($('buscadorPeliculas').value).split(' ').filter(Boolean);
+  const genero=normalizar($('filtroGenero').value), anio=$('filtroAnio').value;
+  filtradas=peliculas.filter(p=>{
+    const texto=normalizar([p.titulo,p.descripcion,p.generoTexto,p.anio,p.tipo].join(' '));
+    return terminos.every(t=>texto.includes(t)) && (!genero || p.generos.some(g=>normalizar(g)===genero)) && (!anio || p.anio===anio);
+  });
+  renderizar(true);
+}
+function mostrarInfo(p) {
+  $('infoTitulo').textContent=p.titulo;
+  $('infoMeta').textContent=p.anio+' · '+p.tipo;
+  $('infoDescripcion').textContent=p.descripcion || 'Sin descripción disponible.';
+  $('infoGeneros').textContent=p.generoTexto;
+  $('panelInfoMaestro').classList.remove('visible');
+  $('btnInfoMaestro').setAttribute('aria-expanded','false');
+}
+function reproducir(p) {
+  mostrarInfo(p);
+  $('visorOriginal').classList.add('abierto');
+  $('visorOriginal').setAttribute('aria-hidden','false');
+  $('btnInfoMaestro').style.display='block'; 
+  $('cerrarVisor').style.display='block';
+  $('escudoAnticlics').style.display='block';
+  
+  const frame = $('paginaOriginal');
+  if (p.urlVideo) {
+    frame.src = p.urlVideo;
+  } else {
+    frame.src = 'about:blank';
+    $('resultadoBusqueda').textContent = 'No se encontró el enlace directo del video.';
+  }
+}
+function cerrarReproductor() {
+  $('paginaOriginal').src='about:blank'; 
+  $('visorOriginal').classList.remove('abierto'); 
+  $('visorOriginal').setAttribute('aria-hidden','true');
+  $('btnInfoMaestro').style.display='none'; 
+  $('cerrarVisor').style.display='none';
+  $('escudoAnticlics').style.display='none';
+  $('panelInfoMaestro').classList.remove('visible');
+  $('btnInfoMaestro').setAttribute('aria-expanded','false');
+}
+async function iniciar() {
+  const fallos=[];
+  for(const pagina of PAGINAS) {
+    try { 
+      const lista=await cargarPagina(pagina); 
+      agregarSinDuplicados(lista); 
+      actualizarGeneros(); 
+      aplicarFiltros(); 
+      $('estadoCarga').textContent='Cargando catálogo: '+peliculas.length+' películas encontradas…'; 
+    }
+    catch(e) { console.warn('No se pudo leer',pagina.url,e); fallos.push(pagina.tipo+' '+pagina.anio); }
+  }
+  $('estadoCarga').textContent=fallos.length ? 'Aviso: No se pudieron leer algunas páginas ('+fallos.join(', ')+').' : 'Catálogo actualizado desde las 16 páginas originales. Las películas repetidas se muestran una sola vez.';
+}
+$('buscadorPeliculas').addEventListener('input',aplicarFiltros);
+$('btnBuscarGo').addEventListener('click',aplicarFiltros);
+$('filtroGenero').addEventListener('change',aplicarFiltros); 
+$('filtroAnio').addEventListener('change',aplicarFiltros);
+$('verMasCine').addEventListener('click',()=>renderizar(false));
+$('btnInfoMaestro').addEventListener('click',()=>{const p=$('panelInfoMaestro');const visible=p.classList.toggle('visible');$('btnInfoMaestro').setAttribute('aria-expanded',visible?'true':'false');});
+$('cerrarVisor').addEventListener('click',cerrarReproductor);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('panelInfoMaestro').classList.contains('visible')){$('panelInfoMaestro').classList.remove('visible');$('btnInfoMaestro').setAttribute('aria-expanded','false');}else cerrarReproductor();}});
+iniciar();
+})();
+</script>
+</body>
+</html>
