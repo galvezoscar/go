@@ -233,11 +233,23 @@ function mostrarInfo(p) {
 }
 
 function reproducir(p) {
+function reproducir(p) {
   mostrarInfo(p);
   const visor = $('visorOriginal');
   visor.classList.add('abierto');
   visor.setAttribute('aria-hidden','false');
   $('btnInfoMaestro').style.display='block'; $('cerrarVisor').style.display='block';
+
+  // Activar el audio del reproductor OK.ru
+  const frame = $('paginaOriginal');
+  let url = p.urlVideo;
+
+  if (url) {
+    const separador = url.includes('?') ? '&' : '?';
+    url = url.replace(/[?&]mute=[^&]*/i, '');
+    url += (url.includes('?') ? '&' : '?') + 'mute=0&autoplay=1';
+    frame.src = url;
+  }
 
   // Usa la misma función de pantalla completa de la página original.
   // Se ejecuta desde el clic de GO y afecta a toda la página, no al video.
@@ -248,6 +260,7 @@ function reproducir(p) {
   } else if (elem.webkitRequestFullscreen) {
     elem.webkitRequestFullscreen();
   }
+}
 
   const frame = $('paginaOriginal');
   
