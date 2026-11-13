@@ -238,25 +238,28 @@ function reproducir(p) {
   const visor = $('visorOriginal');
   visor.classList.add('abierto');
   visor.setAttribute('aria-hidden','false');
-  $('btnInfoMaestro').style.display='block'; $('cerrarVisor').style.display='block';
+  $('btnInfoMaestro').style.display='block';
+  $('cerrarVisor').style.display='block';
 
-  // Activar el audio del reproductor OK.ru
   const frame = $('paginaOriginal');
-  let url = p.urlVideo;
 
-  if (url) {
-    const separador = url.includes('?') ? '&' : '?';
-    url = url.replace(/[?&]mute=[^&]*/i, '');
-    url += (url.includes('?') ? '&' : '?') + 'mute=0&autoplay=1';
-    frame.src = url;
+  if (p.urlVideo) {
+    const url = p.urlVideo.split('?')[0];
+    frame.src = url + '?autoplay=1&loop=1&mute=0';
+  } else {
+    frame.src = 'about:blank';
+    $('resultadoBusqueda').textContent = 'No se encontró el enlace directo del video.';
   }
 
-  // Usa la misma función de pantalla completa de la página original.
-  // Se ejecuta desde el clic de GO y afecta a toda la página, no al video.
+  // Pantalla completa: se conserva el código original
   var elem = document.documentElement;
   if (elem.requestFullscreen) {
     var solicitud = elem.requestFullscreen();
-    if (solicitud && solicitud.catch) solicitud.catch(function(err) { console.warn('No se pudo activar pantalla completa:', err); });
+    if (solicitud && solicitud.catch) {
+      solicitud.catch(function(err) {
+        console.warn('No se pudo activar pantalla completa:', err);
+      });
+    }
   } else if (elem.webkitRequestFullscreen) {
     elem.webkitRequestFullscreen();
   }
