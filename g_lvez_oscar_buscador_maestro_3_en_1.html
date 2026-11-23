@@ -4,36 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080b11">
-<title>Gálvez Oscar - Buscador Maestro 3 en 1</title>
+<title>Gálvez Oscar - Buscador maestro (3 Modos)</title>
 <style>
 :root{color-scheme:dark;--bg:#080b11;--panel:#121824;--red:#ed4052;--text:#f4f6fb;--muted:#9ca8bb}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% -15%,#273149 0,#111622 42%,var(--bg) 78%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body{padding:clamp(6px,1.2vw,14px) clamp(8px,1.5vw,20px) 22px}
+body{padding:clamp(6px,1.2vw,14px) clamp(8px,1.5vw,20px) 18px}
 main{width:100%;max-width:1480px;margin:0 auto}
 header{text-align:center;margin:0 auto 5px}
 header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 
-/* Selector de los 3 buscadores según el teléfono */
-#selectorModoTelefono{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:4px auto 6px}
-.btn-modo{height:28px;padding:0 11px;border:1px solid #394254;border-radius:999px;background:#161c28;color:#cbd5e1;font-size:11px;font-weight:800;cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease}
-.btn-modo.activo{background:linear-gradient(135deg,#ff5968,#bf1e33);border-color:#ff7b89;color:#fff}
+/* Selector de los 3 buscadores segun el telefono o preferencia */
+#selectorModos{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:4px auto 6px}
+.btn-modo{height:28px;padding:0 11px;border:1px solid #394254;border-radius:8px;background:#171d29;color:#d5dbea;font-size:11px;font-weight:800;cursor:pointer}
+.btn-modo.activo{border-color:#ff5968;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff}
 
-/* Buscador y filtros */
 #buscadorCine{width:min(760px,100%);margin:4px auto 7px;padding:5px;display:flex;gap:7px;align-items:center;background:#141a26ed;border:1px solid #30394a;border-radius:17px;box-shadow:0 18px 50px #0007}
 #buscadorPeliculas{flex:1;min-width:0;height:38px;padding:0 12px;border:1px solid transparent;outline:none;border-radius:11px;background:#0b0f17;color:var(--text);font-size:15px}
-#buscadorPeliculas::placeholder{color:#8490a4}
-#buscadorPeliculas:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed405226}
+#buscadorPeliculas::placeholder{color:#8490a4}#buscadorPeliculas:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed405226}
 #btnBuscarGo{height:32px;min-width:47px;padding:0 13px;border:0;border-radius:9px;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff;font-size:12px;font-weight:900;cursor:pointer}
 #btnLimpiarBusqueda{height:32px;width:32px;border:1px solid #394254;border-radius:9px;background:#202635;color:#dce2ed;font-size:22px;cursor:pointer}
 #btnLimpiarBusqueda:hover{background:#30394a}
 #filtrosCine{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:0 auto 5px}
 #filtrosCine select{min-width:135px;max-width:100%;height:31px;padding:0 9px;border:1px solid #394254;border-radius:9px;background:#171d29;color:#f4f6fb;font-size:13px}
 #resultadoBusqueda{min-height:16px;margin:0 auto 4px;text-align:center;color:var(--muted);font-size:13px}
-#estadoCarga{max-width:850px;margin:8px auto 10px;color:#e3b8bd;text-align:center;font-size:12px;line-height:1.4}
+#estadoCarga{max-width:850px;margin:10px auto;color:#e3b8bd;text-align:center;font-size:13px;line-height:1.45}
 
-/* Contenedor de vistas (Sliders y Scroll Lite) */
-#contenedorCarruseles{display:flex;flex-direction:column;gap:16px;width:100%;margin:4px auto 0}
+/* Modo 1: Scroll Lite (cuadricula vertical sin slider, carga progresiva al bajar) */
+#vistaScrollLite{display:none;margin-top:8px}
+body.modo-scroll-lite #vistaScrollLite{display:block}
+#gridScrollLite{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+#gridScrollLite .cine-tarjeta{flex:none;width:100%}
+#centinelaScrollLite{padding:14px;text-align:center;color:var(--muted);font-size:12px}
+
+/* Modo 2: Slider Unico */
+#vistaSliderUnico{display:none;margin-top:6px}
+body.modo-slider-unico #vistaSliderUnico{display:block}
+
+/* Modo 3: Carruseles Clasicos */
+#contenedorCarruseles{display:none;flex-direction:column;gap:18px;width:100%;margin:4px auto 0}
+body.modo-carruseles #contenedorCarruseles{display:flex}
+
 .cine-fila{width:100%;min-width:0}
 .cine-fila-titulo{margin:0 0 4px 3px;color:#f4f6fb;font-size:clamp(14px,1.5vw,19px);font-weight:800;letter-spacing:.02em}
 .cine-carrusel{position:relative;width:100%;min-width:0}
@@ -41,35 +52,19 @@ header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 .cine-lista::-webkit-scrollbar{height:6px}.cine-lista::-webkit-scrollbar-track{background:#151b27;border-radius:8px}.cine-lista::-webkit-scrollbar-thumb{background:#59647a;border-radius:8px}
 .flechaCine{position:absolute;z-index:9;top:50%;transform:translateY(-50%);width:34px;height:54px;border:1px solid #ffffff35;border-radius:9px;background:#111d;color:#fff;font-size:27px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px)}
 .flechaCine.izquierda{left:2px}.flechaCine.derecha{right:2px}
-
-/* Modo 1: Scroll Lite sin slider para celulares con menos memoria */
-#gridScrollLite{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.1vw,15px);width:100%}
-#centinelaScroll{margin-top:12px;padding:10px;text-align:center;color:var(--muted);font-size:12px}
-
 .cine-tarjeta{position:relative;flex:0 0 calc((100% - 4 * clamp(10px,1.3vw,18px)) / 5);min-width:0;aspect-ratio:1/1;overflow:visible;border-radius:14px;scroll-snap-align:start;transition:transform .22s ease;z-index:1}
-#gridScrollLite .cine-tarjeta{flex:none;width:100%;overflow:hidden;border-radius:12px;transition:none}
 .cine-tarjeta:hover,.cine-tarjeta.seleccionada{z-index:8;transform:translateY(-5px) scale(1.045)}
-#gridScrollLite .cine-tarjeta:hover,#gridScrollLite .cine-tarjeta.seleccionada{transform:none}
-
-.cine-poster{position:relative;inset:0;display:block;width:100%;height:100%;padding:5px;border:1px solid #596681;border-radius:14px;overflow:visible;background:linear-gradient(145deg,#202a3b,#090d15);box-shadow:0 9px 24px #0009,inset 0 1px 0 #ffffff20;cursor:pointer;perspective:900px}
-#gridScrollLite .cine-poster{padding:4px;border:0;border-radius:12px;background:#0c111b;box-shadow:none;perspective:none}
-
-.cine-poster img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:9px;filter:drop-shadow(0 7px 7px #000b);transform:perspective(900px) rotateY(-2deg) translateZ(0);transition:transform .28s ease,filter .28s ease;background:#090d15}
-#gridScrollLite .cine-poster img{border-radius:8px;filter:none;transform:none;transition:none}
+.cine-poster{position:absolute;inset:0;display:block;width:100%;height:100%;padding:5px;border:1px solid #596681;border-radius:14px;overflow:visible;background:linear-gradient(145deg,#202a3b,#090d15);box-shadow:0 9px 24px #0009,inset 0 1px 0 #ffffff20;cursor:pointer;perspective:900px}
+.cine-poster img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:9px;filter:drop-shadow(0 7px 7px #000b);transform:perspective(900px) rotateY(-2deg) translateZ(0);transition:transform .28s ease,filter .28s ease}
 .cine-tarjeta:hover .cine-poster img,.cine-tarjeta.seleccionada .cine-poster img{transform:perspective(900px) rotateY(0deg) translateZ(22px) scale(1.055);filter:saturate(1.14) drop-shadow(0 12px 10px #000c)}
-#gridScrollLite .cine-tarjeta:hover .cine-poster img,#gridScrollLite .cine-tarjeta.seleccionada .cine-poster img{transform:none;filter:none}
-
 .cine-etiqueta{position:absolute;z-index:3;left:7px;right:7px;bottom:7px;display:flex;flex-direction:column;gap:3px;padding:8px 9px;border:1px solid #ffffff55;border-radius:9px;background:linear-gradient(145deg,#202a3bed,#080b12f5);box-shadow:0 9px 22px #000c;color:#fff;opacity:0;pointer-events:none;transform:translateY(13px) scale(.94);transition:opacity .2s ease,transform .2s ease}
-#gridScrollLite .cine-etiqueta{left:5px;right:5px;bottom:5px;gap:2px;padding:7px 8px;border:1px solid #ffffff38;border-radius:8px;background:#0b101aee;box-shadow:none;transform:none;transition:none}
 .cine-tarjeta:hover .cine-etiqueta,.cine-tarjeta.seleccionada .cine-etiqueta,.cine-tarjeta:focus-within .cine-etiqueta{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
-#gridScrollLite .cine-tarjeta:hover .cine-etiqueta,#gridScrollLite .cine-tarjeta.seleccionada .cine-etiqueta,#gridScrollLite .cine-tarjeta:focus-within .cine-etiqueta{transform:none}
-
 .cine-etiqueta strong{font-size:clamp(10px,1.05vw,14px);line-height:1.15;text-shadow:0 2px 5px #000}
 .cine-etiqueta small{font-size:clamp(9px,.85vw,11px);color:#ff9aa5;line-height:1.2}
 .cine-etiqueta .cine-generos{font-size:clamp(8px,.78vw,10px);color:#d5dbea;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cine-go{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:26px;margin-top:3px;padding:0 13px;border:0;border-radius:6px;background:linear-gradient(135deg,#ff5968,#bf1e33);color:#fff;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 4px 12px #0008}
 .cine-go:hover{filter:brightness(1.12)}
-.cine-vacio{width:100%;grid-column:1/-1;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}
+.cine-vacio{width:100%;padding:42px 16px;text-align:center;color:var(--muted);border:1px dashed #343d4e;border-radius:15px;background:#111622a8}
 
 /* Reproductor: muestra exclusivamente el video limpio dentro del visor */
 #visorOriginal{position:fixed;inset:0;z-index:999990;display:none;background:#000}
@@ -79,19 +74,74 @@ header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 #panelInfoMaestro{position:fixed;z-index:1000004;left:max(14px,env(safe-area-inset-left));top:62px;display:none;width:min(360px,calc(100vw - 28px));max-height:calc(100dvh - 100px);overflow:auto;padding:18px 19px;border:1px solid #ffffff30;border-radius:12px;background:linear-gradient(145deg,#171e2bed,#080b12f2);box-shadow:0 18px 55px #000b;color:#fff}
 #panelInfoMaestro.visible{display:block}#panelInfoMaestro h2{margin:0 0 9px;font-size:clamp(18px,3vw,24px);line-height:1.15}
 #infoMeta{margin:0 0 12px;color:#ff7b89;font-size:12px;font-weight:800}#infoDescripcion{margin:0;color:#e0e5ee;font-size:14px;line-height:1.5}#infoGeneros{margin-top:12px;color:#aebbd0;font-size:12px}
-#cerrarVisor{position:fixed !important;z-index:2147483647 !important;top:max(14px,env(safe-area-inset-top)) !important;right:max(14px,env(safe-area-inset-right)) !important;bottom:auto !important;display:none;width:42px;height:42px;border:1px solid #ffffff55;border-radius:50%;background:#111e;color:white;font-size:22px;cursor:pointer}
+#cerrarVisor{
+    position:fixed !important;
+    z-index:2147483647 !important;
+    top:max(14px,env(safe-area-inset-top)) !important;
+    right:max(14px,env(safe-area-inset-right)) !important;
+    bottom:auto !important;
+    display:none;
+    width:42px;
+    height:42px;
+    border:1px solid #ffffff55;
+    border-radius:50%;
+    background:#111e;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+}
 
-@media(max-width:1000px){.cine-tarjeta{flex-basis:calc((100% - 2 * clamp(10px,1.3vw,18px)) / 3)}#gridScrollLite{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:650px){body{padding:5px 7px 14px}header{margin-bottom:3px}header h1{font-size:17px}.cine-lista{gap:8px;padding:12px 2px 15px;scrollbar-width:none}.cine-lista::-webkit-scrollbar{display:none}.cine-tarjeta{flex-basis:calc((100% - 10px) / 2);border-radius:10px}#gridScrollLite{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cine-poster{border-radius:10px;padding:4px}.cine-etiqueta{left:4px;right:4px;bottom:4px;padding:5px 6px;gap:2px}.cine-go{height:23px;min-width:43px;margin-top:2px}.flechaCine{display:none}.cine-fila-titulo{font-size:13px;margin-left:2px}#buscadorCine{gap:5px;padding:4px;margin:3px auto 5px;border-radius:10px}#buscadorPeliculas{height:32px;padding:0 8px;font-size:12px}#btnBuscarGo{height:28px;min-width:37px;padding:0 9px;font-size:10px}#btnLimpiarBusqueda{height:28px;width:28px;font-size:18px}#filtrosCine{gap:5px;margin-bottom:3px}#filtrosCine select{min-width:115px;height:27px;padding:0 6px;font-size:11px}#resultadoBusqueda{font-size:11px;margin-bottom:2px}#estadoCarga{margin:4px auto;font-size:10px;line-height:1.2}#panelInfoMaestro{top:58px;left:12px;width:min(330px,calc(100vw - 24px));padding:15px;max-height:calc(100dvh - 100px)}#infoDescripcion{font-size:13px}}
-@media screen and (orientation:landscape) and (max-height:520px){body{padding:3px 8px 8px}header{margin-bottom:2px}header h1{font-size:16px}#buscadorCine{margin:2px auto 3px;padding:3px;max-width:620px}#buscadorPeliculas{height:29px;font-size:12px}#btnBuscarGo,#btnLimpiarBusqueda{height:26px}#filtrosCine{margin-bottom:2px;gap:4px}#filtrosCine select{height:24px;font-size:10px}#resultadoBusqueda{min-height:12px;margin-bottom:0;font-size:10px}#estadoCarga{margin:2px auto;font-size:9px;line-height:1.1}.cine-lista{padding-top:9px;padding-bottom:10px;gap:7px}.cine-tarjeta{flex-basis:calc((100% - 21px) / 4)}#gridScrollLite{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.cine-etiqueta{padding:4px 5px;gap:1px}.cine-etiqueta strong{font-size:10px}.cine-etiqueta small,.cine-etiqueta .cine-generos{font-size:8px}.cine-go{height:20px;font-size:9px}}
-
+@media(max-width:1000px){
+  .cine-tarjeta{flex-basis:calc((100% - 2 * clamp(10px,1.3vw,18px)) / 3)}
+  #gridScrollLite{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  body{padding:5px 7px 12px}header{margin-bottom:3px}header h1{font-size:17px}
+  .cine-lista{gap:8px;padding:12px 2px 15px;scrollbar-width:none}.cine-lista::-webkit-scrollbar{display:none}
+  .cine-tarjeta{flex-basis:calc((100% - 10px) / 2);border-radius:10px}
+  #gridScrollLite{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cine-poster{border-radius:10px;padding:4px}
+  .cine-etiqueta{left:4px;right:4px;bottom:4px;padding:5px 6px;gap:2px}
+  .cine-go{height:23px;min-width:43px;margin-top:2px}
+  .flechaCine{display:none}.cine-fila-titulo{font-size:13px;margin-left:2px}
+  #buscadorCine{gap:5px;padding:4px;margin:3px auto 5px;border-radius:10px}
+  #buscadorPeliculas{height:32px;padding:0 8px;font-size:12px}
+  #btnBuscarGo{height:28px;min-width:37px;padding:0 9px;font-size:10px}
+  #btnLimpiarBusqueda{height:28px;width:28px;font-size:18px}
+  #filtrosCine{gap:5px;margin-bottom:3px}
+  #filtrosCine select{min-width:115px;height:27px;padding:0 6px;font-size:11px}
+  #resultadoBusqueda{font-size:11px;margin-bottom:2px}
+  #estadoCarga{margin:4px auto;font-size:10px;line-height:1.2}
+  #panelInfoMaestro{top:58px;left:12px;width:min(330px,calc(100vw - 24px));padding:15px;max-height:calc(100dvh - 100px)}
+  #infoDescripcion{font-size:13px}
+}
+@media screen and (orientation:landscape) and (max-height:520px){
+  body{padding:3px 8px 5px}header{margin-bottom:2px}header h1{font-size:16px}
+  #buscadorCine{margin:2px auto 3px;padding:3px;max-width:620px}
+  #buscadorPeliculas{height:29px;font-size:12px}
+  #btnBuscarGo,#btnLimpiarBusqueda{height:26px}
+  #filtrosCine{margin-bottom:2px;gap:4px}
+  #filtrosCine select{height:24px;font-size:10px}
+  #resultadoBusqueda{min-height:12px;margin-bottom:0;font-size:10px}
+  #estadoCarga{margin:2px auto;font-size:9px;line-height:1.1}
+  .cine-lista{padding-top:9px;padding-bottom:10px;gap:7px}
+  .cine-tarjeta{flex-basis:calc((100% - 21px) / 4)}
+  .cine-etiqueta{padding:4px 5px;gap:1px}
+  .cine-etiqueta strong{font-size:10px}
+  .cine-etiqueta small,.cine-etiqueta .cine-generos{font-size:8px}
+  .cine-go{height:20px;font-size:9px}
+}
 #avisoOrientacion{display:none}
 .iconoGirar{width:76px;height:76px;margin-bottom:18px;border:3px solid #ed4052;border-radius:18px;display:grid;place-items:center;font-size:48px;line-height:1;color:#ed4052;transform:rotate(0deg)}
 #avisoOrientacion strong{font-size:22px;letter-spacing:.04em}#avisoOrientacion span{max-width:270px;margin-top:10px;color:#c3cada;font-size:14px;line-height:1.5;text-align:center}
-@media screen and (orientation:portrait) and (max-width:900px){html.dispositivo-movil body{padding:0}html.dispositivo-movil body>main,html.dispositivo-movil body>#visorOriginal,html.dispositivo-movil body>#btnInfoMaestro,html.dispositivo-movil body>#panelInfoMaestro,html.dispositivo-movil body>#cerrarVisor{display:none!important}html.dispositivo-movil #avisoOrientacion{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#080b11;color:#fff}}
+@media screen and (orientation:portrait) and (max-width:900px){
+  html.dispositivo-movil body{padding:0}
+  html.dispositivo-movil body>main,html.dispositivo-movil body>#visorOriginal,html.dispositivo-movil body>#btnInfoMaestro,html.dispositivo-movil body>#panelInfoMaestro,html.dispositivo-movil body>#cerrarVisor{display:none!important}
+  html.dispositivo-movil #avisoOrientacion{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#080b11;color:#fff}
+}
 </style>
 </head>
-<body>
+<body class="modo-carruseles">
 <div id="avisoOrientacion" role="status" aria-live="polite">
   <div class="iconoGirar" aria-hidden="true">↻</div>
   <strong>Gira el celular</strong>
@@ -99,10 +149,10 @@ header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 </div>
 <main>
 <header><h1>Gálvez Oscar</h1></header>
-<nav id="selectorModoTelefono" aria-label="Elegir buscador según el teléfono">
-  <button id="btnModoLite" class="btn-modo" type="button">1. Scroll Lite (Menos RAM)</button>
-  <button id="btnModoSliderUnico" class="btn-modo" type="button">2. Slider Único (Todo)</button>
-  <button id="btnModoCarruseles" class="btn-modo" type="button">3. Carruseles (Completo)</button>
+<nav id="selectorModos" aria-label="Seleccionar modo de buscador">
+  <button id="btnModoScrollLite" class="btn-modo" type="button">Scroll Lite (Poca RAM)</button>
+  <button id="btnModoSliderUnico" class="btn-modo" type="button">Slider Único</button>
+  <button id="btnModoCarruseles" class="btn-modo activo" type="button">Carruseles Clásicos</button>
 </nav>
 <section id="buscadorCine" role="search">
   <input id="buscadorPeliculas" type="search" autocomplete="off" placeholder="Buscar por nombre, palabras clave, género o año..." aria-label="Buscar películas">
@@ -115,9 +165,31 @@ header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 </section>
 <div id="resultadoBusqueda" aria-live="polite">Cargando páginas...</div>
 <div id="estadoCarga" role="status"></div>
-<section id="contenedorCarruseles" aria-label="Catálogo de películas"></section>
+
+<!-- Modo 1: Carga por scroll sin slider -->
+<section id="vistaScrollLite" aria-label="Catálogo con carga al bajar">
+  <h2 class="cine-fila-titulo">Catálogo por Scroll Dinámico</h2>
+  <div id="gridScrollLite"></div>
+  <div id="centinelaScrollLite">Desplázate hacia abajo para cargar más películas e imágenes…</div>
+</section>
+
+<!-- Modo 2: Un solo slider con todas las peliculas -->
+<section id="vistaSliderUnico" aria-label="Slider único de películas">
+  <div class="cine-fila">
+    <h2 id="tituloSliderUnico" class="cine-fila-titulo">Todas las películas</h2>
+    <div class="cine-carrusel">
+      <button id="flechaIzqUnica" type="button" class="flechaCine izquierda" aria-label="Películas anteriores">‹</button>
+      <div id="pistaSliderUnico" class="cine-lista" aria-label="Todas las películas"></div>
+      <button id="flechaDerUnica" type="button" class="flechaCine derecha" aria-label="Más películas">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- Modo 3: Carruseles clasicos por pagina y genero -->
+<section id="contenedorCarruseles" aria-label="Películas por página y género"></section>
 </main>
-<div id="visorOriginal" aria-hidden="true"><iframe id="paginaOriginal" title="Reproductor de video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+
+<div id="visorOriginal" aria-hidden="true"><iframe id="paginaOriginal" title="Reproductor de video" allow="autoplay; encrypted-media; picture-in-picture"></iframe></div>
 <button id="btnInfoMaestro" type="button" aria-expanded="false">INFO</button>
 <section id="panelInfoMaestro" aria-live="polite">
   <h2 id="infoTitulo"></h2><div id="infoMeta"></div><p id="infoDescripcion"></p><div id="infoGeneros"></div>
@@ -127,8 +199,6 @@ header h1{margin:0;font-size:clamp(17px,2.1vw,25px);letter-spacing:.035em}
 <script>
 (() => {
 'use strict';
-
-// Páginas maestras originales de Gálvez Oscar
 const PAGINAS = [
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202026.html',tipo:'Inicio',anio:2026},
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202025.html',tipo:'Inicio',anio:2025},
@@ -149,70 +219,21 @@ const PAGINAS = [
   {url:'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202019.html',tipo:'Animacion',anio:2019}
 ];
 
-// Catálogo de respaldo (2019-2026) con pósters vectoriales limpios si el fetch externo es bloqueado por CORS/sandbox
-function crearPosterSvg(titulo, anio, tipo, colorA, colorB) {
-  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const palabras = titulo.split(' ');
-  const linea1 = esc(palabras.slice(0, 2).join(' '));
-  const linea2 = esc(palabras.slice(2).join(' '));
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="440" height="440" viewBox="0 0 440 440">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${colorA}"/><stop offset="100%" stop-color="${colorB}"/></linearGradient></defs>
-    <rect width="440" height="440" rx="24" fill="url(#g)"/>
-    <rect x="20" y="20" width="400" height="400" rx="18" fill="none" stroke="#ffffff33" stroke-width="2"/>
-    <text x="36" y="68" fill="#ff9aa5" font-family="Arial,sans-serif" font-size="19" font-weight="800">${esc(tipo.toUpperCase())} · ${esc(anio)}</text>
-    <text x="36" y="225" fill="#ffffff" font-family="Arial,sans-serif" font-size="35" font-weight="900">${linea1}</text>
-    <text x="36" y="270" fill="#f4f6fb" font-family="Arial,sans-serif" font-size="30" font-weight="700">${linea2}</text>
-    <rect x="36" y="346" width="134" height="38" rx="9" fill="#ed4052"/>
-    <text x="103" y="371" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="17" font-weight="900">GÁLVEZ OSCAR</text>
-  </svg>`;
-  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-}
-
-const CATALOGO_RESPALDO = [
-  { titulo: 'Horizonte de Acero', anio: '2026', tipo: 'Inicio', generos: ['Acción', 'Ciencia Ficción'], descripcion: 'Una flota orbital responde a una señal desconocida más allá del cinturón exterior.', colores: ['#1e3a5f', '#0b132b'], urlVideo: 'https://ok.ru/videoembed/1234567890123?autoplay=1&loop=1' },
-  { titulo: 'Sombras en la Niebla', anio: '2026', tipo: 'Inicio', generos: ['Thriller', 'Misterio'], descripcion: 'Un investigador sigue una pista olvidada en un puerto costero envuelto en niebla.', colores: ['#3a1c3f', '#120d1d'], urlVideo: 'https://ok.ru/videoembed/2345678901234?autoplay=1&loop=1' },
-  { titulo: 'El Guardián del Bosque Azul', anio: '2026', tipo: 'Animacion', generos: ['Animación', 'Aventura', 'Fantasía'], descripcion: 'Un joven aprendiz descubre un espíritu protector escondido en lo profundo del valle.', colores: ['#0f4c5c', '#1b263b'], urlVideo: 'https://ok.ru/videoembed/3456789012345?autoplay=1&loop=1' },
-  { titulo: 'Motor de Medianoche', anio: '2025', tipo: 'Inicio', generos: ['Acción', 'Drama'], descripcion: 'Dos corredores arriesgan todo en una ruta nocturna a través de la sierra.', colores: ['#5c1a28', '#141118'], urlVideo: 'https://ok.ru/videoembed/4567890123456?autoplay=1&loop=1' },
-  { titulo: 'Crónica de un Cometa', anio: '2025', tipo: 'Inicio', generos: ['Aventura', 'Ciencia Ficción'], descripcion: 'Un observatorio registra un fenómeno celeste que cambia el rumbo de una expedición.', colores: ['#23395d', '#0d1b2a'], urlVideo: 'https://ok.ru/videoembed/5678901234567?autoplay=1&loop=1' },
-  { titulo: 'Pequeños Inventores', anio: '2025', tipo: 'Animacion', generos: ['Animación', 'Comedia', 'Aventura'], descripcion: 'Tres amigos construyen un vehículo volador con piezas recicladas de su taller.', colores: ['#4a306d', '#181425'], urlVideo: 'https://ok.ru/videoembed/6789012345678?autoplay=1&loop=1' },
-  { titulo: 'La Casa del Faro', anio: '2024', tipo: 'Inicio', generos: ['Misterio', 'Drama'], descripcion: 'Una antigua bitácora revela los secretos de un faro aislado en el Atlántico.', colores: ['#1d3557', '#0a1128'], urlVideo: 'https://ok.ru/videoembed/7890123456789?autoplay=1&loop=1' },
-  { titulo: 'Reino de Cristal', anio: '2024', tipo: 'Animacion', generos: ['Animación', 'Fantasía'], descripcion: 'Una ciudad suspendida sobre glaciares enfrenta una tormenta de luz.', colores: ['#1b4965', '#0b192c'], urlVideo: 'https://ok.ru/videoembed/8901234567890?autoplay=1&loop=1' },
-  { titulo: 'Código Nocturno', anio: '2023', tipo: 'Inicio', generos: ['Thriller', 'Acción'], descripcion: 'Una especialista en seguridad rastrea una transmisión cifrada en plena madrugada.', colores: ['#3d1e36', '#100b14'], urlVideo: 'https://ok.ru/videoembed/9012345678901?autoplay=1&loop=1' },
-  { titulo: 'Viaje entre Nubes', anio: '2023', tipo: 'Animacion', generos: ['Animación', 'Aventura'], descripcion: 'Un piloto de globos aerostáticos cruza archipiélagos mágicos.', colores: ['#274c77', '#132a46'], urlVideo: 'https://ok.ru/videoembed/1122334455667?autoplay=1&loop=1' },
-  { titulo: 'Último Destello', anio: '2022', tipo: 'Inicio', generos: ['Drama', 'Ciencia Ficción'], descripcion: 'Una tripulación científica enfrenta el silencio absoluto de la órbita baja.', colores: ['#2b2d42', '#10121c'], urlVideo: 'https://ok.ru/videoembed/2233445566778?autoplay=1&loop=1' },
-  { titulo: 'El Tren de las Estrellas', anio: '2022', tipo: 'Animacion', generos: ['Animación', 'Fantasía', 'Comedia'], descripcion: 'Un tren nocturno recorre estaciones iluminadas por constelaciones.', colores: ['#3c1642', '#160c28'], urlVideo: 'https://ok.ru/videoembed/3344556677889?autoplay=1&loop=1' },
-  { titulo: 'Frontera Sur', anio: '2021', tipo: 'Inicio', generos: ['Aventura', 'Drama'], descripcion: 'Un viaje por carretera a través de paisajes áridos y caminos olvidados.', colores: ['#5e3023', '#1c110a'], urlVideo: 'https://ok.ru/videoembed/4455667788990?autoplay=1&loop=1' },
-  { titulo: 'Bosque Encantado', anio: '2020', tipo: 'Animacion', generos: ['Animación', 'Aventura', 'Fantasía'], descripcion: 'Criaturas del bosque unen fuerzas para proteger el manantial principal.', colores: ['#1b4332', '#081c15'], urlVideo: 'https://ok.ru/videoembed/5566778899001?autoplay=1&loop=1' },
-  { titulo: 'Pulso de Neón', anio: '2020', tipo: 'Inicio', generos: ['Ciencia Ficción', 'Thriller'], descripcion: 'En una metrópoli iluminada por neón, un mensajero guarda un archivo clave.', colores: ['#4c1d95', '#110a24'], urlVideo: 'https://ok.ru/videoembed/6677889900112?autoplay=1&loop=1' },
-  { titulo: 'Cumbre Nevada', anio: '2019', tipo: 'Inicio', generos: ['Aventura', 'Acción'], descripcion: 'Un rescate en alta montaña desafía ventiscas y terrenos extremos.', colores: ['#1e3a5f', '#0d1b2a'], urlVideo: 'https://ok.ru/videoembed/7788990011223?autoplay=1&loop=1' },
-  { titulo: 'Cuentos del Relojero', anio: '2019', tipo: 'Animacion', generos: ['Animación', 'Fantasía'], descripcion: 'Un reloj antiguo cobra vida cada medianoche para contar historias olvidadas.', colores: ['#4a2545', '#180c18'], urlVideo: 'https://ok.ru/videoembed/8899001122334?autoplay=1&loop=1' }
-];
-
-// Modos disponibles: 'lite' | 'slider' | 'carruseles'
-const LOTE_LITE = 12;
+const LOTE_SCROLL = 14;
 const $ = id => document.getElementById(id);
 const normalizar = texto => String(texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\.(jpg|jpeg|png|gif|webp)$/i,'').replace(/\b(19|20)\d{2}\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
 
-function detectarModoInicial() {
-  try {
-    const guardado = localStorage.getItem('go_modo_buscador');
-    if (guardado === 'lite' || guardado === 'slider' || guardado === 'carruseles') return guardado;
-  } catch (e) {}
-  const ram = Number(navigator.deviceMemory || 0);
-  const cores = Number(navigator.hardwareConcurrency || 0);
-  if ((ram > 0 && ram <= 3) || (cores > 0 && cores <= 4)) return 'lite';
-  if (ram > 0 && ram <= 6) return 'slider';
-  return 'slider';
-}
+let peliculas = [];
+let filtradas = [];
+let catalogoPaginas = [];
+let modoActual = 'carruseles';
+let renderizadosScroll = 0;
 
-let modoActual = detectarModoInicial();
-let peliculas = [], filtradas = [], catalogoPaginas = [], renderizadosLite = 0;
-
-// Carga dinámica de imágenes al bajar o deslizar
 function activarImagen(img) {
   if (!img || !img.dataset.src) return;
-  img.src = img.dataset.src;
+  const url = img.dataset.src;
   img.removeAttribute('data-src');
+  img.src = url;
 }
 
 const observadorImagenes = new IntersectionObserver((entries, obs) => {
@@ -222,14 +243,33 @@ const observadorImagenes = new IntersectionObserver((entries, obs) => {
       obs.unobserve(entry.target);
     }
   });
-}, { rootMargin: '120px 140px', threshold: 0.01 });
+}, { rootMargin: '220px 260px', threshold: 0.01 });
 
 function escanearImagenesVisibles() {
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const vw = window.innerWidth || document.documentElement.clientWidth;
   document.querySelectorAll('img[data-src]').forEach(img => {
+    const card = img.closest('.cine-tarjeta');
+    if (card && !card.isConnected) return;
     const r = img.getBoundingClientRect();
-    if (r.bottom >= -140 && r.top <= vh + 140 && r.right >= -160 && r.left <= vw + 160) {
+    if (r.width === 0 && r.height === 0) return;
+    const enVertical = r.bottom >= -220 && r.top <= vh + 220;
+    const enHorizontal = r.right >= -260 && r.left <= vw + 260;
+    if (enVertical && enHorizontal) {
+      activarImagen(img);
+      observadorImagenes.unobserve(img);
+    }
+  });
+}
+
+function activarImagenesSliderUnico() {
+  const pista = $('pistaSliderUnico');
+  if (!pista) return;
+  const pr = pista.getBoundingClientRect();
+  if (pr.width === 0 && pr.height === 0) return;
+  pista.querySelectorAll('img[data-src]').forEach(img => {
+    const ir = img.getBoundingClientRect();
+    if (ir.right >= pr.left - 320 && ir.left <= pr.right + 320) {
       activarImagen(img);
       observadorImagenes.unobserve(img);
     }
@@ -283,37 +323,33 @@ function leerFicha(nodo, pagina, indice, scriptText) {
   }
 
   return {
-    titulo,
-    clave: normalizar(titulo),
-    descripcion,
-    generoTexto,
+    titulo, clave: normalizar(titulo), descripcion, generoTexto,
     generos: generos.length ? generos : generoTexto.split(/[·,]/).map(x=>x.trim()).filter(Boolean),
     anio: (anioTexto.match(/20\d{2}|19\d{2}/) || [String(pagina.anio)])[0],
     imagen: src ? new URL(src, pagina.url).href : '',
-    pagina: pagina.url,
-    tipo: pagina.tipo,
-    indice,
-    urlVideo
+    pagina: pagina.url, tipo: pagina.tipo, indice, urlVideo,
+    nombreOriginal: nodo.getAttribute('data-nombre') || '',
+    altOriginal: img.getAttribute('alt') || ''
   };
 }
 
 async function cargarPagina(pagina) {
-  const respuesta = await fetch(pagina.url, { cache: 'no-store', credentials: 'same-origin' });
+  const respuesta = await fetch(pagina.url, {cache:'no-store', credentials:'same-origin'});
   if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
   const html = await respuesta.text();
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const scriptText = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n');
   const nodos = nodosPeliculas(doc);
-  return nodos.map((n,i) => leerFicha(n, pagina, i, scriptText)).filter(Boolean);
+  return nodos.map((n,i)=>leerFicha(n,pagina,i,scriptText)).filter(Boolean);
 }
 
 function agregarSinDuplicados(lista) {
-  const mapa = new Map(peliculas.map(p => [p.clave, p]));
+  const mapa = new Map(peliculas.map(p=>[p.clave,p]));
   for (const p of lista) {
     if (!p.clave) continue;
     const anterior = mapa.get(p.clave);
-    if (!anterior) mapa.set(p.clave, p);
-    else if (!anterior.imagen && p.imagen) mapa.set(p.clave, p);
+    if (!anterior) mapa.set(p.clave,p);
+    else if (!anterior.imagen && p.imagen) mapa.set(p.clave,p);
   }
   peliculas = Array.from(mapa.values());
 }
@@ -321,72 +357,35 @@ function agregarSinDuplicados(lista) {
 function actualizarGeneros() {
   const actual = $('filtroGenero').value;
   const todos = new Map();
-  peliculas.forEach(p => p.generos.forEach(g => {
-    const k = normalizar(g);
-    if (k && !todos.has(k)) todos.set(k, g);
-  }));
-  $('filtroGenero').innerHTML = '<option value="">Todos los géneros</option>' + Array.from(todos.values())
-    .sort((a,b) => a.localeCompare(b, 'es'))
-    .map(g => `<option value="${g.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">${g}</option>`)
-    .join('');
-  if (Array.from(todos.values()).includes(actual)) $('filtroGenero').value = actual;
+  peliculas.forEach(p=>p.generos.forEach(g=>{const k=normalizar(g);if(k && !todos.has(k))todos.set(k,g);}));
+  $('filtroGenero').innerHTML = '<option value="">Todos los géneros</option>' + Array.from(todos.values()).sort((a,b)=>a.localeCompare(b,'es')).map(g=>`<option value="${g.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">${g}</option>`).join('');
+  if (Array.from(todos.values()).includes(actual)) $('filtroGenero').value=actual;
 }
 
 function crearTarjeta(p) {
   if (!p.imagen) return null;
-  const b = document.createElement('article');
-  b.className = 'cine-tarjeta';
-
-  const poster = document.createElement('button');
-  poster.type = 'button';
-  poster.className = 'cine-poster';
-  poster.setAttribute('aria-label', 'Ver información de ' + p.titulo);
-  poster.setAttribute('aria-expanded', 'false');
-
-  const img = document.createElement('img');
-  img.dataset.src = p.imagen;
-  img.alt = p.titulo;
-  img.decoding = 'async';
-  img.onerror = () => b.remove();
+  const b=document.createElement('article'); b.className='cine-tarjeta';
+  const poster=document.createElement('button'); poster.type='button'; poster.className='cine-poster'; poster.setAttribute('aria-label','Ver información de '+p.titulo); poster.setAttribute('aria-expanded','false');
+  const img=document.createElement('img'); img.dataset.src=p.imagen; img.alt=p.titulo; img.decoding='async';
+  img.onerror=()=>{
+    if (img.dataset.src) return;
+    const cardActual = img.closest('.cine-tarjeta');
+    if (cardActual && cardActual.parentElement) cardActual.remove();
+  };
   observadorImagenes.observe(img);
   poster.appendChild(img);
-
-  const etiqueta = document.createElement('div');
-  etiqueta.className = 'cine-etiqueta';
-  const titulo = document.createElement('strong');
-  titulo.textContent = p.titulo;
-  const meta = document.createElement('small');
-  meta.textContent = p.anio + ' · ' + p.tipo;
-  const generos = document.createElement('span');
-  generos.className = 'cine-generos';
-  generos.textContent = p.generoTexto || 'Información de la película';
-
-  const go = document.createElement('button');
-  go.type = 'button';
-  go.className = 'cine-go';
-  go.textContent = 'GO';
-  go.setAttribute('aria-label', 'Reproducir ' + p.titulo);
-  go.addEventListener('click', e => {
-    e.stopPropagation();
-    reproducir(p);
+  const etiqueta=document.createElement('div'); etiqueta.className='cine-etiqueta';
+  const titulo=document.createElement('strong'); titulo.textContent=p.titulo;
+  const meta=document.createElement('small'); meta.textContent=p.anio+' · '+p.tipo;
+  const generos=document.createElement('span'); generos.className='cine-generos'; generos.textContent=p.generoTexto || 'Información de la película';
+  const go=document.createElement('button'); go.type='button'; go.className='cine-go'; go.textContent='GO'; go.setAttribute('aria-label','Reproducir '+p.titulo);
+  go.addEventListener('click',e=>{e.stopPropagation();reproducir(p);});
+  poster.addEventListener('click',()=>{
+    const estaba=b.classList.contains('seleccionada');
+    document.querySelectorAll('.cine-tarjeta.seleccionada').forEach(x=>{x.classList.remove('seleccionada');const q=x.querySelector('.cine-poster');if(q)q.setAttribute('aria-expanded','false');});
+    if(!estaba){b.classList.add('seleccionada');poster.setAttribute('aria-expanded','true');}
   });
-
-  poster.addEventListener('click', () => {
-    const estaba = b.classList.contains('seleccionada');
-    document.querySelectorAll('.cine-tarjeta.seleccionada').forEach(x => {
-      x.classList.remove('seleccionada');
-      const q = x.querySelector('.cine-poster');
-      if (q) q.setAttribute('aria-expanded', 'false');
-    });
-    if (!estaba) {
-      b.classList.add('seleccionada');
-      poster.setAttribute('aria-expanded', 'true');
-    }
-  });
-
-  etiqueta.append(titulo, meta, generos, go);
-  b.append(poster, etiqueta);
-  return b;
+  etiqueta.append(titulo,meta,generos,go); b.append(poster,etiqueta); return b;
 }
 
 function nombreVisiblePagina(pagina) {
@@ -395,7 +394,7 @@ function nombreVisiblePagina(pagina) {
   return nombre;
 }
 
-function crearFilaCarrusel(titulo, lista) {
+function crearFilaCarrusel(titulo, lista, indice) {
   if (!lista || !lista.length) return null;
   const fila = document.createElement('section');
   fila.className = 'cine-fila';
@@ -405,203 +404,180 @@ function crearFilaCarrusel(titulo, lista) {
   const carrusel = document.createElement('div');
   carrusel.className = 'cine-carrusel';
   const anterior = document.createElement('button');
-  anterior.type = 'button';
-  anterior.className = 'flechaCine izquierda';
-  anterior.setAttribute('aria-label', 'Películas anteriores');
-  anterior.textContent = '‹';
+  anterior.type = 'button'; anterior.className = 'flechaCine izquierda';
+  anterior.setAttribute('aria-label','Películas anteriores'); anterior.textContent = '‹';
   const siguiente = document.createElement('button');
-  siguiente.type = 'button';
-  siguiente.className = 'flechaCine derecha';
-  siguiente.setAttribute('aria-label', 'Más películas');
-  siguiente.textContent = '›';
+  siguiente.type = 'button'; siguiente.className = 'flechaCine derecha';
+  siguiente.setAttribute('aria-label','Más películas'); siguiente.textContent = '›';
   const pista = document.createElement('div');
   pista.className = 'cine-lista';
   pista.setAttribute('aria-label', titulo);
-
-  const frag = document.createDocumentFragment();
-  lista.forEach(p => {
-    const tarjeta = crearTarjeta(p);
-    if (tarjeta) frag.appendChild(tarjeta);
-  });
-  pista.appendChild(frag);
+  lista.forEach(p => { const tarjeta = crearTarjeta(p); if (tarjeta) pista.appendChild(tarjeta); });
   pista.addEventListener('scroll', escanearImagenesVisibles, { passive: true });
-  anterior.addEventListener('click', () => {
-    pista.scrollBy({ left: -pista.clientWidth * 0.85, behavior: 'smooth' });
-    setTimeout(escanearImagenesVisibles, 260);
-  });
-  siguiente.addEventListener('click', () => {
-    pista.scrollBy({ left: pista.clientWidth * 0.85, behavior: 'smooth' });
-    setTimeout(escanearImagenesVisibles, 260);
-  });
-  carrusel.append(anterior, pista, siguiente);
-  fila.append(encabezado, carrusel);
+  anterior.addEventListener('click',()=>{pista.scrollBy({left:-pista.clientWidth*.85,behavior:'smooth'});setTimeout(escanearImagenesVisibles,260);});
+  siguiente.addEventListener('click',()=>{pista.scrollBy({left:pista.clientWidth*.85,behavior:'smooth'});setTimeout(escanearImagenesVisibles,260);});
+  carrusel.append(anterior,pista,siguiente);
+  fila.append(encabezado,carrusel);
   return fila;
 }
 
-// --- MODO 1: SCROLL LITE SIN SLIDER (MENOS MEMORIA) ---
-let observadorCentinela = null;
-
-function cargarSiguienteLoteLite() {
-  const grid = $('gridScrollLite');
-  const centinela = $('centinelaScroll');
-  if (!grid || !centinela) return;
-
-  if (!filtradas.length) {
-    if (renderizadosLite === 0) grid.innerHTML = '<div class="cine-vacio">No se encontraron películas.</div>';
-    $('resultadoBusqueda').textContent = '0 películas encontradas';
-    centinela.textContent = '';
-    return;
-  }
-
-  if (renderizadosLite >= filtradas.length) {
-    $('resultadoBusqueda').textContent = 'Mostrando ' + renderizadosLite + ' de ' + filtradas.length + ' películas (Scroll Lite)';
-    centinela.textContent = 'Fin de la lista (' + filtradas.length + ' películas).';
-    return;
-  }
-
-  const lote = filtradas.slice(renderizadosLite, renderizadosLite + LOTE_LITE);
-  const frag = document.createDocumentFragment();
-  lote.forEach(p => {
-    const t = crearTarjeta(p);
-    if (t) frag.appendChild(t);
-  });
-  grid.appendChild(frag);
-  renderizadosLite += lote.length;
-
-  $('resultadoBusqueda').textContent = 'Mostrando ' + renderizadosLite + ' de ' + filtradas.length + ' películas (Scroll Lite)';
-  centinela.textContent = renderizadosLite < filtradas.length
-    ? 'Baja con el scroll para cargar más (' + (filtradas.length - renderizadosLite) + ' restantes)…'
-    : 'Fin de la lista (' + filtradas.length + ' películas).';
-  escanearImagenesVisibles();
-}
-
-function prepararVistaLite(etiquetaTitulo) {
-  const contenedor = $('contenedorCarruseles');
-  contenedor.innerHTML = `
-    <h2 class="cine-fila-titulo">${etiquetaTitulo}</h2>
-    <div id="gridScrollLite"></div>
-    <div id="centinelaScroll">Baja con el scroll para cargar más películas e imágenes…</div>
-  `;
-  renderizadosLite = 0;
-  cargarSiguienteLoteLite();
-
-  if (observadorCentinela) observadorCentinela.disconnect();
-  observadorCentinela = new IntersectionObserver(entries => {
-    if (modoActual === 'lite' && entries.some(e => e.isIntersecting)) {
-      cargarSiguienteLoteLite();
-    }
-  }, { rootMargin: '220px 0px' });
-  observadorCentinela.observe($('centinelaScroll'));
-}
-
-// --- MODO 2: SLIDER ÚNICO CON TODAS LAS PELÍCULAS ---
-function prepararVistaSliderUnico(etiquetaTitulo) {
+function pintarFilas(filas, mensaje) {
   const contenedor = $('contenedorCarruseles');
   contenedor.innerHTML = '';
-  const fila = crearFilaCarrusel(etiquetaTitulo, filtradas);
-  if (fila) contenedor.appendChild(fila);
-  else contenedor.innerHTML = '<div class="cine-vacio">No se encontraron películas.</div>';
-  $('resultadoBusqueda').textContent = filtradas.length + ' películas en el slider único';
-  escanearImagenesVisibles();
-}
-
-// --- MODO 3: CARRUSELES POR PÁGINA Y GÉNERO ---
-function prepararVistaCarruseles(hayFiltro) {
-  const contenedor = $('contenedorCarruseles');
-  contenedor.innerHTML = '';
-  const filas = [];
-
-  if (hayFiltro) {
-    filas.push({ titulo: 'Resultados de búsqueda', lista: filtradas });
-  } else {
-    catalogoPaginas.forEach(({ pagina, lista }) => filas.push({ titulo: nombreVisiblePagina(pagina), lista }));
-    const generos = new Map();
-    peliculas.forEach(p => p.generos.forEach(g => {
-      const clave = normalizar(g);
-      if (clave && !generos.has(clave)) generos.set(clave, g);
-    }));
-    Array.from(generos.entries()).sort((a,b) => a[1].localeCompare(b[1], 'es')).forEach(([clave, nombre]) => {
-      const lista = peliculas.filter(p => p.generos.some(g => normalizar(g) === clave));
-      filas.push({ titulo: nombre, lista });
-    });
-  }
-
   let cantidad = 0;
-  filas.forEach(f => {
-    if (!f.lista || !f.lista.length) return;
-    const el = crearFilaCarrusel(f.titulo, f.lista);
-    if (el) { contenedor.appendChild(el); cantidad += f.lista.length; }
+  filas.forEach((fila,i)=>{
+    if (!fila.lista || !fila.lista.length) return;
+    const elemento = crearFilaCarrusel(fila.titulo,fila.lista,i);
+    if (elemento) { contenedor.appendChild(elemento); cantidad += fila.lista.length; }
   });
+  $('resultadoBusqueda').textContent = mensaje || (cantidad + ' películas en carruseles');
   if (!cantidad) contenedor.innerHTML = '<div class="cine-vacio">No se encontraron películas.</div>';
-  $('resultadoBusqueda').textContent = hayFiltro ? (filtradas.length + ' resultados') : (peliculas.length + ' películas · ' + catalogoPaginas.length + ' páginas');
+  activarImagenesSliderUnico();
   escanearImagenesVisibles();
 }
 
-function aplicarFiltros() {
-  const terminos = normalizar($('buscadorPeliculas').value).split(' ').filter(Boolean);
-  const genero = normalizar($('filtroGenero').value);
-  const anio = $('filtroAnio').value;
-  const hayFiltro = terminos.length > 0 || !!genero || !!anio;
+function renderizarPrincipalCarruseles() {
+  const filas = [];
+  catalogoPaginas.forEach(({pagina,lista})=>filas.push({titulo:nombreVisiblePagina(pagina),lista}));
+  const generos = new Map();
+  peliculas.forEach(p=>p.generos.forEach(g=>{
+    const clave=normalizar(g);
+    if(clave && !generos.has(clave)) generos.set(clave,g);
+  }));
+  Array.from(generos.entries()).sort((a,b)=>a[1].localeCompare(b[1],'es')).forEach(([clave,nombre])=>{
+    const lista=peliculas.filter(p=>p.generos.some(g=>normalizar(g)===clave));
+    filas.push({titulo:nombre,lista});
+  });
+  pintarFilas(filas, peliculas.length + ' películas · ' + catalogoPaginas.length + ' páginas cargadas');
+}
 
-  filtradas = peliculas.filter(p => {
-    const texto = normalizar([p.titulo, p.descripcion, p.generoTexto, p.anio, p.tipo].join(' '));
-    return terminos.every(t => texto.includes(t)) &&
-      (!genero || p.generos.some(g => normalizar(g) === genero)) &&
-      (!anio || p.anio === anio);
+function renderizarSliderUnico(lista, hayFiltro) {
+  const pista = $('pistaSliderUnico');
+  $('tituloSliderUnico').textContent = hayFiltro
+    ? 'Resultados en slider (' + lista.length + ')'
+    : 'Todas las películas (' + lista.length + ')';
+  pista.innerHTML = '';
+  if (!lista.length) {
+    pista.innerHTML = '<div class="cine-vacio">No se encontraron películas.</div>';
+    $('resultadoBusqueda').textContent = '0 películas en el slider';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  lista.forEach(p => { const t = crearTarjeta(p); if (t) frag.appendChild(t); });
+  pista.appendChild(frag);
+  pista.scrollLeft = 0;
+  $('resultadoBusqueda').textContent = lista.length + ' películas en el slider único';
+  requestAnimationFrame(() => {
+    activarImagenesSliderUnico();
+    escanearImagenesVisibles();
+  });
+}
+
+function cargarLoteScrollLite() {
+  const grid = $('gridScrollLite');
+  if (!filtradas.length) {
+    if (renderizadosScroll === 0) grid.innerHTML = '<div class="cine-vacio">No se encontraron películas.</div>';
+    $('centinelaScrollLite').textContent = '';
+    return;
+  }
+  if (renderizadosScroll >= filtradas.length) {
+    $('centinelaScrollLite').textContent = 'Mostrando las ' + filtradas.length + ' películas coincidente(s).';
+    return;
+  }
+  const tramo = filtradas.slice(renderizadosScroll, renderizadosScroll + LOTE_SCROLL);
+  const frag = document.createDocumentFragment();
+  tramo.forEach(p => { const t = crearTarjeta(p); if (t) frag.appendChild(t); });
+  grid.appendChild(frag);
+  renderizadosScroll += tramo.length;
+  $('resultadoBusqueda').textContent = 'Mostrando ' + renderizadosScroll + ' de ' + filtradas.length + ' películas (Scroll Lite)';
+  $('centinelaScrollLite').textContent = renderizadosScroll < filtradas.length
+    ? 'Baja con el scroll para cargar más (' + (filtradas.length - renderizadosScroll) + ' restantes)…'
+    : 'Fin de la lista (' + filtradas.length + ' películas).';
+  activarImagenesSliderUnico();
+  escanearImagenesVisibles();
+}
+
+function aplicarFiltros(resetScroll = true) {
+  const terminos=normalizar($('buscadorPeliculas').value).split(' ').filter(Boolean);
+  const genero=normalizar($('filtroGenero').value), anio=$('filtroAnio').value;
+  const hayFiltro=terminos.length>0 || !!genero || !!anio;
+  filtradas=peliculas.filter(p=>{
+    const texto=normalizar([p.titulo,p.descripcion,p.generoTexto,p.anio,p.tipo].join(' '));
+    return terminos.every(t=>texto.includes(t)) && (!genero || p.generos.some(g=>normalizar(g)===genero)) && (!anio || p.anio===anio);
   });
 
-  const partes = [];
-  if (anio) partes.push('Año ' + anio);
-  if ($('filtroGenero').value) partes.push($('filtroGenero').value);
-  if (terminos.length) partes.push('"' + $('buscadorPeliculas').value.trim() + '"');
-  const tituloDinamico = hayFiltro
-    ? 'Resultados (' + partes.join(' · ') + ')'
-    : 'Todas las películas (' + peliculas.length + ')';
-
-  if (modoActual === 'lite') {
-    prepararVistaLite(tituloDinamico);
-  } else if (modoActual === 'slider') {
-    prepararVistaSliderUnico(tituloDinamico);
+  if (modoActual === 'scroll-lite') {
+    if (resetScroll) {
+      $('gridScrollLite').innerHTML = '';
+      renderizadosScroll = 0;
+    }
+    cargarLoteScrollLite();
+  } else if (modoActual === 'slider-unico') {
+    renderizarSliderUnico(filtradas, hayFiltro);
   } else {
-    prepararVistaCarruseles(hayFiltro);
+    if (hayFiltro) pintarFilas([{titulo:'Resultados de búsqueda',lista:filtradas}], filtradas.length + ' resultados');
+    else renderizarPrincipalCarruseles();
   }
 }
 
-function cambiarModoBuscador(nuevoModo) {
+function establecerModo(nuevoModo) {
   modoActual = nuevoModo;
-  try { localStorage.setItem('go_modo_buscador', nuevoModo); } catch (e) {}
-  $('btnModoLite').classList.toggle('activo', modoActual === 'lite');
-  $('btnModoSliderUnico').classList.toggle('activo', modoActual === 'slider');
-  $('btnModoCarruseles').classList.toggle('activo', modoActual === 'carruseles');
-  aplicarFiltros();
+  document.body.classList.remove('modo-scroll-lite', 'modo-slider-unico', 'modo-carruseles');
+  document.body.classList.add('modo-' + nuevoModo);
+  $('btnModoScrollLite').classList.toggle('activo', nuevoModo === 'scroll-lite');
+  $('btnModoSliderUnico').classList.toggle('activo', nuevoModo === 'slider-unico');
+  $('btnModoCarruseles').classList.toggle('activo', nuevoModo === 'carruseles');
+  try { localStorage.setItem('galvez_modo_buscador', nuevoModo); } catch (e) {}
+  aplicarFiltros(true);
 }
+
+// Desactiva el paso a pantalla completa del visor y el iframe del reproductor
+function desactivarPantallaCompletaReproductor() {
+  const visor = $('visorOriginal');
+  const frame = $('paginaOriginal');
+  if (frame) {
+    frame.removeAttribute('allowfullscreen');
+    frame.removeAttribute('webkitallowfullscreen');
+    frame.removeAttribute('mozallowfullscreen');
+    frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+  }
+  [document.documentElement, document.body, visor, frame].forEach(el => {
+    if (!el) return;
+    ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullscreen', 'msRequestFullscreen'].forEach(fn => {
+      if (typeof el[fn] === 'function') {
+        el[fn] = () => Promise.resolve();
+      }
+    });
+  });
+}
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement && document.exitFullscreen) {
+    document.exitFullscreen().catch(() => {});
+  }
+});
+document.addEventListener('webkitfullscreenchange', () => {
+  if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+});
 
 function mostrarInfo(p) {
-  $('infoTitulo').textContent = p.titulo;
-  $('infoMeta').textContent = p.anio + ' · ' + p.tipo;
-  $('infoDescripcion').textContent = p.descripcion || 'Sin descripción disponible.';
-  $('infoGeneros').textContent = p.generoTexto;
+  $('infoTitulo').textContent=p.titulo;
+  $('infoMeta').textContent=p.anio+' · '+p.tipo;
+  $('infoDescripcion').textContent=p.descripcion || 'Sin descripción disponible.';
+  $('infoGeneros').textContent=p.generoTexto;
   $('panelInfoMaestro').classList.remove('visible');
-  $('btnInfoMaestro').setAttribute('aria-expanded', 'false');
+  $('btnInfoMaestro').setAttribute('aria-expanded','false');
 }
 
 function reproducir(p) {
-  const pagina = document.documentElement;
-  if (pagina.requestFullscreen) {
-    const solicitud = pagina.requestFullscreen();
-    if (solicitud && solicitud.catch) {
-      solicitud.catch(err => console.warn('No se pudo activar pantalla completa:', err));
-    }
-  } else if (pagina.webkitRequestFullscreen) {
-    pagina.webkitRequestFullscreen();
-  }
-
+  desactivarPantallaCompletaReproductor();
   mostrarInfo(p);
   const visor = $('visorOriginal');
   visor.classList.add('abierto');
-  visor.setAttribute('aria-hidden', 'false');
-  $('btnInfoMaestro').style.display = 'block';
-  $('cerrarVisor').style.display = 'block';
+  visor.setAttribute('aria-hidden','false');
+  $('btnInfoMaestro').style.display='block'; $('cerrarVisor').style.display='block';
 
   const frame = $('paginaOriginal');
   if (p.urlVideo) {
@@ -613,153 +589,71 @@ function reproducir(p) {
 }
 
 function cerrarReproductor() {
-  $('paginaOriginal').src = 'about:blank';
-  $('visorOriginal').classList.remove('abierto');
-  $('visorOriginal').setAttribute('aria-hidden', 'true');
-  $('btnInfoMaestro').style.display = 'none';
-  $('cerrarVisor').style.display = 'none';
-  $('panelInfoMaestro').classList.remove('visible');
-  $('btnInfoMaestro').setAttribute('aria-expanded', 'false');
+  $('paginaOriginal').src='about:blank'; $('visorOriginal').classList.remove('abierto'); $('visorOriginal').setAttribute('aria-hidden','true');
+  $('btnInfoMaestro').style.display='none'; $('cerrarVisor').style.display='none'; $('panelInfoMaestro').classList.remove('visible');
+  $('btnInfoMaestro').setAttribute('aria-expanded','false');
 }
 
-// Dos toques en la página para abrir o cerrar la pantalla completa
-(() => {
-  let ultimoToque = 0;
-
-  function cambiarPantallaCompleta() {
-    const enPantallaCompleta = document.fullscreenElement || document.webkitFullscreenElement;
-    if (enPantallaCompleta) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(err => console.warn('No se pudo cerrar la pantalla completa:', err));
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    } else {
-      const pagina = document.documentElement;
-      if (pagina.requestFullscreen) {
-        const solicitud = pagina.requestFullscreen();
-        if (solicitud && solicitud.catch) {
-          solicitud.catch(err => console.warn('No se pudo activar pantalla completa:', err));
-        }
-      } else if (pagina.webkitRequestFullscreen) {
-        pagina.webkitRequestFullscreen();
-      }
-    }
+const observadorScrollLite = new IntersectionObserver(entries => {
+  if (modoActual === 'scroll-lite' && entries.some(e => e.isIntersecting)) {
+    cargarLoteScrollLite();
   }
-
-  document.addEventListener('touchend', e => {
-    if (e.target.closest('button, a, input, select, textarea, iframe')) {
-      ultimoToque = 0;
-      return;
-    }
-    const ahora = Date.now();
-    if (ahora - ultimoToque < 350) {
-      e.preventDefault();
-      ultimoToque = 0;
-      cambiarPantallaCompleta();
-    } else {
-      ultimoToque = ahora;
-    }
-  }, { passive: false });
-})();
-
-function cargarCatalogoRespaldo() {
-  const fichas = CATALOGO_RESPALDO.map((item, idx) => ({
-    titulo: item.titulo,
-    clave: normalizar(item.titulo),
-    descripcion: item.descripcion,
-    generoTexto: item.generos.join(' · '),
-    generos: item.generos,
-    anio: item.anio,
-    imagen: crearPosterSvg(item.titulo, item.anio, item.tipo, item.colores[0], item.colores[1]),
-    pagina: 'respaldo-local',
-    tipo: item.tipo,
-    indice: idx,
-    urlVideo: item.urlVideo
-  }));
-  catalogoPaginas = [
-    { pagina: { url: 'https://galvezoscar.github.io/go/Galvez%20Oscar%20Inicio%202026.html', tipo: 'Inicio', anio: 2026 }, lista: fichas.filter(x => x.tipo === 'Inicio') },
-    { pagina: { url: 'https://galvezoscar.github.io/go/Galvez%20Oscar%20Animacion%202026.html', tipo: 'Animacion', anio: 2026 }, lista: fichas.filter(x => x.tipo === 'Animacion') }
-  ];
-  agregarSinDuplicados(fichas);
-  actualizarGeneros();
-  aplicarFiltros();
-}
-
-async function iniciar() {
-  $('btnModoLite').classList.toggle('activo', modoActual === 'lite');
-  $('btnModoSliderUnico').classList.toggle('activo', modoActual === 'slider');
-  $('btnModoCarruseles').classList.toggle('activo', modoActual === 'carruseles');
-
-  const fallos = [];
-  for (const pagina of PAGINAS) {
-    try {
-      const lista = await cargarPagina(pagina);
-      if (lista.length) {
-        catalogoPaginas.push({ pagina, lista });
-        agregarSinDuplicados(lista);
-        actualizarGeneros();
-        aplicarFiltros();
-        $('estadoCarga').textContent = 'Cargando catálogo: ' + peliculas.length + ' películas encontradas…';
-      } else {
-        fallos.push(pagina.tipo + ' ' + pagina.anio);
-      }
-    } catch (e) {
-      fallos.push(pagina.tipo + ' ' + pagina.anio);
-    }
-  }
-
-  if (peliculas.length === 0) {
-    cargarCatalogoRespaldo();
-    $('estadoCarga').textContent = 'Catálogo de muestra activo (2019–2026). Cambia entre los 3 buscadores según el teléfono.';
-  } else {
-    $('estadoCarga').textContent = fallos.length
-      ? 'Aviso: No se pudieron leer algunas páginas (' + fallos.join(', ') + ').'
-      : 'Catálogo completo (' + peliculas.length + ' películas) cargado desde ' + PAGINAS.length + ' páginas.';
-  }
-  escanearImagenesVisibles();
-}
-
-$('btnModoLite').addEventListener('click', () => cambiarModoBuscador('lite'));
-$('btnModoSliderUnico').addEventListener('click', () => cambiarModoBuscador('slider'));
-$('btnModoCarruseles').addEventListener('click', () => cambiarModoBuscador('carruseles'));
+}, { rootMargin: '240px 0px' });
+observadorScrollLite.observe($('centinelaScrollLite'));
 
 window.addEventListener('scroll', () => {
+  activarImagenesSliderUnico();
   escanearImagenesVisibles();
-  if (modoActual === 'lite' && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 260) {
-    cargarSiguienteLoteLite();
+  if (modoActual === 'scroll-lite' && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 250) {
+    cargarLoteScrollLite();
   }
 }, { passive: true });
-window.addEventListener('resize', escanearImagenesVisibles, { passive: true });
+window.addEventListener('resize', () => { activarImagenesSliderUnico(); escanearImagenesVisibles(); }, { passive: true });
 
-$('buscadorPeliculas').addEventListener('input', aplicarFiltros);
-$('btnBuscarGo').addEventListener('click', aplicarFiltros);
-$('btnLimpiarBusqueda').addEventListener('click', () => {
-  $('buscadorPeliculas').value = '';
-  $('filtroGenero').value = '';
-  $('filtroAnio').value = '';
-  aplicarFiltros();
-  $('buscadorPeliculas').focus();
-});
-$('filtroGenero').addEventListener('change', aplicarFiltros);
-$('filtroAnio').addEventListener('change', aplicarFiltros);
-document.documentElement.classList.toggle('dispositivo-movil', ('ontouchstart' in window) || navigator.maxTouchPoints > 0);
-$('btnInfoMaestro').addEventListener('click', () => {
-  const p = $('panelInfoMaestro');
-  const visible = p.classList.toggle('visible');
-  $('btnInfoMaestro').setAttribute('aria-expanded', visible ? 'true' : 'false');
-});
-$('cerrarVisor').addEventListener('click', cerrarReproductor);
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if ($('panelInfoMaestro').classList.contains('visible')) {
-      $('panelInfoMaestro').classList.remove('visible');
-      $('btnInfoMaestro').setAttribute('aria-expanded', 'false');
-    } else {
-      cerrarReproductor();
-    }
+async function iniciar() {
+  desactivarPantallaCompletaReproductor();
+  let guardado = '';
+  try { guardado = localStorage.getItem('galvez_modo_buscador') || ''; } catch (e) {}
+  if (guardado === 'scroll-lite' || guardado === 'slider-unico' || guardado === 'carruseles') {
+    establecerModo(guardado);
+  } else {
+    const ram = navigator.deviceMemory || 0;
+    const cores = navigator.hardwareConcurrency || 0;
+    if ((ram && ram <= 3) || (cores && cores <= 4)) establecerModo('scroll-lite');
+    else establecerModo('carruseles');
   }
-});
+
+  const fallos=[];
+  for(const pagina of PAGINAS) {
+    try { 
+      const lista=await cargarPagina(pagina); 
+      catalogoPaginas.push({pagina,lista});
+      agregarSinDuplicados(lista); 
+      actualizarGeneros();
+      aplicarFiltros(modoActual === 'scroll-lite' && renderizadosScroll === 0);
+      $('estadoCarga').textContent='Cargando catálogo: '+peliculas.length+' películas encontradas…'; 
+    }
+    catch(e) { console.warn('No se pudo leer',pagina.url,e); fallos.push(pagina.tipo+' '+pagina.anio); }
+  }
+  $('estadoCarga').textContent=fallos.length ? 'Aviso: No se pudieron leer algunas páginas ('+fallos.join(', ')+').' : 'Catálogo actualizado desde ' + PAGINAS.length + ' páginas. Las películas repetidas se unifican en los resultados y géneros.';
+  activarImagenesSliderUnico();
+  escanearImagenesVisibles();
+}
+
+$('btnModoScrollLite').addEventListener('click', () => establecerModo('scroll-lite'));
+$('btnModoSliderUnico').addEventListener('click', () => establecerModo('slider-unico'));
+$('btnModoCarruseles').addEventListener('click', () => establecerModo('carruseles'));
+$('pistaSliderUnico').addEventListener('scroll', () => { activarImagenesSliderUnico(); escanearImagenesVisibles(); }, { passive: true });
+$('flechaIzqUnica').addEventListener('click', () => { $('pistaSliderUnico').scrollBy({left:-$('pistaSliderUnico').clientWidth*.85,behavior:'smooth'}); setTimeout(() => { activarImagenesSliderUnico(); escanearImagenesVisibles(); }, 280); });
+$('flechaDerUnica').addEventListener('click', () => { $('pistaSliderUnico').scrollBy({left:$('pistaSliderUnico').clientWidth*.85,behavior:'smooth'}); setTimeout(() => { activarImagenesSliderUnico(); escanearImagenesVisibles(); }, 280); });
+$('buscadorPeliculas').addEventListener('input',()=>aplicarFiltros(true));
+$('btnBuscarGo').addEventListener('click',()=>aplicarFiltros(true));
+$('btnLimpiarBusqueda').addEventListener('click',()=>{$('buscadorPeliculas').value='';$('filtroGenero').value='';$('filtroAnio').value='';aplicarFiltros(true);$('buscadorPeliculas').focus();});
+$('filtroGenero').addEventListener('change',()=>aplicarFiltros(true)); $('filtroAnio').addEventListener('change',()=>aplicarFiltros(true));
+document.documentElement.classList.toggle('dispositivo-movil',('ontouchstart' in window)||navigator.maxTouchPoints>0);
+$('btnInfoMaestro').addEventListener('click',()=>{const p=$('panelInfoMaestro');const visible=p.classList.toggle('visible');$('btnInfoMaestro').setAttribute('aria-expanded',visible?'true':'false');});
+$('cerrarVisor').addEventListener('click',cerrarReproductor);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('panelInfoMaestro').classList.contains('visible')){$('panelInfoMaestro').classList.remove('visible');$('btnInfoMaestro').setAttribute('aria-expanded','false');}else cerrarReproductor();}});
 
 iniciar();
 })();
