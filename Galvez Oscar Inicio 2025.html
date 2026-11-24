@@ -224,6 +224,89 @@ function activarAudio() {
     }
 }
 </script>    
+
+
+<style id="go-buscador-integrado-2026">
+#goAbrirBuscador2026{cursor:pointer;}
+
+#goVentanaBuscador2026{
+  position:fixed;
+  inset:0;
+  z-index:2147483000;
+  display:none;
+  background:#05070c;
+  color:#fff;
+}
+#goVentanaBuscador2026.go-buscador-visible{
+  display:flex;
+  flex-direction:column;
+}
+#goBarraBuscador2026{display:contents;}
+
+#goControlesBuscador2026{
+  position:fixed;
+  top:10px;
+  right:12px;
+  z-index:2147483001;
+  display:flex;
+  gap:7px;
+}
+#goControlesBuscador2026 button{
+  width:38px;
+  height:34px;
+  border:1px solid #ffffff55;
+  border-radius:7px;
+  background:#172334ef;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 2px 8px #0009;
+}
+#goControlesBuscador2026 button:active{background:#414c60;}
+
+#goIframeBuscador2026{
+  display:block;
+  flex:1;
+  width:100%;
+  height:100%;
+  min-height:0;
+  border:0;
+  background:#080b12;
+}
+
+.go-buscador-posicion{
+  position:relative;
+  z-index:2147482999;
+  display:flex;
+  justify-content:center;
+  margin:8px 0;
+}
+#goAbrirBuscador2026{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 10px;
+  border:1px solid #20cfff;
+  border-radius:5px;
+  background:linear-gradient(180deg,#172b40 0%,#091522 100%);
+  color:#dffaff;
+  box-shadow:0 0 4px #00bfff,inset 0 1px 0 #b8f4ff55;
+  font:700 10px Arial,sans-serif;
+  letter-spacing:.7px;
+  text-shadow:0 0 5px #00cfff;
+  cursor:pointer;
+}
+#goAbrirBuscador2026:hover{
+  background:linear-gradient(180deg,#21496a 0%,#0b2034 100%);
+  box-shadow:0 0 7px #00cfff,0 0 12px #007bff;
+}
+@media(max-width:600px){
+  #goControlesBuscador2026{top:7px;right:8px;}
+  #goControlesBuscador2026 button{width:35px;height:32px;}
+}
+</style>
+
+	
 </head> 
     
     
