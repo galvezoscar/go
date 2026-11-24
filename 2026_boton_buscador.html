@@ -285,56 +285,23 @@ function activarAudio() {
 </script>    
 
 <style id="go-buscador-maestro-integrado-2026-style">
-#goAbrirBuscador2026{cursor:pointer;}
-#goVentanaBuscador2026{position:fixed;inset:0;z-index:2147483000;display:none;background:#05070c;color:#fff;}
-#goVentanaBuscador2026.go-buscador-visible{display:flex;flex-direction:column;}
-/* Controles flotantes: sin barra superior y sin quitar espacio al buscador */
-#goBarraBuscador2026{display:contents;}
-#goControlesBuscador2026{position:fixed;top:10px;right:12px;z-index:2147483001;display:flex;gap:7px;}
-#goControlesBuscador2026 button{width:38px;height:34px;border:1px solid #ffffff55;border-radius:7px;background:#172334eF;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 2px 8px #0009;}
-#goControlesBuscador2026 button:active{background:#414c60;}
-#goIframeBuscador2026{display:block;flex:1;width:100%;height:100%;min-height:0;border:0;background:#080b12;}
-@media(max-width:600px){#goControlesBuscador2026{top:7px;right:8px;}#goControlesBuscador2026 button{width:35px;height:32px;} }
+#goVentanaBuscador2026{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;z-index:2147483000;display:none;background:rgba(0,0,0,.94);}
+#goVentanaBuscador2026.go-buscador-visible{display:block;}
+#goIframeBuscador2026{position:absolute;inset:0;width:100%;height:100%;border:0;background:#080b11;}
+#goVentanaBuscador2026:fullscreen{width:100%;height:100%;background:#080b11;}
+#goBarraBuscador2026{position:absolute;z-index:2;top:0;right:0;left:0;height:48px;pointer-events:none;}
+#goControlesBuscador2026{position:absolute;top:7px;right:9px;display:flex;gap:8px;pointer-events:auto;transition:opacity .15s ease;}
+#goControlesBuscador2026 button{width:36px;height:36px;border:1px solid #596273;border-radius:50%;background:#111827eF;color:#fff;font-size:25px;line-height:1;cursor:pointer;box-shadow:0 2px 10px #0008;}
+#goVentanaBuscador2026.go-reproduciendo #goControlesBuscador2026{display:none!important;}
+@media(max-width:600px){#goControlesBuscador2026{top:5px;right:6px;}#goControlesBuscador2026 button{width:33px;height:33px;}}
 
-
-/* Botón BUSCADOR superpuesto al control AÑO: no ocupa espacio ni desplaza la barra lateral */
-.go-buscador-posicion{
-  position: absolute;
-  z-index:2147482999;
-  top:-19px;
-  left:0;
-  width:100%;
-  height:10%;
-  margin:0;
-  display:flex;
-  justify-content:center;
-  transform:translateX(12px);
-  pointer-events:none;
-}
-	/* Ocultar botón cuando se abre el reproductor */
-body:has(#visorOriginal.abierto) .go-buscador-posicion{
-  display:none !important;
-	}
-#goAbrirBuscador2026{
-  pointer-events:auto;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:4px 10px;
-  border:1px solid #20cfff;
-  border-radius:5px;
-  background:linear-gradient(180deg,#172b40 0%,#091522 100%);
-  color:#dffaff;
-  box-shadow:0 0 4px #00bfff,inset 0 1px 0 #b8f4ff55;
-  font:700 10px Arial,sans-serif;
-  letter-spacing:.7px;
-  text-shadow:0 0 5px #00cfff;
-  cursor:pointer;
-}
-#goAbrirBuscador2026:hover{background:linear-gradient(180deg,#21496a 0%,#0b2034 100%);box-shadow:0 0 7px #00cfff,0 0 12px #007bff;}
-#goAbrirBuscador2026:active{transform:translateY(1px);}
-@media(max-width:600px){.go-buscador-posicion{top:-27px;transform:translateX(12px);}#goAbrirBuscador2026{padding:4px 9px;font-size:9px;}}
-
+/* Botón BUSCADOR fijo: no modifica ni desplaza la barra lateral */
+#goAbrirBuscador2026{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:2147482000;display:flex;align-items:center;justify-content:center;gap:9px;min-width:154px;height:43px;padding:0 17px;border:1px solid #39f5ff;border-radius:24px;background:linear-gradient(120deg,#071c35ee,#190b36ee);color:#fff!important;font: bold 15px Arial,sans-serif;letter-spacing:1.2px;text-decoration:none!important;text-shadow:0 0 7px #39f5ff,0 0 13px #a855f7;box-shadow:0 0 7px #00eaff,0 0 16px #00cfff, inset 0 0 10px #7c3aed88;cursor:pointer;animation:goNeonPulso2026 2s ease-in-out infinite;}
+#goAbrirBuscador2026 .go-lupa-neon{font-size:21px;line-height:1;filter:drop-shadow(0 0 5px #39f5ff);}
+#goAbrirBuscador2026:active{transform:translateX(-50%) scale(.96);}
+@keyframes goNeonPulso2026{0%,100%{box-shadow:0 0 7px #00eaff,0 0 16px #00cfff,inset 0 0 10px #7c3aed88;}50%{box-shadow:0 0 11px #00eaff,0 0 25px #a855f7,inset 0 0 14px #7c3aedaa;}}
+@media(max-width:600px){#goAbrirBuscador2026{top:calc(7px + env(safe-area-inset-top));min-width:142px;height:40px;font-size:14px;}}
+</style>
 </head> 
     
     
