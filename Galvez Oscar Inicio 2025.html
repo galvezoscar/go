@@ -2941,6 +2941,91 @@ if (isAndroid) {
 })();
 </script>
 <script src="https://galvezoscar.github.io/go/buscador-inyector.js" defer></script>
+	
+<div id="goVentanaBuscador2026" aria-hidden="true">
+  <div id="goBarraBuscador2026">
+    <div id="goControlesBuscador2026">
+      <button type="button" id="goActualizarBuscador2026" title="Actualizar">⟳</button>
+      <button type="button" id="goCerrarBuscador2026" title="Cerrar">×</button>
+    </div>
+  </div>
+  <iframe id="goIframeBuscador2026"
+    title="Buscador maestro Gálvez Oscar"
+    allow="autoplay; fullscreen"
+    loading="eager"></iframe>
+</div>
+
+<script id="go-buscador-integrado-2026-script">
+(function(){
+  'use strict';
+
+  var urlBuscador = 'https://galvezoscar.github.io/go/g_lvez_oscar_buscador_maestro_3_en_1.html';
+
+  var ventana = document.getElementById('goVentanaBuscador2026');
+  var iframe = document.getElementById('goIframeBuscador2026');
+  var botonAbrir = document.getElementById('goAbrirBuscador2026');
+  var botonCerrar = document.getElementById('goCerrarBuscador2026');
+  var botonActualizar = document.getElementById('goActualizarBuscador2026');
+
+  var cargado = false;
+  var overflowAnterior = '';
+  var pantallaCompletaPropia = false;
+
+  function abrir(){
+    overflowAnterior = document.body.style.overflow;
+    ventana.classList.add('go-buscador-visible');
+    ventana.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+
+    if(!cargado){
+      iframe.src = urlBuscador;
+      cargado = true;
+    }
+
+    if(ventana.requestFullscreen){
+      var solicitud = ventana.requestFullscreen();
+      if(solicitud && solicitud.then){
+        solicitud.then(function(){
+          pantallaCompletaPropia = true;
+        }).catch(function(){
+          pantallaCompletaPropia = false;
+        });
+      }
+    }
+  }
+
+  function cerrar(){
+    ventana.classList.remove('go-buscador-visible');
+    ventana.setAttribute('aria-hidden','true');
+    document.body.style.overflow = overflowAnterior;
+
+    if(pantallaCompletaPropia && document.fullscreenElement && document.exitFullscreen){
+      document.exitFullscreen().catch(function(){});
+    }
+    pantallaCompletaPropia = false;
+  }
+
+  function actualizar(){
+    iframe.src = urlBuscador + '?actualizar=' + Date.now();
+    cargado = true;
+  }
+
+  botonAbrir.addEventListener('click',function(e){
+    e.preventDefault();
+    abrir();
+  });
+
+  botonCerrar.addEventListener('click',cerrar);
+  botonActualizar.addEventListener('click',actualizar);
+
+  document.addEventListener('keydown',function(e){
+    if(e.key === 'Escape' && ventana.classList.contains('go-buscador-visible')){
+      cerrar();
+    }
+  },true);
+})();
+</script>
+
 </body></html>
   
     
