@@ -312,7 +312,7 @@ function activarAudio() {
 
 /* Botón BUSCADOR superpuesto al control AÑO: no ocupa espacio ni desplaza la barra lateral */
 .go-buscador-posicion{
-  position: fixed;
+  position: absulute;
   z-index:2147482999;
   top:-29px;
   left:0;
@@ -324,6 +324,10 @@ function activarAudio() {
   transform:translateX(12px);
   pointer-events:none;
 }
+	/* Ocultar botón cuando se abre el reproductor */
+body:has(#visorOriginal.abierto) .go-buscador-posicion{
+  display:none !important;
+	}
 #goAbrirBuscador2026{
   pointer-events:auto;
   display:inline-flex;
