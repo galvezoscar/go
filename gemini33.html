@@ -302,6 +302,24 @@ function activarAudio() {
 @keyframes goNeonPulso2026{0%,100%{box-shadow:0 0 7px #00eaff,0 0 16px #00cfff,inset 0 0 10px #7c3aed88;}50%{box-shadow:0 0 11px #00eaff,0 0 25px #a855f7,inset 0 0 14px #7c3aedaa;}}
 #panel:has(#popup-20.active) #goAbrirBuscador2026{display:none!important;}
 @media(max-width:600px){#goAbrirBuscador2026{top:calc(7px + env(safe-area-inset-top));min-width:142px;height:40px;font-size:14px;}}
+
+#goAbrirBuscador2026{
+    animation: goFadeCompleto2026 1.5s ease-in-out both,
+               goNeonPulso2026 2s ease-in-out infinite;
+}
+
+@keyframes goFadeCompleto2026{
+    0%{
+        opacity:0;
+        filter:brightness(0.5);
+    }
+    100%{
+        opacity:1;
+        filter:brightness(1);
+    }
+	}
+
+	
 </style>
 </head> 
     
