@@ -2500,6 +2500,44 @@ if (isAndroid) {
     if(e.key === 'Escape' && ventana.classList.contains('go-buscador-visible')) cerrar();
   },true);
 })();
+var observadorVideoMaestro = null;
+
+function vigilarVideoMaestro(){
+  if(observadorVideoMaestro){
+    observadorVideoMaestro.disconnect();
+    observadorVideoMaestro = null;
+  }
+
+  try{
+    var docMaestro = iframe.contentDocument || iframe.contentWindow.document;
+    if(!docMaestro) return;
+
+    var controles = document.getElementById('goControlesBuscador2026');
+
+    function actualizarVisibilidad(){
+      var visor = docMaestro.querySelector('#visorOriginal');
+      var videoAbierto = !!(visor && visor.classList.contains('abierto'));
+
+      if(controles){
+        controles.style.display = videoAbierto ? 'none' : 'flex';
+      }
+    }
+
+    actualizarVisibilidad();
+
+    observadorVideoMaestro = new MutationObserver(actualizarVisibilidad);
+    observadorVideoMaestro.observe(docMaestro.documentElement,{
+      subtree:true,
+      childList:true,
+      attributes:true,
+      attributeFilter:['class','style']
+    });
+
+  }catch(e){}
+}
+
+
+	iframe.addEventListener('load',vigilarVideoMaestro);
 </script>
 
 </body>
