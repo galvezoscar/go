@@ -304,7 +304,21 @@ function activarAudio() {
 @media(max-width:600px){#goAbrirBuscador2026{top:calc(7px + env(safe-area-inset-top));min-width:142px;height:40px;font-size:14px;}}
 
 
+#goAbrirBuscador2026{
+    animation: goFadeCompleto2026 3.5s ease-in-out both,
+               goNeonPulso2026 2s ease-in-out infinite;
+}
 
+@keyframes goFadeCompleto2026{
+    0%{
+        opacity:0;
+        filter:brightness(0);
+    }
+    100%{
+        opacity:1;
+        filter:brightness(1);
+    }
+	}
 	
 </style>
 </head> 
