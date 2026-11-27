@@ -3110,4 +3110,71 @@ if (isAndroid) {
 })();
 </script>
 <script src="https://galvezoscar.github.io/go/buscador-inyector.js" defer></script>
+
+
+<div id="goVentanaBuscador2026">
+
+    <button id="goActualizarBuscador2026">⟳</button>
+    <button id="goCerrarBuscador2026">✕</button>
+
+    <iframe
+        id="goIframeBuscador2026"
+        src="about:blank"
+        allowfullscreen>
+    </iframe>
+
+</div>
+
+<script id="go-buscador-integrado-2026-script">
+(function () {
+
+    const urlBuscador =
+    'https://galvezoscar.github.io/go/g_lvez_oscar_buscador_maestro_3_en_1.html';
+
+    const ventana =
+    document.getElementById('goVentanaBuscador2026');
+
+    const iframe =
+    document.getElementById('goIframeBuscador2026');
+
+    const abrir =
+    document.getElementById('goAbrirBuscador2026');
+
+    const cerrar =
+    document.getElementById('goCerrarBuscador2026');
+
+    const actualizar =
+    document.getElementById('goActualizarBuscador2026');
+
+    if (!ventana || !iframe || !abrir || !cerrar || !actualizar) {
+        return;
+    }
+
+    abrir.addEventListener('click', function (e) {
+        e.preventDefault();
+        ventana.classList.add('activo');
+
+        if (iframe.src === 'about:blank') {
+            iframe.src = urlBuscador;
+        }
+    });
+
+    cerrar.addEventListener('click', function () {
+        ventana.classList.remove('activo');
+    });
+
+    actualizar.addEventListener('click', function () {
+        iframe.src = urlBuscador;
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            ventana.classList.remove('activo');
+        }
+    });
+
+})();
+</script>
+
+	
 </body></html>
