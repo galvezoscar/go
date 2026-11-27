@@ -3112,67 +3112,79 @@ if (isAndroid) {
 <script src="https://galvezoscar.github.io/go/buscador-inyector.js" defer></script>
 
 
-<div id="goVentanaBuscador2026">
 
-    <button id="goActualizarBuscador2026">⟳</button>
-    <button id="goCerrarBuscador2026">✕</button>
-
-    <iframe
-        id="goIframeBuscador2026"
-        src="about:blank"
-        allowfullscreen>
-    </iframe>
-
+    <!-- Buscador maestro 3 en 1 integrado en esta misma página -->
+<div id="goVentanaBuscador2026" aria-hidden="true">
+  <div id="goBarraBuscador2026"><div id="goControlesBuscador2026">
+    <button type="button" id="goActualizarBuscador2026" aria-label="Recargar buscador" title="Recargar">⟳</button>
+    <button type="button" id="goCerrarBuscador2026" aria-label="Cerrar buscador" title="Cerrar">×</button>
+  </div></div>
+  <iframe id="goIframeBuscador2026" title="Buscador maestro Gálvez Oscar" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
 </div>
-
 <script id="go-buscador-integrado-2026-script">
-(function () {
-
-    const urlBuscador =
-    'https://galvezoscar.github.io/go/g_lvez_oscar_buscador_maestro_3_en_1.html';
-
-    const ventana =
-    document.getElementById('goVentanaBuscador2026');
-
-    const iframe =
-    document.getElementById('goIframeBuscador2026');
-
-    const abrir =
-    document.getElementById('goAbrirBuscador2026');
-
-    const cerrar =
-    document.getElementById('goCerrarBuscador2026');
-
-    const actualizar =
-    document.getElementById('goActualizarBuscador2026');
-
-    if (!ventana || !iframe || !abrir || !cerrar || !actualizar) {
-        return;
+(function(){
+  'use strict';
+  var urlBuscador='https://galvezoscar.github.io/go/g_lvez_oscar_buscador_maestro_3_en_1.html';
+  var ventana=document.getElementById('goVentanaBuscador2026');
+  var iframe=document.getElementById('goIframeBuscador2026');
+  var abrir=document.getElementById('goAbrirBuscador2026');
+  var cerrar=document.getElementById('goCerrarBuscador2026');
+  var actualizar=document.getElementById('goActualizarBuscador2026');
+  var cargado=false, vigilancia=null, observador=null;
+  function comprobarVideo(){
+    try{
+      var doc=iframe.contentDocument;
+      var visor=doc&&doc.getElementById('visorOriginal');
+      ventana.classList.toggle('go-reproduciendo',!!(visor&&visor.classList.contains('abierto')));
+    }catch(e){}
+  }
+  function iniciarVigilancia(){
+    detenerVigilancia();
+    comprobarVideo();
+    try{
+      var doc=iframe.contentDocument;
+      var visor=doc&&doc.getElementById('visorOriginal');
+      if(visor&&window.MutationObserver){
+        observador=new MutationObserver(comprobarVideo);
+        observador.observe(visor,{attributes:true,attributeFilter:['class']});
+      }
+    }catch(e){}
+    vigilancia=window.setInterval(comprobarVideo,350);
+  }
+  function detenerVigilancia(){
+    if(vigilancia){window.clearInterval(vigilancia);vigilancia=null;}
+    if(observador){observador.disconnect();observador=null;}
+  }
+  function abrirBuscador(){
+    ventana.classList.add('go-buscador-visible');
+    if(ventana.requestFullscreen){
+      var promesa=ventana.requestFullscreen();
+      if(promesa&&promesa.catch)promesa.catch(function(){});
     }
-
-    abrir.addEventListener('click', function (e) {
-        e.preventDefault();
-        ventana.classList.add('activo');
-
-        if (iframe.src === 'about:blank') {
-            iframe.src = urlBuscador;
-        }
-    });
-
-    cerrar.addEventListener('click', function () {
-        ventana.classList.remove('activo');
-    });
-
-    actualizar.addEventListener('click', function () {
-        iframe.src = urlBuscador;
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            ventana.classList.remove('activo');
-        }
-    });
-
+    ventana.classList.remove('go-reproduciendo');
+    ventana.setAttribute('aria-hidden','false');
+    if(!cargado){iframe.src=urlBuscador;cargado=true;}
+    iniciarVigilancia();
+  }
+  function cerrarBuscador(){
+    ventana.classList.remove('go-buscador-visible','go-reproduciendo');
+    if(document.fullscreenElement&&document.exitFullscreen){
+      var salida=document.exitFullscreen();
+      if(salida&&salida.catch)salida.catch(function(){});
+    }
+    ventana.setAttribute('aria-hidden','true');
+    detenerVigilancia();
+  }
+  function recargarBuscador(){
+    ventana.classList.remove('go-reproduciendo');
+    iframe.src=urlBuscador+(urlBuscador.indexOf('?')===-1?'?':'&')+'actualizar='+Date.now();
+    cargado=true;
+  }
+  if(abrir)abrir.addEventListener('click',abrirBuscador);
+  if(cerrar)cerrar.addEventListener('click',cerrarBuscador);
+  if(actualizar)actualizar.addEventListener('click',recargarBuscador);
+  iframe.addEventListener('load',function(){if(ventana.classList.contains('go-buscador-visible'))iniciarVigilancia();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ventana.classList.contains('go-buscador-visible'))cerrarBuscador();});
 })();
 </script>
 
