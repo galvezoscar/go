@@ -563,66 +563,174 @@ document.getElementById('nuevaimg').innerHTML = '<video preload="none" poster="i
         }
         img[loading="lazy"].cargada {
             opacity: 1;
+        }
+    `;
+    document.head.appendChild(styleLazy);
 
-<style id="go-buscador-maestro-integrado-2026-style">
-#goVentanaBuscador2026{position:fixed;inset:0;width:50%;height:50vh;height:50dvh;z-index:2147483000;display:none;background:rgba(0,0,0,.94);}
-#goVentanaBuscador2026.go-buscador-visible{display:block;}
-#goIframeBuscador2026{position:absolute;inset:0;width:100%;height:100%;border:0;background:#080b11;}
-#goVentanaBuscador2026:fullscreen{width:100%;height:100%;background:#080b11;}
-#goBarraBuscador2026{position:absolute;z-index:2;top:0;right:0;left:0;height:48px;pointer-events:none;}
-#goControlesBuscador2026{position:absolute;top:7px;right:9px;display:flex;gap:8px;pointer-events:auto;transition:opacity .15s ease;}
-#goControlesBuscador2026 button{width:36px;height:36px;border:1px solid #596273;border-radius:50%;background:#111827eF;color:#fff;font-size:25px;line-height:1;cursor:pointer;box-shadow:0 2px 10px #0008;}
-#goVentanaBuscador2026.go-reproduciendo #goControlesBuscador2026{display:none!important;}
-@media(max-width:600px){#goControlesBuscador2026{top:5px;right:6px;}#goControlesBuscador2026 button{width:33px;height:33px;}}
-
-/* Botón BUSCADOR fijo: no modifica ni desplaza la barra lateral */
-#goAbrirBuscador2026{position:fixed;top:calc(10px + env(safe-area-inset-top));left:85%;transform:translateX(-50%);z-index:90;display:flex;align-items:center;justify-content:center;gap:9px;min-width:54px;height:23px;padding:0 17px;border:1px solid #39f5ff;border-radius:24px;background:linear-gradient(120deg,#071c35ee,#190b36ee);color:#fff!important;font: bold 15px Arial,sans-serif;letter-spacing:1.2px;text-decoration:none!important;text-shadow:0 0 7px #39f5ff,0 0 13px #a855f7;box-shadow:0 0 7px #00eaff,0 0 16px #00cfff, inset 0 0 10px #7c3aed88;cursor:pointer;animation:goNeonPulso2026 2s ease-in-out infinite;}
-#goAbrirBuscador2026 .go-lupa-neon{font-size:21px;line-height:1;filter:drop-shadow(0 0 5px #39f5ff);}
-#goAbrirBuscador2026:active{transform:translateX(-50%) scale(.96);}
-@keyframes goNeonPulso2026{0%,100%{box-shadow:0 0 7px #00eaff,0 0 16px #00cfff,inset 0 0 10px #7c3aed88;}50%{box-shadow:0 0 11px #00eaff,0 0 25px #a855f7,inset 0 0 14px #7c3aedaa;}}
-#panel:has(#popup-20.active) #goAbrirBuscador2026{display:none!important;}
-@media(max-width:600px){#goAbrirBuscador2026{top:calc(7px + env(safe-area-inset-top));min-width:142px;height:40px;font-size:14px;}}
-
-
-#goAbrirBuscador2026{
-    animation: goFadeCompleto2026 3.5s ease-in-out both,
-               goNeonPulso2026 2s ease-in-out infinite;
-}
-
-@keyframes goFadeCompleto2026{
-    0%{
-        opacity:0;
-        filter:brightness(0);
+    // 4. Detectar cuando cada imagen terminó de cargar y mostrarla con fade
+    function activarFade(img) {
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('cargada');
+        } else {
+            img.addEventListener('load', function() {
+                img.classList.add('cargada');
+            }, { once: true });
+            // Si falla la carga, igual la mostramos (para no quedar invisible)
+            img.addEventListener('error', function() {
+                img.classList.add('cargada');
+                img.style.background = '#2a0a0a';
+            }, { once: true });
+        }
     }
-    100%{
-        opacity:1;
-        filter:brightness(1);
+
+    // Aplicar fade a las existentes
+    todasLasImg.forEach(activarFade);
+
+    // Aplicar fade a las nuevas que se inyecten
+    var observerFade = new MutationObserver(function(mutaciones) {
+        mutaciones.forEach(function(mutacion) {
+<!-- ===== CARGA DINÁMICA REAL (sin tocar el HTML existente) ===== -->
+<script>
+(function() {
+    'use strict';
+
+    // Pixel transparente 1x1 como placeholder
+    var PIXEL = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    // ==========================================
+    // 1. INTERCEPTAR: guardar src real en data-src, poner placeholder
+    // ==========================================
+    function interceptar(img) {
+        if (img.getAttribute('data-lz') === '1') return; // ya interceptada
+        var src = img.getAttribute('src');
+        if (!src || src.startsWith('data:')) return; // no interceptar data-uris
+        
+        img.setAttribute('data-src', src);   // guardar la url real
+        img.setAttribute('src', PIXEL);       // poner placeholder
+        img.setAttribute('data-lz', '1');     // marcar como interceptada
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
     }
-	}
 
+    // ==========================================
+    // 2. CARGAR: restaurar src real cuando toque
+    // ==========================================
+    function cargar(img) {
+        var realSrc = img.getAttribute('data-src');
+        if (!realSrc) return;
+        
+        img.setAttribute('src', realSrc);
+        img.removeAttribute('data-src');
+        
+        // Fade-in cuando termine de descargar
+        img.onload = function() {
+            img.style.opacity = '1';
+            img.onload = null;
+        };
+        img.onerror = function() {
+            img.style.opacity = '1';
+            img.style.background = '#2a0a0a';
+            img.onerror = null;
+        };
 
-/* Buscador siempre a pantalla completa */
-#goVentanaBuscador2026.go-buscador-visible{
-    position:fixed!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    bottom:0!important;
-    width:100vw!important;
-    height:100vh!important;
-    height:100dvh!important;
-    max-width:none!important;
-    max-height:none!important;
-}
+        // Si ya estaba en cache, onload no dispara
+        if (img.complete) {
+            img.style.opacity = '1';
+        }
+    }
 
-#goIframeBuscador2026{
-    width:100%!important;
-    height:100%!important;
-}
+    // ==========================================
+    // 3. INTERSECTION OBSERVER: carga al entrar al viewport
+    // ==========================================
+    var io = new IntersectionObserver(function(entries) {
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+                cargar(entries[i].target);
+                io.unobserve(entries[i].target);
+            }
+        }
+    }, {
+        rootMargin: '300px 0px', // empezar a cargar 300px antes de verse
+        threshold: 0.01
+    });
 
+    // ==========================================
+    // 4. MUTATION OBSERVER: atrapar imágenes nuevas Y cambios display
+    // ==========================================
+    var mo = new MutationObserver(function(mutations) {
+        for (var m = 0; m < mutations.length; m++) {
+            var mut = mutations[m];
 
-	
-</style>
+            // --- Imágenes nuevas inyectadas al DOM ---
+            if (mut.addedNodes) {
+                for (var n = 0; n < mut.addedNodes.length; n++) {
+                    var nodo = mut.addedNodes[n];
+                    if (nodo.nodeName === 'IMG') {
+                        interceptar(nodo);
+                        io.observe(nodo);
+                    }
+                    if (nodo.querySelectorAll) {
+                        var imgs = nodo.querySelectorAll('img');
+                        for (var j = 0; j < imgs.length; j++) {
+                            interceptar(imgs[j]);
+                            io.observe(imgs[j]);
+                        }
+                    }
+                }
+            }
+
+            // --- Un contenedor pasó de display:none a visible ---
+            if (mut.type === 'attributes' && mut.attributeName === 'style') {
+                var target = mut.target;
+                var displayActual = window.getComputedStyle(target).display;
+                if (displayActual !== 'none') {
+                    var internas = target.querySelectorAll('img[data-src]');
+                    for (var k = 0; k < internas.length; k++) {
+                        cargar(internas[k]);
+                        io.unobserve(internas[k]);
+                    }
+                }
+            }
+        }
+    });
+
+    // ==========================================
+    // 5. INICIO: interceptar todo lo que ya existe
+    // ==========================================
+    var todas = document.querySelectorAll('img');
+    var contador = 0;
+    for (var i = 0; i < todas.length; i++) {
+        interceptar(todas[i]);
+        io.observe(todas[i]);
+        contador++;
+    }
+
+    // Activar vigilancia permanente
+    mo.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style']
+    });
+
+    // ==========================================
+    // 6. RE-ESCANEO cada 2 segundos (seguridad extra)
+    //    Atrapa imágenes que se escaparon por plugins o scripts externos
+    // ==========================================
+    setInterval(function() {
+        var pendientes = document.querySelectorAll('img:not([data-lz])');
+        for (var i = 0; i < pendientes.length; i++) {
+            var src = pendientes[i].getAttribute('src');
+            if (src && !src.startsWith('data:')) {
+                interceptar(pendientes[i]);
+                io.observe(pendientes[i]);
+            }
+        }
+    }, 2000);
+
+    console.log('Carga dinamica REAL activada: ' + contador + ' imagen(es) interceptadas');
+})();
+</script>
 <body  onload="downLoad()" id="layer2" >
    
 <img class="iniciocarga fade2" onclick="myFunction()" src="./Galvez Oscar video_files/inicio artel.gif">    
@@ -1557,9 +1665,6 @@ Una tormenta de nieve obliga a los habitantes de un pueblo a cobijarse en el alb
         
 
         
- <a class="fade3" id="goAbrirBuscador2026" href="javascript:void(0)" aria-label="Abrir buscador maestro"><span class="go-lupa-neon fade2">🔍</span> </a>
-
-    
 
 
 <div class="volver2">
@@ -2637,87 +2742,4 @@ if (isAndroid) {
 })();
 </script>
 <script src="https://galvezoscar.github.io/go/buscador-inyector.js" defer></script>
-
-
-<!-- Buscador maestro 3 en 1 integrado en esta misma página -->
-<div id="goVentanaBuscador2026" aria-hidden="true">
-  <div id="goBarraBuscador2026"><div id="goControlesBuscador2026">
-    <button type="button" id="goActualizarBuscador2026" aria-label="Recargar buscador" title="Recargar">⟳</button>
-    <button type="button" id="goCerrarBuscador2026" aria-label="Cerrar buscador" title="Cerrar">×</button>
-  </div></div>
-  <iframe id="goIframeBuscador2026" title="Buscador maestro Gálvez Oscar" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
-</div>
-<script id="go-buscador-integrado-2026-script">
-(function(){
-  'use strict';
-  var urlBuscador='https://galvezoscar.github.io/go/g_lvez_oscar_buscador_maestro_3_en_1.html';
-  var ventana=document.getElementById('goVentanaBuscador2026');
-  var iframe=document.getElementById('goIframeBuscador2026');
-  var abrir=document.getElementById('goAbrirBuscador2026');
-  var cerrar=document.getElementById('goCerrarBuscador2026');
-  var actualizar=document.getElementById('goActualizarBuscador2026');
-  var cargado=false, vigilancia=null, observador=null;
-  function comprobarVideo(){
-    try{
-      var doc=iframe.contentDocument;
-      var visor=doc&&doc.getElementById('visorOriginal');
-      ventana.classList.toggle('go-reproduciendo',!!(visor&&visor.classList.contains('abierto')));
-    }catch(e){}
-  }
-  function iniciarVigilancia(){
-    detenerVigilancia();
-    comprobarVideo();
-    try{
-      var doc=iframe.contentDocument;
-      var visor=doc&&doc.getElementById('visorOriginal');
-      if(visor&&window.MutationObserver){
-        observador=new MutationObserver(comprobarVideo);
-        observador.observe(visor,{attributes:true,attributeFilter:['class']});
-      }
-    }catch(e){}
-    vigilancia=window.setInterval(comprobarVideo,350);
-  }
-  function detenerVigilancia(){
-    if(vigilancia){window.clearInterval(vigilancia);vigilancia=null;}
-    if(observador){observador.disconnect();observador=null;}
-  }
-  function abrirBuscador(){
-    ventana.classList.add('go-buscador-visible');
-    if(ventana.requestFullscreen){
-      var promesa=ventana.requestFullscreen();
-      if(promesa&&promesa.catch)promesa.catch(function(){});
-    }
-    ventana.classList.remove('go-reproduciendo');
-    ventana.setAttribute('aria-hidden','false');
-    if(!cargado){iframe.src=urlBuscador;cargado=true;}
-    iniciarVigilancia();
-  }
-  function cerrarBuscador(){
-    ventana.classList.remove('go-buscador-visible','go-reproduciendo');
-    if(document.fullscreenElement&&document.exitFullscreen){
-      var salida=document.exitFullscreen();
-      if(salida&&salida.catch)salida.catch(function(){});
-    }
-    ventana.setAttribute('aria-hidden','true');
-    detenerVigilancia();
-  }
-  function recargarBuscador(){
-    ventana.classList.remove('go-reproduciendo');
-    iframe.src=urlBuscador+(urlBuscador.indexOf('?')===-1?'?':'&')+'actualizar='+Date.now();
-    cargado=true;
-  }
-  if(abrir)abrir.addEventListener('click',abrirBuscador);
-  if(cerrar)cerrar.addEventListener('click',cerrarBuscador);
-  if(actualizar)actualizar.addEventListener('click',recargarBuscador);
-  iframe.addEventListener('load',function(){if(ventana.classList.contains('go-buscador-visible'))iniciarVigilancia();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ventana.classList.contains('go-buscador-visible'))cerrarBuscador();});
-})();
-</script>
-
-
-	
 </body></html>
-
-
-
-
