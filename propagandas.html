@@ -1,23 +1,309 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Panel de propagandas | El Pato</title><style>*{box-sizing:border-box}body{margin:0;background:#090d19;color:#f4f6ff;font-family:Arial,sans-serif}header{padding:25px 5vw;background:linear-gradient(110deg,#131d39,#21143b);border-bottom:1px solid #34415f}h1{margin:0;font-size:clamp(25px,4vw,38px)}header p{color:#b9c4df}main{max-width:1050px;margin:30px auto;padding:0 18px}.note,.ad-item{padding:16px;border:1px solid #35e7ff55;border-radius:12px;background:#101a2c;margin:14px 0;line-height:1.5}.ad-item img{display:block;max-width:100%;width:380px;max-height:180px;object-fit:cover;border-radius:9px}.ad-item h2,.ad-item h3,h2{color:#35e7ff}code{color:#a9eaff}.muted{color:#aeb8ce;font-size:14px}</style></head><body><header><h1>Panel de propagandas</h1><p>Agregá cada anuncio una sola vez. El buscador lo distribuye automáticamente.</p></header><main>
 <div class="note"><b>Cómo agregar:</b> duplicá un bloque <code>&lt;article class="ad-item"&gt;</code> y completá sus datos. Ambos HTML deben estar en la misma carpeta y publicados en el mismo sitio.<br><br><b>Campos importantes:</b><br><code>data-type</code>: banner, oferta, articulo, servicio o producto.<br><code>data-featured="true"</code>: aparece en el slider infinito de Destacados (podés marcar muchos).<br><code>data-locality</code>: localidad para crear su botón.<br><code>data-neighborhood</code>: barrio para crear su propio botón. También podés poner ambos en <code>data-keywords</code> para encontrarlos escribiendo en el buscador.<br><code>data-whatsapp</code>: número internacional sin + ni espacios.<br><code>data-facebook</code>, <code>data-website</code>, <code>data-address</code>: enlaces y dirección.<br><code>data-images</code>: imágenes adicionales separadas por |.<br><br>Los anuncios tipo producto se muestran en Productos; los recomendados también aparecen allí.</div>
 <h2>Anuncios de ejemplo</h2>
-<article class="ad-item"
-  data-type="banner"
-  data-locality="Berazategui" 
-  data-neighborhood=""
-  data-whatsapp="+54 1164212284" 
-  data-facebook="" 
-  data-website=""
-  data-address=""
-  data-id="banner-001"
-  data-title="Peliculas y Series"
-  data-category="Ofertas"
-  data-keywords="banner promoción publicidad destacado"
-  data-description="Peliculas y series " 
-  data-image="cinevacas.jpg" 
-  data-link="https://ejemplo.com" 
-  data-featured="true" 
-  data-recommended="false"><h3 class="ad-title">GO Entretenimiento</h3><p class="ad-description">aplicacion </p><img src="https://placehold.co/1200x500/172442/35e7ff?text=TU+BANNER" alt="Banner"><a class="ad-link" href="https://ejemplo.com">Ver anuncio</a></article>
+
+
+
+
+<!-- 1. CARNICERÍAS -->
+<div class="ad-item"
+ data-id="carn-001"
+ data-title="Carnicería Don Juan"
+ data-category="Carnicerías"
+ data-type="oferta"
+ data-keywords="carne asado vacio milanesas ofertas Berazategui centro"
+ data-description="Carnes frescas todos los días. Ofertas en asado, vacío, milanesas y cortes especiales. Consultá nuestros precios."
+ data-image="publicidades/carniceria.jpg"
+ data-images="publicidades/carniceria2.jpg|publicidades/carniceria3.jpg"
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 2. POLLERÍAS -->
+<div class="ad-item"
+ data-id="poll-001"
+ data-title="Pollería El Buen Pollo"
+ data-category="Pollerías"
+ data-type="oferta"
+ data-keywords="pollo supremas pata muslo milanesas Berazategui"
+ data-description="Pollo fresco, supremas, pata muslo y productos elaborados. Consultá nuestras promociones."
+ data-image="publicidades/polleria.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 3. CERDO -->
+<div class="ad-item"
+ data-id="cerdo-001"
+ data-title="Cerdo Seleccionado"
+ data-category="Cerdo"
+ data-type="producto"
+ data-keywords="cerdo costillas bondiola pechito chorizos Berazategui"
+ data-description="Cortes de cerdo frescos. Bondiola, costillas, pechito y chorizos. Consultá disponibilidad."
+ data-image="publicidades/cerdo.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 4. SUPERMERCADOS -->
+<div class="ad-item"
+ data-id="super-001"
+ data-title="Supermercado La Economía"
+ data-category="Supermercados"
+ data-type="oferta"
+ data-keywords="supermercado alimentos bebidas limpieza ofertas Berazategui"
+ data-description="Encontrá alimentos, bebidas, limpieza y artículos para el hogar. Conocé nuestras ofertas."
+ data-image="publicidades/supermercado.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 5. MAYORISTAS -->
+<div class="ad-item"
+ data-id="may-001"
+ data-title="Distribuidora Mayorista"
+ data-category="Mayoristas"
+ data-type="producto"
+ data-keywords="mayorista distribuidora bebidas alimentos comercios Berazategui"
+ data-description="Venta mayorista de alimentos, bebidas y productos para comercios. Consultá precios por cantidad."
+ data-image="publicidades/mayorista.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 6. CELULARES, INSUMOS Y REPUESTOS -->
+<div class="ad-item"
+ data-id="cel-001"
+ data-title="Mundo Celular"
+ data-category="Celulares, insumos y repuestos"
+ data-type="producto"
+ data-keywords="celulares accesorios cargadores fundas pantallas repuestos Berazategui"
+ data-description="Venta de celulares, accesorios, fundas, cargadores, insumos y repuestos. Consultá modelos y precios."
+ data-image="publicidades/celulares.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 7. FERRETERÍAS -->
+<div class="ad-item"
+ data-id="ferr-001"
+ data-title="Ferretería El Tornillo"
+ data-category="Ferreterías"
+ data-type="producto"
+ data-keywords="ferreteria herramientas tornillos pinturas electricidad Berazategui"
+ data-description="Herramientas, tornillos, pinturas, electricidad y artículos para mantenimiento del hogar."
+ data-image="publicidades/ferreteria.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 8. CASAS DE DEPORTES -->
+<div class="ad-item"
+ data-id="dep-001"
+ data-title="Deportes Total"
+ data-category="Casas de deportes"
+ data-type="producto"
+ data-keywords="deportes zapatillas camisetas pelotas ropa deportiva Berazategui"
+ data-description="Indumentaria deportiva, zapatillas, pelotas y accesorios para entrenar y competir."
+ data-image="publicidades/deportes.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 9. LIBRERÍAS -->
+<div class="ad-item"
+ data-id="lib-001"
+ data-title="Librería Escolar"
+ data-category="Librerías"
+ data-type="producto"
+ data-keywords="libreria útiles escolares cuadernos fotocopias impresiones Berazategui"
+ data-description="Útiles escolares, cuadernos, artículos de oficina, fotocopias e impresiones."
+ data-image="publicidades/libreria.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 10. AUTOMOTORES -->
+<div class="ad-item"
+ data-id="auto-001"
+ data-title="Automotores del Sur"
+ data-category="Automotores"
+ data-type="servicio"
+ data-keywords="autos usados venta vehículos repuestos mecánica Berazategui"
+ data-description="Venta de vehículos y servicios para automotores. Consultá modelos, disponibilidad y financiación."
+ data-image="publicidades/automotores.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 11. PANADERÍAS -->
+<div class="ad-item"
+ data-id="pan-001"
+ data-title="Panadería La Espiga"
+ data-category="Panaderías"
+ data-type="oferta"
+ data-keywords="panaderia pan facturas tortas sandwiches Berazategui"
+ data-description="Pan recién horneado, facturas, tortas, sándwiches y productos artesanales."
+ data-image="publicidades/panaderia.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 12. BICICLETERÍAS -->
+<div class="ad-item"
+ data-id="bici-001"
+ data-title="Bicicletería Pedal"
+ data-category="Bicicleterías"
+ data-type="servicio"
+ data-keywords="bicicletas bicicletas repuestos arreglos service Berazategui"
+ data-description="Venta de bicicletas, repuestos, accesorios y reparación. Servicio de mantenimiento."
+ data-image="publicidades/bicicleteria.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 13. CORRALONES Y CONSTRUCCIÓN -->
+<div class="ad-item"
+ data-id="cons-001"
+ data-title="Corralón Construir"
+ data-category="Corralones y construcción"
+ data-type="producto"
+ data-keywords="corralon materiales construccion ladrillos cemento arena hierro Berazategui"
+ data-description="Materiales para construcción, cemento, arena, ladrillos, hierros y artículos para obra."
+ data-image="publicidades/corralon.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Calle y número"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+<!-- 14. SERVICIOS Y TRABAJOS -->
+<div class="ad-item"
+ data-id="serv-001"
+ data-title="Electricista Matriculado"
+ data-category="Servicios y trabajos"
+ data-type="servicio"
+ data-keywords="electricista electricidad instalaciones reparaciones plomero albañil pintor carpintero Berazategui"
+ data-description="Instalaciones eléctricas, reparaciones y mantenimiento. También podés encontrar plomeros, albañiles, pintores, mecánicos y otros trabajadores."
+ data-image="publicidades/electricista.jpg"
+ data-images=""
+ data-link="https://ejemplo.com"
+ data-featured="false"
+ data-recommended="false"
+ data-locality="Berazategui"
+ data-neighborhood="Centro"
+ data-address="Zona de trabajo"
+ data-whatsapp="5491100000000"
+ data-facebook="https://facebook.com/"
+ data-website="https://ejemplo.com">
+</div>
+
+
+
+
+
+
   
 <article class="ad-item" data-type="producto" data-locality="" data-neighborhood="" data-whatsapp="" data-facebook="" data-website="" data-address="" data-id="const-001" data-title="Herramientas y materiales" data-category="Construcción" data-keywords="obra taladro herramientas cemento pintura" data-description="Herramientas y materiales para tus proyectos." data-image="https://placehold.co/600x360/202b3f/ffffff?text=Construccion" data-link="https://ejemplo.com" data-featured="false" data-recommended="true"><h3 class="ad-title">Herramientas y materiales</h3><p class="ad-description">Herramientas y materiales para tus proyectos.</p><img src="https://placehold.co/600x360/202b3f/ffffff?text=Construccion" alt="Construcción"><a class="ad-link" href="https://ejemplo.com">Ver anuncio</a></article>
 <article class="ad-item" data-type="producto" data-locality="" data-neighborhood="" data-whatsapp="" data-facebook="" data-website="" data-address="" data-id="electro-001" data-title="Electrodomésticos para el hogar" data-category="Electrodomésticos" data-keywords="heladera lavarropas cocina microondas" data-description="Promociones y novedades para tu hogar." data-image="https://placehold.co/600x360/202b3f/ffffff?text=Electrodomesticos" data-link="https://ejemplo.com" data-featured="false" data-recommended="true"><h3 class="ad-title">Electrodomésticos para el hogar</h3><p class="ad-description">Promociones y novedades para tu hogar.</p><img src="https://placehold.co/600x360/202b3f/ffffff?text=Electrodomesticos" alt="Electrodomésticos"><a class="ad-link" href="https://ejemplo.com">Ver anuncio</a></article>
